@@ -53,6 +53,9 @@ dependencies:
   nodemailer:
     specifier: ^6.9.4
     version: 6.9.4
+  openid-client:
+    specifier: ^5.4.3
+    version: 5.4.3
   postcss:
     specifier: 8.4.27
     version: 8.4.27

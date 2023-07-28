@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import Auth0Provider from 'next-auth/providers/auth0';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/prima';
 import bcrypt from 'bcrypt';
@@ -13,7 +14,18 @@ export const authOptions = {
       if (token) return true; // If there is a token, the user is authenticated
     },
     async session({ session, user, token }: any) {
-      return session;
+      return {
+        ...session,
+        user: {
+          ...(session.user ?? {}),
+          ...(user
+            ? {
+                id: user.id,
+                role: user.role,
+              }
+            : {}),
+        },
+      };
     },
     async jwt(token: any, user?: any) {
       if (user) {
@@ -30,6 +42,11 @@ export const authOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
+    Auth0Provider({
+      clientId: process.env.AUTH0_CLIENT_ID as string,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
+      issuer: process.env.AUTH0_CLIENT_ISSUER as string,
+    }),
     CredentialsProvider({
       name: 'Password',
       credentials: {

@@ -17,6 +17,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import prisma from '@/prima';
 import CartModal from './server/CartModal';
+import Themes from './client/Themes';
 
 const AppBar = async () => {
   const session = await getServerSession(authOptions);
@@ -28,12 +29,9 @@ const AppBar = async () => {
   return (
     <div className="navbar h-12 mb-5 items-center bg-base-200 col-span-2 border-b gap-2 p-1 justify-between">
       <div className="container flex justify-between mx-auto max-w-7xl">
-        <div className="">
-          <Link
-            href="/"
-            className=" normal-case flex justify-center items-center text-xl"
-          >
-            <Drawer />
+        <div className="inline-flex justify-start items-center text-xl">
+          <Drawer />
+          <Link href="/" className=" normal-case ">
             <Image
               alt="Shaka"
               width={120}
@@ -102,6 +100,9 @@ const AppBar = async () => {
                     </Link>
                   </li>
                   <li>
+                    <Themes />
+                  </li>
+                  <li>
                     <LogoutBtn />
                   </li>
                 </ul>
@@ -117,14 +118,14 @@ const AppBar = async () => {
                   Login <MdLogin />
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href={'/auth/signup'}
                   className="btn  normal-case btn-outline text-lg"
                 >
                   Signup <AiOutlineUserAdd />
                 </Link>
-              </li>
+              </li> */}
             </ul>
           )}
         </div>

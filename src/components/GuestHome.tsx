@@ -7,7 +7,7 @@ import CategoryList from './CategoryList';
 
 const GuestHome = async () => {
   const products = await prisma.product.findMany({
-    include: { images: true, categories: true, sizes: true },
+    include: { images: true, categories: true, shop: true, sizes: true },
     orderBy: { createdAt: 'desc' },
   });
   const categories = await prisma.category.findMany();
@@ -17,9 +17,7 @@ const GuestHome = async () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:items-center md:grid-cols-2 gap-6">
             <div className="flex flex-col items-start gap-2 md:gap-3">
-              <h2 className="text-4xl font-bold mb-4">
-                SHAKA E-commerce
-              </h2>
+              <h2 className="text-4xl font-bold mb-4">SHAKA E-commerce</h2>
               <p className="text-lg mb-4">
                 Discover the best products from various shops all in one place.
               </p>

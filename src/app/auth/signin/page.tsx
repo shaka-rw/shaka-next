@@ -6,6 +6,7 @@ import { MdDangerous, MdLock, MdLogin } from 'react-icons/md';
 import {
   AiFillGoogleCircle as GoogleIcon,
   AiOutlineUserAdd as SignupIcon,
+  AiOutlineLogin,
 } from 'react-icons/ai';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -74,14 +75,16 @@ const LoginPage = () => {
           }}
         >
           <div className="w-full flex gap-2 flex-col">
-            {error === 'CredentialsSignin' ? (
+            {(error?.length ?? 0) > 0 ? (
               <p className="alert alert-error flex gap-2 items-center">
-                <MdDangerous /> Incorrect email or password
+                <MdDangerous /> Something went wrong. Check you details, or try
+                again.
               </p>
             ) : (
               <></>
             )}
-            <div className="w-full">
+          </div>
+          {/* <div className="w-full">
               <label htmlFor="email" className="label">
                 <div className="label-text">Email address</div>
               </label>
@@ -113,9 +116,9 @@ const LoginPage = () => {
                 <p className="text-red-500">{errors.password.message}</p>
               )}
             </div>
-          </div>
+          </div> */}
 
-          <div className="flex flex-col md:flex-row justify-center  items-stretch md:items-center gap-2">
+          {/* <div className="flex flex-col md:flex-row justify-center  items-stretch md:items-center gap-2">
             <button
               disabled={isLoading}
               type="submit"
@@ -139,11 +142,22 @@ const LoginPage = () => {
               </span>
             </Link>
           </div>
-          <div className="flex w-full gap-3 items-center">
-            <div className=" border-b-2 rounded border-gray-500 w-full"></div>
-            <span className="inline-block font-bold text-sm">OR</span>
-            <div className=" border-b-2 rounded border-gray-500 w-full"></div>
-          </div>
+          <div className="divider">OR</div> */}
+
+          <button
+            type="button"
+            onClick={() =>
+              signIn('auth0', { redirect: true, callbackUrl: '/' })
+            }
+            disabled={isLoading}
+            className="btn flex btn-secondary text-white items-center "
+          >
+            <span className=" flex items-center pl-3">
+              <AiOutlineLogin className="h-5 w-5 text-xl text-yellow-500 group-hover:text-yellow-400" />
+            </span>
+            Login or Signup
+          </button>
+          <div className="divider">OR</div>
           <button
             type="button"
             onClick={() =>

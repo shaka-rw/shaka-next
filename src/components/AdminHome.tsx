@@ -6,11 +6,15 @@ import AddShopForm from './forms/AddShopForm';
 import { approveShop } from '@/app/_actions';
 import CategoryList from './CategoryList';
 import UsersTable from './server/UsersTable';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import ShopList from './server/ShopList';
 
 const AdminHome = async () => {
   const categories = await prisma.category.findMany();
   const shops = await prisma.shop.findMany();
   const users = await prisma.user.findMany();
+  const session = await getServerSession(authOptions);
   return (
     <div className="flex flex-col p-3">
       <div>
@@ -19,39 +23,7 @@ const AdminHome = async () => {
       <CategoryList categories={categories} />
       <div>{/* <AddShopForm categories={categories} /> */}</div>
       <div className="divider"></div>
-      <div>
-        <h3 className="font-bold m-2 mt-3 text-2xl uppercase">Shops</h3>
-      </div>
-      {shops.length === 0 && (
-        <div className="alert  flex gap-2">
-          <MdEmojiObjects /> No shops created yet.
-        </div>
-      )}
-      <div className="flex items-stretch gap-2 p-2">
-        {shops.map((shop) => (
-          <div
-            key={shop.id}
-            className="card flex items-center px-3 border card-side bg-base-100"
-          >
-            <figure className="w-10 flex justify-center items-center h-w-10">
-              <MdShop />
-            </figure>
-            <div className="card-body p-2">
-              <h2 className="card-title">{shop.name}</h2>
-              {!shop.approved && (
-                <div className="card-actions justify-end">
-                  <form action={approveShop}>
-                    <input type="hidden" name="shopId" value={shop.id} />
-                    <button type="submit" className="btn btn-sm btn-primary">
-                      <MdCheck /> Approve
-                    </button>
-                  </form>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+      <ShopList shops={shops} user={session.user} />
       <div className="divider"></div>
       <div>
         <h3 className="font-bold m-2 mt-3 text-2xl uppercase">Users</h3>

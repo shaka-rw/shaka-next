@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Category, Product, ProductAsset } from '@prisma/client';
+import { Category, Product, ProductAsset, Shop } from '@prisma/client';
 import Link from 'next/link';
 import React from 'react';
 import { MdAddShoppingCart, MdFavorite } from 'react-icons/md';
@@ -36,6 +36,14 @@ const ProductList = ({ products }: { products: Product[] }) => {
                 </div>
               ))}
             </div>
+            {(prod as any).shop && (
+              <div className="my-2 flex items-center gap-3 ">
+                <div className="text-xl text-secondary italic">From: </div>
+                <span className="btn font-bold btn-outline">
+                  {((prod as any).shop as Shop).name}
+                </span>
+              </div>
+            )}
             <div className="flex items-center gap-2 p-1">
               <button className="btn btn-accent  btn-outline text-xl btn-circle">
                 <MdFavorite />
