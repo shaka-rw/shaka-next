@@ -6,3 +6,4 @@ export const GET = async (req: NextRequest) => {
   if (user instanceof NextResponse) return user;
   return NextResponse.json(user);
 };
+export const dynamic = 'force-dynamic'

@@ -236,3 +236,4 @@ const SignupPage = () => {
 };
 
 export default SignupPage;
+export const dynamic = "force-dynamic"

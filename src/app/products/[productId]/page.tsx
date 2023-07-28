@@ -42,8 +42,8 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Carousel
                   images={product.images
-                    .filter((img) => !img.isVideo)
-                    .map((img) => img.secureUrl)}
+                    .filter((img: any) => !img.isVideo)
+                    .map((img: any) => img.secureUrl)}
                 />
                 <div className="self-end flex flex-col gap-2 py-2 items-start">
                   <h2 className="text-2xl font-semibold mb-2">
@@ -84,3 +84,5 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
 };
 
 export default ProductPage;
+
+export const dynamic = 'force-dynamic';

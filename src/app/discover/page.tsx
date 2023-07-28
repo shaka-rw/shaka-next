@@ -43,3 +43,4 @@ export default async function DiscoverPage() {
     </main>
   );
 }
+export const dynamic = "force-dynamic"

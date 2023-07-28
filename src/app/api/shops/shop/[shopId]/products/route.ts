@@ -14,3 +14,4 @@ export const GET = async (
 
   return NextResponse.json(products);
 };
+export const dynamic = 'force-dynamic'

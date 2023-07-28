@@ -5,7 +5,7 @@ const CategoryOptions = async () => {
   const options = await prisma.category.findMany();
   return (
     <>
-      {options.map((cat) => (
+      {options.map((cat: any) => (
         <option key={cat.id} value={cat.id}>
           {cat.name}
         </option>

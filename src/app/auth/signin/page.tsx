@@ -60,7 +60,9 @@ const LoginPage = () => {
       <div className="flex flex-col gap-3 items-center max-w-2xl w-full space-y-8">
         <div>
           <div className="flex items-center justify-center gap-2 p-1">
-            <Image src={'/logo_.png'} height={80} width={120} alt="Shaka" />
+            <Link href={'/'} className="flex items-center justify-center">
+              <Image src={'/logo_.png'} height={80} width={120} alt="Shaka" />
+            </Link>
             <span className=" h-10 w-[.07rem] rounded bg-gray-400 hidden md:inline-block font-bold text-sm"></span>
 
             <MdLock className="mx-auto h-12 w-auto text-primary" />
@@ -178,3 +180,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+export const dynamic = 'force-dynamic';

@@ -15,3 +15,4 @@ export const POST = async (req: NextRequest) => {
 
   return NextResponse.json({ user });
 };
+export const dynamic = 'force-dynamic'

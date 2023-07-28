@@ -22,3 +22,4 @@ export async function GET(req: NextRequest) {
   const categories = await prisma.category.findMany();
   return NextResponse.json(categories);
 }
+export const dynamic = 'force-dynamic'
