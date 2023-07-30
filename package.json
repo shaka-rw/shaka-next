@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "deploy": "prima migrate deploy && prisma generate && pm2 restart shaka-next-02",
     "start": "next start",
     "lint": "next lint"
   },
