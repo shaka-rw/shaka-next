@@ -65,3 +65,4 @@ const AddToCartForm = async ({ product }: { product: Product }) => {
 };
 
 export default AddToCartForm;
+export const dynamic = 'force-dynamic';
