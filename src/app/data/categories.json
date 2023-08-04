@@ -1,0 +1,626 @@
+[
+  
+  {
+    "name": "Male Fashion",
+    "icon": "tshirt",
+    "url": "",
+    "image": "",
+    "sub": [
+      {
+        "title": "Men's Fashion",
+        "list": [
+          {
+            "name": "Clothing",
+            "url": ""
+          },
+          {
+            "name": "Shoes",
+            "url": ""
+          },
+          {
+            "name": "Jewelry",
+            "url": ""
+          },
+          {
+            "name": "Watches",
+            "url": ""
+          },
+          {
+            "name": "Handbags",
+            "url": ""
+          },
+          {
+            "name": "Accessories",
+            "url": ""
+          },
+          {
+            "name": "Boy's Fashion",
+            "url": ""
+          },
+          {
+            "name": "More Categories",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "Boy's Fashion",
+        "list": [
+          {
+            "name": "Clothing",
+            "url": ""
+          },{
+            "name": "Shoes",
+            "url": ""
+          },{
+            "name": "Jewelry",
+            "url": ""
+          },{
+            "name": "Watches",
+            "url": ""
+          },{
+            "name": "Accessories",
+            "url": ""
+          },{
+            "name": "School Uniforms",
+            "url": ""
+          },{
+            "name": "Mens's Fashion",
+            "url": ""
+          },{
+            "name": "More Categories",
+            "url": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Female Fashion",
+    "icon": "tshirt",
+    "url": "",
+    "image": "",
+    "sub": [
+      {
+        "title": "Women's Fashion",
+        "list": [
+          {
+            "name": "Clothing",
+            "url": ""
+          },
+          {
+            "name": "Shoes",
+            "url": ""
+          },
+          {
+            "name": "Jewelry",
+            "url": ""
+          },
+          {
+            "name": "Watches",
+            "url": ""
+          },
+          {
+            "name": "Handbags",
+            "url": ""
+          },
+          {
+            "name": "Accessories",
+            "url": ""
+          },
+          {
+            "name": "Girl's Fashion",
+            "url": ""
+          },
+          {
+            "name": "More Categories",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "Girl's Fashion",
+        "list": [
+          {
+            "name": "Clothing",
+            "url": ""
+          },
+          {
+            "name": "Shoes",
+            "url": ""
+          },
+          {
+            "name": "Jewelry",
+            "url": ""
+          },
+          {
+            "name": "Watches",
+            "url": ""
+          },
+          {
+            "name": "Accessories",
+            "url": ""
+          },
+          {
+            "name": "School Uniforms",
+            "url": ""
+          },
+          {
+            "name": "Women's Fashion",
+            "url": ""
+          },
+          {
+            "name": "More Categories",
+            "url": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Electronics",
+    "icon": "cpu",
+    "url": "",
+    "image": "",
+    "sub": [
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Accessories & Suppliers",
+            "url": ""
+          },
+          {
+            "name": "Computer & Accessories",
+            "url": ""
+          },
+          {
+            "name": "Cell Phones & Accessories",
+            "url": ""
+          },
+          {
+            "name": "GPS & Navigation",
+            "url": ""
+          },
+          {
+            "name": "Office Electronics",
+            "url": "Headphones"
+          },
+          {
+            "name": "Portable Audi & Video",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Monitors",
+            "url": ""
+          },
+          {
+            "name": "Networking Products",
+            "url": ""
+          },
+          {
+            "name": "Strips & Surge",
+            "url": ""
+          },
+          {
+            "name": "Printers",
+            "url": ""
+          },
+          {
+            "name": "Scanners",
+            "url": ""
+          },
+          {
+            "name": "Servers",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Television and Video",
+            "url": ""
+          },
+          {
+            "name": "Readers & Accessories",
+            "url": ""
+          },
+          {
+            "name": "Wearable Technology",
+            "url": ""
+          },
+          {
+            "name": "Video Projectors",
+            "url": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Computers",
+    "icon": "desktop",
+    "url": "",
+    "image": "",
+    "sub": [
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Accessories & Peripherals",
+            "url": ""
+          },
+          {
+            "name": "Computer Components",
+            "url": ""
+          },
+          {
+            "name": "Computers & Tablets",
+            "url": ""
+          },
+          {
+            "name": "Data Storage",
+            "url": ""
+          },
+          {
+            "name": "External Components",
+            "url": ""
+          },
+          {
+            "name": "Laptop Accessories",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Monitors",
+            "url": ""
+          },
+          {
+            "name": "Networking Products",
+            "url": ""
+          },
+          {
+            "name": "Strips & Surge",
+            "url": ""
+          },
+          {
+            "name": "Printers",
+            "url": ""
+          },
+          {
+            "name": "Scanners",
+            "url": ""
+          },
+          {
+            "name": "Servers",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Tablet Accessories",
+            "url": ""
+          },
+          {
+            "name": "Tablet Replacement Parts",
+            "url": ""
+          },
+          {
+            "name": "Waranties & Services",
+            "url": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Beauty & Health & Hair",
+    "icon": "mouth",
+    "url": "",
+    "image": "",
+    "sub": [
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Make",
+            "url": ""
+          },
+          {
+            "name": "Skin Care",
+            "url": ""
+          },
+          {
+            "name": "Hair Care",
+            "url": ""
+          },
+          {
+            "name": "Fragrance",
+            "url": ""
+          },
+          {
+            "name": "Foot, Hand & Nail Care",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Shave & Hair Removal",
+            "url": ""
+          },
+          {
+            "name": "Personal Care",
+            "url": ""
+          },
+          {
+            "name": "Oral Care",
+            "url": ""
+          },
+          {
+            "name": "Tools & Accessories",
+            "url": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Sports & Fitness",
+    "icon": "soccer",
+    "url": "",
+    "image": "",
+    "sub": [
+      {
+        "title": "Sports & Fitness",
+        "list": [
+          {
+            "name": "Fitness Equipment",
+            "url": ""
+          },
+          {
+            "name": "Yoga Equipment",
+            "url": ""
+          },
+          {
+            "name": "Martial Arts Equipment",
+            "url": ""
+          },
+          {
+            "name": "Dance Equipment",
+            "url": ""
+          },
+          {
+            "name": "Boxing & Combat",
+            "url": ""
+          },
+          {
+            "name": "Gymnastics Equipment",
+            "url": ""
+          },
+          {
+            "name": "Track & Field",
+            "url": ""
+          },
+          {
+            "name": "Swimming & Aquatics",
+            "url": ""
+          },
+          {
+            "name": "Nutrition & Hydration",
+            "url": ""
+          },
+          {
+            "name": "Fitness Technology",
+            "url": ""
+          }
+        ]
+      },
+      
+      {
+        "title": "Sports And Outdoors",
+        "list": [
+          {
+            "name": "Team Sports Equipment",
+            "url": ""
+          },
+          {
+            "name": "Individual Sports Equipment",
+            "url": ""
+          },
+          {
+            "name": "Camping & Hiking Gear",
+            "url": ""
+          },
+          {
+            "name": "Fishing Equipment",
+            "url": ""
+          },
+          {
+            "name": "Hunting Equipment",
+            "url": ""
+          },
+          {
+            "name": "Water Sports Equipment",
+            "url": ""
+          },
+          {
+            "name": "Cycling Equipment",
+            "url": ""
+          },
+          {
+            "name": "Winter Sports Equipment",
+            "url": ""
+          },
+          {
+            "name": "Climbing Equipment",
+            "url": ""
+          },
+          {
+            "name": "Outdoor Clothing & Footwear",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "Outdoor Recreation",
+        "list": [
+          {
+            "name": "Camping & Hiking",
+            "url": ""
+          },
+          {
+            "name": "Cycling",
+            "url": ""
+          },
+          {
+            "name": "Fishing",
+            "url": ""
+          },
+          {
+            "name": "Bird Watching & Wildlife Viewing",
+            "url": ""
+          },
+          {
+            "name": "Canoeing & Kayaking",
+            "url": ""
+          },
+          {
+            "name": "Rock Climbing & Mountaineering",
+            "url": ""
+          },
+          {
+            "name": "Trail Running",
+            "url": ""
+          },
+          {
+            "name": "Picnicking",
+            "url": ""
+          },
+          {
+            "name": "Gardening & Landscaping",
+            "url": ""
+          },
+          {
+            "name": "Outdoor Photography",
+            "url": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Tools & Home Kits",
+    "icon": "home",
+    "url": "",
+    "image": "",
+    "sub": [
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Tools & Home Improvement",
+            "url": ""
+          },
+          {
+            "name": "Appliances",
+            "url": ""
+          },
+          {
+            "name": "Building Supplies",
+            "url": ""
+          },
+          {
+            "name": "Electrical",
+            "url": ""
+          },
+          {
+            "name": "Hardware",
+            "url": ""
+          },
+          {
+            "name": "Storage & Home Organization",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Lighting & Ceiling Fans",
+            "url": ""
+          },
+          {
+            "name": "Measuring & Layout Tools",
+            "url": ""
+          },
+          {
+            "name": "Painting Supplies & Wall Treatments",
+            "url": ""
+          },
+          {
+            "name": "Power & Hand Tools",
+            "url": ""
+          },
+          {
+            "name": "Safety & Security",
+            "url": ""
+          },
+          {
+            "name": "Rought Plumbing",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "title": "",
+        "list": [
+          {
+            "name": "Welding & Soldering",
+            "url": ""
+          },
+          {
+            "name": "Kitchen & Bath Fixtures",
+            "url": ""
+          },
+          {
+            "name": "Light Bulbs",
+            "url": ""
+          },
+          {
+            "name": "Storage & Home Organization",
+            "url": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Music",
+    "icon": "music",
+    "url": ""
+  },
+  {
+    "name": "Foods and Beverages",
+    "icon": "cup",
+    "url": ""
+  }
+
+]

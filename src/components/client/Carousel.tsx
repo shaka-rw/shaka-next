@@ -1,11 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
+import { motion } from 'framer-motion';
 
-const Carousel = ({ images }: { images: string[] }) => {
+const Carousel = ({
+  images,
+  autoPlay = false,
+  duration = 4000,
+}: {
+  images: string[];
+  autoPlay?: boolean;
+  duration?: number;
+}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // const [duration, setDuration] = useState(0);
+
+  const handleNextImage = useCallback(() => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  }, [images.length]);
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -13,19 +30,28 @@ const Carousel = ({ images }: { images: string[] }) => {
     );
   };
 
-  const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+  useEffect(() => {
+    if (!autoPlay) return;
+    const interval = setInterval(() => {
+      handleNextImage();
+      // setDuration((seconds) => seconds + 1);
+    }, duration) as any;
+    return () => clearInterval(interval);
+  }, [autoPlay, duration, handleNextImage]);
+
   return (
     <div className="flex relative flex-col h-full justify-center">
       <div className="relative">
-        <img
-          src={images[currentImageIndex]}
-          alt="Product"
-          className="md:w-full md:h-96 h-64 w-full object-cover rounded-md shadow-md"
-        />
+        {
+          <motion.img
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            src={images[currentImageIndex]}
+            alt="Product"
+            className="md:w-full animate-fade transition-opacity duration-200 md:h-96 h-64 w-full object-contain rounded-md shadow-md"
+          />
+        }
         {images.length > 1 && (
           <>
             <button
@@ -43,7 +69,7 @@ const Carousel = ({ images }: { images: string[] }) => {
           </>
         )}
       </div>
-      {images.length > 1 && (
+      {!autoPlay && images.length > 1 ? (
         <div className="flex justify-center bg-black/5 absolute p-2 rounded-md bottom-1 left-[45%] -translate-y-1/2 items-center mt-4">
           {images.map((image, index) => (
             <button
@@ -57,6 +83,8 @@ const Carousel = ({ images }: { images: string[] }) => {
             />
           ))}
         </div>
+      ) : (
+        <></>
       )}
     </div>
   );

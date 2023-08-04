@@ -2,6 +2,7 @@ import GuestHome from '@/components/GuestHome';
 import AppBar from '@/components/AppBar';
 import HomeContent from '@/components/HomeContent';
 import { Metadata } from 'next';
+import NewHome from '@/components/server/NewHome';
 
 export const metadata: Metadata = {
   title: 'Shaka - Home',
@@ -11,13 +12,14 @@ export const metadata: Metadata = {
 
 const HomePage = () => {
   return (
-    <main className="grid min-h-screen grid-rows-[auto,1fr] grid-cols-[1fr]">
-      <AppBar />
-      {/* <Sidebar />  */}
-      <div className="container mx-auto max-w-7xl">
-        <GuestHome />
-      </div>
-    </main>
+    <NewHome />
+    // <main className="grid min-h-screen grid-rows-[auto,1fr] grid-cols-[1fr]">
+    //   <AppBar />
+    //   {/* <Sidebar />  */}
+    //   <div className="container mx-auto max-w-7xl">
+    //     <GuestHome />
+    //   </div>
+    // </main>
   );
 };
 
