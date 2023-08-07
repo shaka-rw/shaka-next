@@ -57,3 +57,5 @@ const Discover = async () => {
 };
 
 export default Discover;
+
+export const dynamic = 'force-dynamic';
