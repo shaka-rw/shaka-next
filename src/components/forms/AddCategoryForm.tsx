@@ -3,15 +3,34 @@ import React from 'react';
 import ModalBtn from '../ModalBtn';
 import { revalidatePath } from 'next/cache';
 import { MdAdd } from 'react-icons/md';
+import { uploadAssetImage } from '@/app/_actions';
+
+export enum AssetFolder {
+  Categories = 'categories',
+  Shops = 'shops',
+  ProductColors = 'product_colors',
+}
 
 async function addCategory(data: FormData) {
   'use server';
   const name = data.get('name') as string;
-  console.log({ catname: name });
-  if (!name.trim()) return;
+  const image = data.get('image') as File;
 
-  const category = await prisma.category.create({ data: { name } });
-  console.log({ category });
+  if (!name.trim() || !image.size) return;
+  const asset = await uploadAssetImage(image, AssetFolder.Categories);
+
+  const category = await prisma.category.create({
+    data: {
+      name,
+      image: {
+        create: {
+          secureUrl: asset.secure_url,
+          url: asset.url,
+          assetId: asset.public_id,
+        },
+      },
+    },
+  });
   revalidatePath('/');
 }
 
@@ -33,6 +52,18 @@ const AddCategory = () => {
               className="input w-full input-bordered"
               placeholder="Category Name"
             />
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Category image</span>
+              </label>
+              <input
+                type="file"
+                className="file-input file-input-bordered w-full max-w-xs"
+                required
+                name="image"
+              />
+              <label className="label"></label>
+            </div>
             <button type="submit" className="btn w-fit btn-primary">
               <MdAdd /> Add Category
             </button>

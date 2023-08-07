@@ -1,5 +1,6 @@
 import AppBar from '@/components/AppBar';
 import HomeContent from '@/components/HomeContent';
+import Navbar from '@/components/server/Navbar';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="grid min-h-screen grid-rows-[auto,1fr] grid-cols-[1fr]">
-      <AppBar />
+      {/* <AppBar /> */}
+      <Navbar />
       {/* <Sidebar />  */}
-      <div className="container mx-auto max-w-7xl">
+      <div className="">
         <HomeContent />
       </div>
     </main>

@@ -10,27 +10,54 @@ import { User } from '@prisma/client';
 import prisma from '@/prima';
 import { revalidatePath } from 'next/cache';
 import { getPath } from '@/app/_actions';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 async function removeCart(formData: FormData) {
   'use server';
-  await prisma.cart.delete({ where: { id: formData.get('cartId') as string } });
+  const [cartId, prdQtyId] = (formData.get('cartQtyId') as string).split('_');
+  await prisma.quantitiesOnCart.delete({
+    where: {
+      cartId_productQuantityId: { cartId, productQuantityId: prdQtyId },
+    },
+  });
   revalidatePath(await getPath());
 }
 
-const CartModal = async ({ user }: { user: User }) => {
-  const carts = await prisma.cart.findMany({
-    where: { userId: user.id },
-    include: { product: true },
+const CartModal = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) return <></>;
+
+  const cart = await prisma.cart.findUnique({
+    where: { userId: session?.user?.id },
+    include: {
+      _count: { select: { quantities: true } },
+      quantities: {
+        include: {
+          productQuantity: {
+            include: {
+              product: true,
+              color: { include: { mainImage: true } },
+              size: true,
+            },
+          },
+        },
+      },
+    },
   });
   return (
     <Modal
       btnContent={''}
+      modalId="cart_modal"
       btn={
-        <div className="indicator mt-[2px]">
-          <span className="indicator-item font-smibold text-lg badge badge-secondary">
-            {await prisma.cart.count({ where: { userId: user.id } })}
-          </span>
-          <button className="btn relative text-3xl btn-circle">
+        <div className="indicator">
+          {(cart?._count.quantities ?? 0) > 0 && (
+            <span className="indicator-item font-bold -translate-x-[.15rem] translate-y-[.05rem] text-sm  badge badge-primary border rounded-full">
+              {cart?._count.quantities ?? 0}
+            </span>
+          )}
+          <button className="btn relative btn-square bg-transparent border-0 text-lg [padding:.15rem!important]">
             <MdShoppingCart />
           </button>
         </div>
@@ -39,12 +66,12 @@ const CartModal = async ({ user }: { user: User }) => {
       <h3 className="text-2xl flex items-center gap-2 mb-3 font-bold">
         <MdShoppingCart /> <span>Cart</span>
       </h3>
-      {carts.length === 0 && (
+      {!cart && (
         <div className="alert  flex gap-2">
           <MdHourglassEmpty /> Empty cart.
         </div>
       )}
-      {carts.length > 0 && (
+      {cart && (
         <div className="overflow-x-auto">
           <table className="table table-zebra">
             {/* head */}
@@ -59,17 +86,26 @@ const CartModal = async ({ user }: { user: User }) => {
               </tr>
             </thead>
             <tbody>
-              {carts.map((cart, i) => (
-                <tr key={cart.id}>
+              {(cart?.quantities ?? []).map((qty, i) => (
+                <tr key={qty.cartId + qty.productQuantityId}>
                   <th>{i + 1}</th>
-                  <td>{cart.product.name}</td>
-                  <td>{cart.product.price}</td>
-                  <td>{cart.quantity}</td>
-                  <th>{cart.product.price * cart.quantity} RWF</th>
+                  <td>{qty.productQuantity.product.name}</td>
+                  <td>{qty.price ?? qty.productQuantity.price}</td>
+                  <td>{qty.quantity}</td>
+                  <th>
+                    {(qty.price ?? qty.productQuantity.price) * qty.quantity}{' '}
+                    RWF
+                  </th>
                   <td>
                     <form action={removeCart}>
-                      <input type="hidden" name="cartId" value={cart.id} />
-                      <button className="btn-sm btn-outline">Remove</button>
+                      <input
+                        type="hidden"
+                        name="cartQtyId"
+                        value={`${qty.cartId}_${qty.productQuantityId}`}
+                      />
+                      <button type="submit" className="btn-sm btn-outline">
+                        Remove
+                      </button>
                     </form>
                   </td>
                 </tr>
@@ -79,9 +115,14 @@ const CartModal = async ({ user }: { user: User }) => {
         </div>
       )}
       <div className="text-xl uppercase my-2 font-bold">
-        Total: {carts.reduce((a, c) => a + c.quantity * c.product.price, 0)} RWF
+        Total:{' '}
+        {(cart?.quantities ?? []).reduce(
+          (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
+          0
+        )}{' '}
+        RWF
       </div>
-      {carts.length > 0 && (
+      {cart && (
         <div className="my-3">
           <button className="btn btn-primary">
             <MdShoppingCartCheckout /> Checkout

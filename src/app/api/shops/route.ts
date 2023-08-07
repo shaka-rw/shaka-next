@@ -4,6 +4,7 @@ import { Shop } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 const shopSchema = z.object({
   address: z.string().trim().min(1),
@@ -12,7 +13,7 @@ const shopSchema = z.object({
 });
 
 export const getCurrentUser = async () => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   const user = await prisma.user.findUnique({
     where: { email: session?.user?.email ?? '' },
@@ -25,7 +26,7 @@ export const getCurrentUser = async () => {
 
 export const POST = async (req: NextRequest) => {
   const body = (await req.json()) as z.infer<typeof shopSchema>;
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   const user = await prisma.user.findUnique({
     where: { email: session?.user?.email ?? '' },
@@ -47,4 +48,4 @@ export const POST = async (req: NextRequest) => {
 
   return NextResponse.json(shop, { status: 201 });
 };
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

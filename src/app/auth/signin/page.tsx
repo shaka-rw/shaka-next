@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { MdDangerous, MdLock, MdLogin } from 'react-icons/md';
+import { MdDangerous, MdLock } from 'react-icons/md';
 import {
   AiFillGoogleCircle as GoogleIcon,
-  AiOutlineUserAdd as SignupIcon,
   AiOutlineLogin,
 } from 'react-icons/ai';
 import { useForm, SubmitHandler } from 'react-hook-form';

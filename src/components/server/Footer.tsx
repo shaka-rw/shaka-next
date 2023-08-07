@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const Footer = () => {
   return (
-    <footer className="footer p-10 bg-base-200 text-base-content">
+    <footer className="footer p-10 pb-14 bg-base-200 text-base-content">
       <div>
         <Image alt="Shaka Logo" width={100} height={50} src={'/logo_.png'} />
         <p>

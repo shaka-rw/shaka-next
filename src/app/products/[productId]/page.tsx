@@ -1,13 +1,13 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import AppBar from '@/components/AppBar';
-import HomeContent from '@/components/HomeContent';
 import Carousel from '@/components/client/Carousel';
 import AddToCartForm from '@/components/forms/AddToCartForm';
+import Navbar from '@/components/server/Navbar';
 import prisma from '@/prima';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import React from 'react';
-import { MdAddShoppingCart, MdFavorite } from 'react-icons/md';
+import { MdFavorite } from 'react-icons/md';
 
 export const metadata: Metadata = {
   title: 'Shaka',
@@ -16,67 +16,109 @@ export const metadata: Metadata = {
 };
 
 const ProductPage = async ({ params }: { params: { productId: string } }) => {
-  // const productImages = [
-  //   'https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg', // Replace with actual image URLs
-  //   'https://daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg',
-  //   'https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg',
-  //   // Add more images here
-  // ];
-
   const product = await prisma.product.findUnique({
     where: { id: params.productId },
-    include: { images: true, shop: true, categories: true, sizes: true },
+    include: {
+      mainImage: true,
+      colors: { include: { mainImage: true, images: true } },
+      shop: { include: { image: true } },
+      categories: true,
+      quantities: {
+        include: { color: { include: { mainImage: true } }, size: true },
+      },
+      sizes: true,
+    },
   });
   if (!product) {
     return notFound();
   }
 
   return (
-    <main className="grid min-h-screen grid-rows-[auto,1fr] grid-cols-[1fr]">
-      <AppBar />
-      <div className="container mx-auto max-w-7xl">
-        <div className="p-6">
-          {/* <header className="bg-secondary py-4">...</header> */}
-          <main className="mt-6">
-            <section className="container min-h-[600px] mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Carousel
-                  images={product.images
-                    .filter((img: any) => !img.isVideo)
-                    .map((img: any) => img.secureUrl)}
-                />
-                <div className="self-end flex flex-col gap-2 py-2 items-start">
-                  <h2 className="text-2xl font-semibold mb-2">
-                    {product?.name}
-                  </h2>
-                  <p className="text-3xl font-extrabold mb-4 mt-2">
-                    {product?.price} RWF
-                  </p>
-                  <div className="flex gap-2 flex-row items-center">
-                    <AddToCartForm product={product} />
-                    <button className="btn btn-secondary">
-                      <MdFavorite /> Add to wishlist
-                    </button>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <div className="text-lg italic text-secondary font-semibold">
-                      From
-                    </div>
-                    <div className="btn mb-2 flex items-center">
-                      <div className="avatar rounded-full border w-10 h-10">
-                        <div className="text-3xl">{product.shop.name[0]}</div>
-                      </div>
-                      <span className="text-xl [text-transform:none]">
-                        {product.shop.name}
-                      </span>
-                    </div>
-                  </div>
+    <main className="">
+      <Navbar />
 
-                  <p className="mt-6 text-lg">{product.description}</p>
+      {/* <SingleProduct product={product} /> */}
+
+      <div className="container mx-auto ">
+        <div className="p-3 flex flex-col gap-2">
+          <section className="w-full rounded pt-3 bg-base-200">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col justify-center w-full gap-2 items-start">
+                <div className="bg-base-200 w-full rounded border-r-2 px-2">
+                  <Carousel images={[]} colors={product.colors} />
                 </div>
               </div>
-            </section>
-          </main>
+              <div className="flex h-full flex-col  px-2 mb:px-0 gap-2 py-1 items-start">
+                <h2 className="text-2xl font-semibold mb-2">{product?.name}</h2>
+
+                <p className="text-lg  font-extrabold mb-2 text-secondary">
+                  {product.quantities.map((q, i) =>
+                    i > 0 ? (
+                      <></>
+                    ) : (
+                      <span
+                        key={q.id}
+                        className={`${
+                          i !== 0 ? 'border-l' : ''
+                        } px-1 inline-block`}
+                      >
+                        {q.price} RWF
+                      </span>
+                    )
+                  )}
+                </p>
+
+                <div className="mb-4">
+                  <h3 className="text-sm font-semibold mb-2">Size</h3>
+                  <div className="p-2 border bg-base-100 rounded flex gap-2 items-center flex-wrap">
+                    {product.sizes.map((size) => (
+                      <label
+                        key={size.id}
+                        className="flex items-center space-x-2 label cursor-pointer"
+                      >
+                        <input
+                          type="radio"
+                          name="size"
+                          className="radio radio-primary"
+                        />
+                        <span className="text-sm label-text capitalize">
+                          {size.size}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-row items-center">
+                  <AddToCartForm product={product as any} />
+                  <button className="btn btn-secondary">
+                    <MdFavorite /> Add to wishlist
+                  </button>
+                </div>
+                <div className="flex flex-col mt-2 gap-2">
+                  <div className="text-sm mb-2 font-semibold">Retailer</div>
+                  <div className="mb-2 rounded flex items-center">
+                    <div className="avatar rounded-full border w-10 h-10">
+                      <div className="avatar w-10 h-10 overflow-hidden">
+                        <img
+                          className="h-full w-full object-contain"
+                          src={product.shop.image.secureUrl}
+                        />
+                      </div>
+                    </div>
+                    <span className="text-lg ml-2 font-bold [text-transform:none]">
+                      {product.shop.name}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col mt-2 gap-2">
+                  <div className="text-sm mb-2 font-semibold">Description</div>
+                  <div className="mb-2 p-2 bg-base-300 rounded text-center text-sm">
+                    {product.description}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </main>

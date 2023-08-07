@@ -92,15 +92,16 @@ model Category {
 model Shop {
   id         String    @id @default(cuid())
   name       String
+  assetId    String
   image      Asset     @relation(fields: [assetId], references: [id])
   address    String
   categoryId String
+  about      String    @default("")
   approved   Boolean   @default(false)
   userId     String    @unique
   owner      User      @relation(name: "UserShopRelation", fields: [userId], references: [id])
   category   Category  @relation(fields: [categoryId], references: [id])
   products   Product[]
-  assetId    String
   followers  User[]    @relation(name: "UserFollowingRelation")
   User       User[]
   Order      Order[]
@@ -115,22 +116,23 @@ enum ProductGender {
 }
 
 model Product {
-  id              String            @id @default(cuid())
-  name            String
-  description     String
-  price           Float
-  gender          ProductGender
-  categories      Category[]
+  id          String            @id @default(cuid())
+  name        String
+  description String
+  gender      ProductGender     @default(UNISEX)
+  categories  Category[]
   // main_image    ProductImage @relation(fields: [main_image_id], references: [id])
-  images          ProductAsset[]
-  sizes           ProductSize[]
-  shop            Shop              @relation(fields: [shopId], references: [id])
-  shopId          String
-  carts           Cart[]
-  colors          ProductColor[]
-  ProductQuantity ProductQuantity[]
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @default(now()) @updatedAt
+  mainImage   Asset             @relation(name: "ProductMainImage", fields: [assetId], references: [id])
+  sizes       ProductSize[]
+  shop        Shop              @relation(fields: [shopId], references: [id])
+  shopId      String
+  colors      ProductColor[]
+  available   Boolean           @default(true)
+  published   Boolean           @default(false)
+  quantities  ProductQuantity[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now()) @updatedAt
+  assetId     String            @unique
 }
 
 model ProductSize {
@@ -141,51 +143,54 @@ model ProductSize {
 }
 
 model Cart {
-  id         String            @id @default(cuid())
-  productId  String
-  user       User              @relation(fields: [userId], references: [id])
-  userId     String            @unique
-  quantity   Int
-  total      Int?
-  Product    Product           @relation(fields: [productId], references: [id])
-  quantities ProductQuantity[]
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @default(now()) @updatedAt
+  id            String             @id @default(cuid())
+  user          User               @relation(fields: [userId], references: [id])
+  userId        String             @unique
+  totalQuantity Int?
+  totalAmount   Int?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @default(now()) @updatedAt
+  quantities    QuantitiesOnCart[]
+}
 
-  @@unique([productId, userId])
+model QuantitiesOnCart {
+  cart              Cart            @relation(fields: [cartId], references: [id])
+  quantity          Int
+  price             Float?
+  productQuantity   ProductQuantity @relation(fields: [productQuantityId], references: [id])
+  cartId            String
+  productQuantityId String
+  createAt          DateTime        @default(now())
+  updatedAt         DateTime        @default(now()) @updatedAt
+
+  @@id([cartId, productQuantityId])
 }
 
 model Asset {
-  id           String         @id @default(cuid())
-  assetId      String?
-  secureUrl    String
-  url          String
-  Category     Category[]
-  Shop         Shop[]
-  ProductColor ProductColor[]
+  id        String     @id @default(cuid())
+  assetId   String?
+  secureUrl String
+  url       String
+  isVideo   Boolean    @default(false)
+  Category  Category[]
+  Shop      Shop[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @default(now()) @updatedAt
+  products_main_asset Product?       @relation(name: "ProductMainImage")
+  productId           String?        @unique
+  colorAssets         ProductColor[] @relation(name: "ColorAssets")
+  productMainColor    ProductColor?  @relation(name: "MainColorImage")
+  productColorId      String?
 }
 
 // Images or videos
-model ProductAsset {
-  id         String   @id @default(cuid())
-  assetId    String?
-  secureUrl  String
-  url        String
-  isVideo    Boolean  @default(false)
-  isMain     Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  product_id String
-  product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-}
 
 model ProductColor {
   id         String            @id @default(cuid())
-  image      Asset             @relation(fields: [assetId], references: [id])
-  assetId    String
+  mainImage  Asset             @relation(name: "MainColorImage", fields: [assetId], references: [id])
+  images     Asset[]           @relation(name: "ColorAssets")
+  assetId    String            @unique
   name       String?
   product    Product           @relation(fields: [productId], references: [id])
   productId  String
@@ -194,6 +199,7 @@ model ProductColor {
 
 model ProductQuantity {
   id             String       @id @default(cuid())
+  price          Float
   size           ProductSize  @relation(fields: [productSizeId], references: [id])
   productSizeId  String
   color          ProductColor @relation(fields: [productColorId], references: [id])
@@ -201,11 +207,13 @@ model ProductQuantity {
   quantity       Int
   product        Product      @relation(fields: [productId], references: [id])
   productId      String
-  Cart           Cart[]
   orders         Order[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt
+  QuantitiesOnCart QuantitiesOnCart[]
+
+  @@unique([productSizeId, productColorId])
 }
 
 enum OrderStatus {

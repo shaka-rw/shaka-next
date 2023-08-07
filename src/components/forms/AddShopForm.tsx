@@ -7,14 +7,23 @@ import { Modal } from '../Modal';
 import { MdAdd } from 'react-icons/md';
 import { Category } from '@prisma/client';
 import { addShop } from '@/app/_actions';
+import { toast } from 'react-hot-toast';
 
 const shopSchema = z.object({
   address: z.string().trim().min(1),
   name: z.string().trim().min(1),
+  about: z.string().min(1),
   category: z.string().trim().min(1),
+  image: z.any(),
 });
 
-const AddShopForm = ({ categories }: { categories: Category[] }) => {
+const AddShopForm = ({
+  categories,
+  btn,
+}: {
+  categories: Category[];
+  btn?: React.ReactNode;
+}) => {
   const [isPending, startTransition] = useTransition();
 
   const {
@@ -30,16 +39,35 @@ const AddShopForm = ({ categories }: { categories: Category[] }) => {
     formData.append('name', data.name);
     formData.append('address', data.address);
     formData.append('category', data.category);
-    return startTransition(() => addShop(formData));
+    formData.append('about', data.about);
+    const imageList = data.image as FileList;
+    console.log({ img: imageList.item(0) });
+    if ((imageList?.length ?? 0) !== 1) {
+      return toast.error('No shop image was selected!');
+    }
+    formData.append('image', imageList.item(0) as File);
+
+    try {
+      startTransition(() => addShop(formData));
+    } catch (error: any) {
+      toast.error(`Error: ${error?.message ?? 'Something went wrong..'}`);
+      console.log(error);
+    }
   };
 
   return (
     <Modal
-      btnContent={
-        <>
-          <MdAdd /> Add shop
-        </>
+      modalId={btn ? 'add_shop_o' : 'add_shop_i'}
+      btn={
+        btn ? (
+          btn
+        ) : (
+          <button className="btn btn-primary">
+            <MdAdd /> create shop
+          </button>
+        )
       }
+      btnContent={<></>}
     >
       <h3 className="font-bold items-center text-2xl my-2 uppercase flex gap-2">
         <MdAdd /> Add shop
@@ -55,13 +83,31 @@ const AddShopForm = ({ categories }: { categories: Category[] }) => {
           <input
             type="text"
             className="input input-bordered w-full"
-            placeholder="Name"
+            placeholder="Shop name"
             {...register('name')}
           />
+          ,
           {errors.name && (
             <label className="label">
               <span className="label-text-alt text-red-500">
                 {errors.name.message}
+              </span>
+            </label>
+          )}
+        </div>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Description</span>
+          </label>
+          <textarea
+            className="textarea textarea-bordered w-full"
+            placeholder="About your shop"
+            {...register('about')}
+          ></textarea>
+          {errors.about && (
+            <label className="label">
+              <span className="label-text-alt text-red-500">
+                {errors.about.message}
               </span>
             </label>
           )}
@@ -86,13 +132,26 @@ const AddShopForm = ({ categories }: { categories: Category[] }) => {
         </div>
         <div className="form-control w-full max-w-xs">
           <label className="label">
+            <span className="label-text">Shop Profile</span>
+          </label>
+          <input
+            type="file"
+            className="file-input file-input-bordered w-full max-w-xs"
+            {...register('image', {
+              required: 'Shop image is required',
+            })}
+          />
+          <label className="label"></label>
+        </div>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
             <span className="label-text">Category (Industry)</span>
           </label>
           <select
             className="select select-bordered w-full max-w-xs"
             {...register('category')}
           >
-            <option disabled selected>
+            <option defaultValue={''} disabled defaultChecked>
               Choose category
             </option>
             {categories.map((cat) => (
@@ -110,7 +169,8 @@ const AddShopForm = ({ categories }: { categories: Category[] }) => {
           )}
         </div>
         <button disabled={isPending} className="btn btn-primary w-fit">
-          <MdAdd /> Add shop {isPending && <span className='loading loading-spinner loading-sm' />}
+          <MdAdd /> Add shop{' '}
+          {isPending && <span className="loading loading-spinner loading-sm" />}
         </button>
       </form>
     </Modal>

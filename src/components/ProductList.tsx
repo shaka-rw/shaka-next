@@ -1,28 +1,29 @@
 /* eslint-disable @next/next/no-img-element */
-import { Category, Product, ProductAsset, Shop } from '@prisma/client';
+import { Category, Product, Shop } from '@prisma/client';
 import Link from 'next/link';
 import React from 'react';
 import { MdAddShoppingCart, MdFavorite } from 'react-icons/md';
 import AddToCartForm from './forms/AddToCartForm';
 
 const ProductList = ({ products }: { products: Product[] }) => {
-  return (
+  return true ? (
+    <>Products</>
+  ) : (
     <div className="flex flex-wrap md:grid md:grid-cols-2 xl:grid-cols-3 gap-3 justify-items-center p-2">
       {products.map((prod) => (
         <div key={prod.id} className="card w-96 bg-base-100 shadow-xl">
           <figure>
             <img
               src={
-                ((prod as any).images as ProductAsset[]).find(
-                  (img) => img.isMain
-                )?.secureUrl ?? (prod as any).images[0].secureUrl
+                ((prod as any).images as any[]).find((img) => img.isMain)
+                  ?.secureUrl ?? (prod as any).images[0].secureUrl
               }
               alt={prod.name}
             />
           </figure>
           <div className="card-body">
             <div className="my-1 flex">
-              <span className="font-extrabold text-2xl">{prod.price} RWF</span>
+              <span className="font-extrabold text-2xl">{0} RWF</span>
             </div>
             <Link href={`/products/${prod.id}`} className="card-title">
               {prod.name}

@@ -1,20 +1,45 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import Image from 'next/image';
-import {
-  MdExplore,
-  MdFavorite,
-  MdOutlineWindow,
-  MdPerson,
-  MdSearch,
-  MdShoppingCart,
-} from 'react-icons/md';
 import Carousel from '../client/Carousel';
-import Link from 'next/link';
 import Navbar from './Navbar';
-import NewProductList from './NewProductList';
+import NewProductList, { NewDynamicProductList } from './NewProductList';
+import { getServerSession } from 'next-auth';
+import Link from 'next/link';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import prisma from '@/prima';
+import AddShopForm from '../forms/AddShopForm';
 
-const NewHome = () => {
+const NewHome = async () => {
+  const session = await getServerSession(authOptions);
+
+  const products = await prisma.product.findMany({
+    where: {
+      AND: { quantities: { some: { quantity: { gt: 0 } } }, available: true },
+    },
+    include: {
+      mainImage: true,
+      shop: { include: { image: true } },
+      categories: { include: { image: true } },
+      quantities: {
+        where: { quantity: { gt: 0 } },
+        distinct: ['productColorId', 'productSizeId'],
+        include: { color: { include: { mainImage: true } }, size: true },
+      },
+      sizes: true,
+      colors: { include: { mainImage: true, images: true } },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const categories = await prisma.category.findMany({
+    take: 100,
+    include: { image: true },
+  });
+  const shops = await prisma.shop.findMany({
+    take: 100,
+    include: { image: true },
+  });
+
   return (
     <div>
       <Navbar />
@@ -46,9 +71,21 @@ const NewHome = () => {
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque quis
             a illo tenetur eum minima quidem pariatur sunt numquam quas!
           </p>
-          <button className="btn mt-6 btn-primary">
-            Start Shopping &nbsp; &nbsp; &rarr;
-          </button>
+          <div className="flex items-center gap-3">
+            <Link href={'/discover'} className="btn mt-6 btn-primary">
+              Start Shopping &nbsp; &nbsp; &rarr;
+            </Link>
+            {session?.user && session.user.role === 'CUSTOMER' && (
+              <AddShopForm
+                btn={
+                  <button className="btn mt-6 btn-outline btn-secondary">
+                    Start a shop &nbsp; &nbsp; &rarr;
+                  </button>
+                }
+                categories={categories}
+              />
+            )}
+          </div>
         </div>
         <div className="hidden md:block">
           <Carousel
@@ -72,17 +109,24 @@ const NewHome = () => {
           </div>
           <div className="row-span-2 text-base">Recommended for you.</div>
         </div>
-        <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
-          <div className="avatar rounded-full overflow-hidden row-span-2 w-14 h-14">
-            <img
-              src="/assets/imgs/products/product-16-2.jpg"
-              alt="profile"
-              className="object-cover object-top w-full h-full"
-            />
+        {shops.map((shop) => (
+          <div
+            key={shop.id}
+            className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2"
+          >
+            <div className="avatar rounded-full overflow-hidden row-span-2 w-14 h-14">
+              <img
+                src={shop.image.secureUrl}
+                alt="profile"
+                className="object-cover object-top w-full h-full"
+              />
+            </div>
+            <span className="text-lg font-bold">{shop.name}</span>
+            <span className="text-sm">
+              {(shop as any).about ?? 'Modern fashion trends'}
+            </span>
           </div>
-          <span className="text-lg font-bold">Fashion</span>
-          <span className="text-sm">Modern fashion trends</span>
-        </div>
+        ))}
         <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
           <div className="avatar rounded-full overflow-hidden row-span-2 w-14 h-14">
             <img
@@ -128,76 +172,36 @@ const NewHome = () => {
             <span className="link">All categories &rarr;</span>
           </div>
           <div className="grid grid-cols-[auto,auto] md:flex flex-wrap gap-2">
-            <div className="flex justify-between flex-col w-40 md:w-52 h-48  md:h-56 p-3 bg-base-200 gap-2">
-              <div className="avatar rounded justify-self-end self-end overflow-hidden h-32 w-32 ">
-                <img
-                  src="/assets/imgs/products/product-16-2.jpg"
-                  alt="Category"
-                  className="object-contain object-center"
-                />
+            {categories.map((cat) => (
+              <div
+                key={cat.id}
+                className="flex justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"
+              >
+                <div className="avatar rounded justify-self-end self-end overflow-hidden h-24 w-24 ">
+                  <img
+                    src={cat.image.secureUrl}
+                    alt={cat.name}
+                    className="object-contain object-center"
+                  />
+                </div>
+                <div className="text-xl font-bold">{cat.name}</div>
               </div>
-              <div className="text-xl font-bold">T-Shirts</div>
-            </div>
-            <div className="flex justify-between flex-col w-40 md:w-52 h-48  md:h-56 p-3 bg-base-200 gap-2">
-              <div className="avatar rounded justify-self-end self-end overflow-hidden h-32 w-32 ">
-                <img
-                  src="/assets/imgs/products/product-16-2.jpg"
-                  alt="Category"
-                  className="object-contain object-center"
-                />
+            ))}
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="flex justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"
+              >
+                <div className="avatar rounded justify-self-end self-end overflow-hidden h-24 w-24 ">
+                  <img
+                    src={`/assets/imgs/products/product-${i + 1}-1.jpg`}
+                    alt="Category"
+                    className="object-contain object-center"
+                  />
+                </div>
+                <div className="text-xl font-bold">T-Shirts</div>
               </div>
-              <div className="text-xl font-bold">T-Shirts</div>
-            </div>
-            <div className="flex justify-between flex-col w-40 md:w-52 h-48  md:h-56 p-3 bg-base-200 gap-2">
-              <div className="avatar rounded justify-self-end self-end overflow-hidden h-32 w-32 ">
-                <img
-                  src="/assets/imgs/products/product-16-2.jpg"
-                  alt="Category"
-                  className="object-contain object-center"
-                />
-              </div>
-              <div className="text-xl font-bold">T-Shirts</div>
-            </div>
-            <div className="flex justify-between flex-col w-40 md:w-52 h-48  md:h-56 p-3 bg-base-200 gap-2">
-              <div className="avatar rounded justify-self-end self-end overflow-hidden h-32 w-32 ">
-                <img
-                  src="/assets/imgs/products/product-16-2.jpg"
-                  alt="Category"
-                  className="object-contain object-center"
-                />
-              </div>
-              <div className="text-xl font-bold">T-Shirts</div>
-            </div>
-            <div className="flex justify-between flex-col w-40 md:w-52 h-48  md:h-56 p-3 bg-base-200 gap-2">
-              <div className="avatar rounded justify-self-end self-end overflow-hidden h-32 w-32 ">
-                <img
-                  src="/assets/imgs/products/product-16-2.jpg"
-                  alt="Category"
-                  className="object-contain object-center"
-                />
-              </div>
-              <div className="text-xl font-bold">T-Shirts</div>
-            </div>
-            <div className="flex justify-between flex-col w-40 md:w-52 h-48  md:h-56 p-3 bg-base-200 gap-2">
-              <div className="avatar rounded justify-self-end self-end overflow-hidden h-32 w-32 ">
-                <img
-                  src="/assets/imgs/products/product-16-2.jpg"
-                  alt="Category"
-                  className="object-contain object-center"
-                />
-              </div>
-              <div className="text-xl font-bold">T-Shirts</div>
-            </div>
-            <div className="flex justify-between flex-col w-40 md:w-52 h-48  md:h-56 p-3 bg-base-200 gap-2">
-              <div className="avatar rounded justify-self-end self-end overflow-hidden h-32 w-32 ">
-                <img
-                  src="/assets/imgs/products/product-16-2.jpg"
-                  alt="Category"
-                  className="object-contain object-center"
-                />
-              </div>
-              <div className="text-xl font-bold">T-Shirts</div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -276,7 +280,7 @@ const NewHome = () => {
         </div>
       </section>
 
-      <NewProductList />
+      <NewDynamicProductList products={products} title={'Top Products'} />
     </div>
   );
 };

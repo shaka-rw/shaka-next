@@ -1,11 +1,21 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
+import { Asset, Category } from '@prisma/client';
 import React, { useRef } from 'react';
-import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
+import {
+  MdArrowCircleLeft,
+  MdArrowCircleRight,
+  MdCategory,
+} from 'react-icons/md';
 
-const CategoryBar = () => {
+const CategoryBar = ({
+  categories,
+}: {
+  categories: (Category & { image: Asset })[];
+}) => {
   const scrollRef = useRef<HTMLElement>(null);
 
-  const categories: string[] = [
+  const _categories: string[] = [
     'Electronics',
     'Clothing',
     'Shoes',
@@ -37,7 +47,7 @@ const CategoryBar = () => {
   };
 
   return (
-    <div className="flex items-center gap-1 md:gap-2 overflow-x-auto bg-base-300 p-2 md:p-4">
+    <div className="flex w-full items-center gap-1 md:gap-2 overflow-x-auto bg-base-300 p-2 md:p-4">
       <button
         className="btn btn-sm  btn-circle text-xl"
         onClick={handleScrollLeft}
@@ -45,12 +55,26 @@ const CategoryBar = () => {
         <MdArrowCircleLeft />
       </button>
       <div
-        className="flex p-2 scroll-smooth rounded-md  join join-horizontal overflow-x-auto"
+        className="flex flex-1 w-full p-2 scroll-smooth rounded-md  gap-2 overflow-x-auto"
         ref={scrollRef as any}
       >
         {categories.map((category) => (
-          <div key={category} className="btn join-item shadow-md">
-            {category}
+          <div
+            key={category.id}
+            className="btn flex gap-2 items-center [border-radius:0.475rem!important] shadow-md"
+          >
+            <div className="avatar border w-10 h-10 rounded-full text-2xl  justify-center items-center">
+              {category.image ? (
+                <img
+                  src={category.image.secureUrl}
+                  alt={category.name}
+                  className="max-w-full max-h-full object-contain object-center"
+                />
+              ) : (
+                <MdCategory />
+              )}
+            </div>
+            <span className="text-sm inline-block">{category.name}</span>
           </div>
         ))}
       </div>

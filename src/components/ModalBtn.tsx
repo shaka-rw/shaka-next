@@ -25,7 +25,7 @@ export const ModalBtn2 = ({
 }>) => {
   return btn ? (
     <div
-      className="inline-flex"
+      className="inline-flex items-center justify-center"
       tabIndex={0}
       onClick={() => (window[modalId as any] as any).showModal()}
     >

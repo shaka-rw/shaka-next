@@ -1,31 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { MdClose, MdMenu } from 'react-icons/md';
+import useMobile from '@/hooks/useMobile';
+import React, { useState } from 'react';
+import { FaCaretDown } from 'react-icons/fa';
+import { MdResetTv } from 'react-icons/md';
 
 const SideSection = () => {
   const [selectedGender, setSelectedGender] = useState('all');
   const [selectedSize, setSelectedSize] = useState('all');
   const [selectedPrice, setSelectedPrice] = useState('all');
-  const [open, setOpen] = useState(false);
-
-  const [isMobile, setIsMobile] = useState(true);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 768px)');
-
-    setIsMobile(mediaQuery.matches);
-
-    const handleMediaQueryChange = (event: MediaQueryListEvent) => {
-      setIsMobile(event.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleMediaQueryChange);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaQueryChange);
-    };
-  }, []);
+  const isMobile = useMobile();
 
   const genders = ['all', 'men', 'women'];
   const sizes = ['all', 'small', 'medium', 'large'];
@@ -42,37 +26,23 @@ const SideSection = () => {
   };
 
   return (
-    <div
-      className={`p-4 bg-base-200 max-w-full ${
-        isMobile ? 'z-10' : 'w-60 h-full'
-      }
-
-      ${isMobile && open ? 'fixed w-full h-full inset-0' : ''}
-      ${
-        isMobile && !open
-          ? 'w-fit p-1 fixed flex justify-center items-center bottom-4 left-4 h-12 rounded '
-          : ''
-      }
-      
-     flex-1 `}
-    >
+    <div className="w-full flex flex-col gap-2 p-2 md:w-60 h-full">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold md:mb-4">
-          {!isMobile ? 'Discover' : ''}
-        </h2>
-        {isMobile && (
-          <button
-            onClick={() => setOpen((p) => !p)}
-            className="btn btn-sm btn-outline text-xl btn-cicle"
-          >
-            {open ? <MdClose /> : <MdMenu />}
-          </button>
+        {!isMobile && (
+          <h2 className="text-lg font-semibold md:mb-4">Discover</h2>
         )}
       </div>
-      <div className={`${isMobile && !open ? 'hidden' : ''}`}>
-        <div className={`mb-4 `}>
-          <h3 className="text-sm font-semibold mb-2">Gender</h3>
-          <div className="bg-base-100 p-2 shadow border rounded flex gap-2 items-center flex-wrap">
+      <div className={` ${isMobile ? 'flex gap-2 items-center ' : ''} `}>
+        <div className={`${isMobile ? 'dropdown' : ''} mb-4 `}>
+          <label
+            tabIndex={0}
+            className={`text-sm ${
+              isMobile ? 'btn gap-2' : ''
+            }  font-semibold mb-2`}
+          >
+            {isMobile ? selectedGender : 'Gender'} {isMobile && <FaCaretDown />}
+          </label>
+          <div className="bg-base-100 z-10 dropdown-content min-w-[12rem] p-2 shadow border rounded flex gap-2 items-center flex-wrap">
             {genders.map((gender) => (
               <label
                 key={gender}
@@ -94,9 +64,16 @@ const SideSection = () => {
           </div>
         </div>
 
-        <div className="mb-4">
-          <h3 className="text-sm font-semibold mb-2">Size</h3>
-          <div className="bg-base-100 p-2 shadow border rounded flex gap-2 items-center flex-wrap">
+        <div className={`${isMobile ? 'dropdown' : ''} mb-4 `}>
+          <label
+            tabIndex={0}
+            className={`text-sm ${
+              isMobile ? 'btn gap-2' : ''
+            }  font-semibold mb-2`}
+          >
+            {isMobile ? selectedSize : 'Size'} {isMobile && <FaCaretDown />}
+          </label>
+          <div className="z-10 dropdown-content min-w-[12rem] bg-base-100 p-2 shadow border rounded flex gap-2 items-center flex-wrap">
             {sizes.map((size) => (
               <label
                 key={size}
@@ -118,9 +95,16 @@ const SideSection = () => {
           </div>
         </div>
 
-        <div className="mb-4">
-          <h3 className="text-sm font-semibold mb-2">Price</h3>
-          <div className="bg-base-100 p-2 shadow border rounded flex gap-2 items-center flex-wrap">
+        <div className={`${isMobile ? 'dropdown dropdown-end' : ''} mb-4 `}>
+          <label
+            tabIndex={0}
+            className={`text-sm ${
+              isMobile ? 'btn gap-2' : ''
+            }  font-semibold mb-2`}
+          >
+            {isMobile ? selectedPrice : 'Price'} {isMobile && <FaCaretDown />}
+          </label>
+          <div className="z-10 dropdown-content min-w-[12rem] bg-base-100 p-2 shadow border rounded flex gap-2 items-center flex-wrap">
             {prices.map((price) => (
               <label
                 key={price}
@@ -141,14 +125,13 @@ const SideSection = () => {
             ))}
           </div>
         </div>
-
-        <button
-          className="bg-blue-500 text-white font-semibold py-2 px-4 rounded w-full"
-          onClick={handleResetFilters}
-        >
-          Reset Filters
-        </button>
       </div>
+      <button
+        className="btn-primary btn  font-semibold py-2 px-4 rounded w-full"
+        onClick={handleResetFilters}
+      >
+        <MdResetTv /> Reset Filters
+      </button>
     </div>
   );
 };
