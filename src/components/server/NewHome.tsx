@@ -2,12 +2,13 @@
 import React from 'react';
 import Carousel from '../client/Carousel';
 import Navbar from './Navbar';
-import NewProductList, { NewDynamicProductList } from './NewProductList';
+import { NewDynamicProductList } from './NewProductList';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/prima';
 import AddShopForm from '../forms/AddShopForm';
+import HorizontalScroll from './HorizontalScroll';
 
 const NewHome = async () => {
   const session = await getServerSession(authOptions);
@@ -68,8 +69,8 @@ const NewHome = async () => {
             SHOP QUICKLY, CHEAPLY & COMFORTABLY
           </div>
           <p className="text-lg mt-5">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Neque quis
-            a illo tenetur eum minima quidem pariatur sunt numquam quas!
+            Shaka is changing the definition of e-commerce in Africa. Join us to
+            book your ticket to the future of online shopping.
           </p>
           <div className="flex items-center gap-3">
             <Link href={'/discover'} className="btn mt-6 btn-primary">
@@ -98,69 +99,63 @@ const NewHome = async () => {
           />
         </div>
       </div>
-      <div className="p-3 container  md:flex-wrap mx-auto my-5 [&>div]:flex-1 items-center  rounded md:join bg-amber-200/50 grid grid-cols-2 md:flex justify-stretch w-full gap-6">
-        <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
-          <div className="avatar rounded-full overflow-hidden row-span-2 w-14 h-14">
-            <img
-              src="/assets/imgs/products/product-16-2.jpg"
-              alt="profile"
-              className="object-cover object-top w-full h-full"
-            />
-          </div>
-          <div className="row-span-2 text-base">Recommended for you.</div>
-        </div>
-        {shops.map((shop) => (
-          <div
-            key={shop.id}
-            className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2"
-          >
-            <div className="avatar rounded-full overflow-hidden row-span-2 w-14 h-14">
+      <HorizontalScroll
+        speed={500}
+        className="bg-accent/50 container mx-auto p-2 my-5"
+      >
+        <div className="items-center rounded flex w-full gap-2">
+          {/* <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
+            <div className="avatar rounded-full overflow-hidden row-span-2 w-10 h-10">
               <img
-                src={shop.image.secureUrl}
+                src="/assets/imgs/products/product-16-2.jpg"
                 alt="profile"
-                className="object-cover object-top w-full h-full"
+                className="object-cover object-top w-10 h-10"
               />
             </div>
-            <span className="text-lg font-bold">{shop.name}</span>
-            <span className="text-sm">
-              {(shop as any).about ?? 'Modern fashion trends'}
-            </span>
-          </div>
-        ))}
-        <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
-          <div className="avatar rounded-full overflow-hidden row-span-2 w-14 h-14">
-            <img
-              src="/assets/imgs/products/product-16-2.jpg"
-              alt="profile"
-              className="object-cover object-top w-full h-full"
-            />
-          </div>
-          <span className="text-lg font-bold">Fashion</span>
-          <span className="text-sm">Modern fashion trends</span>
+            <div className="row-span-2 text-base">Recommended for you.</div>
+          </div> */}
+          {shops.map((shop) => (
+            <div
+              key={shop.id}
+              className="flex py-1 px-2 border rounded items-center gap-2 bg-base-100/30 hover:bg-accent"
+            >
+              <div className="avatar rounded-full overflow-hidden w-10 h-10">
+                <img
+                  src={shop.image.secureUrl}
+                  alt="profile"
+                  className="object-contain object-top w-10 h-10"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-sm font-semibold">
+                  {shop.name?.slice(0, 6)}
+                </span>
+                <span className="text-xs">
+                  {((shop as any).about ?? 'Modern fashion trends').slice(0, 6)}
+                </span>
+              </div>
+            </div>
+          ))}
+          {Array.from({ length: 12 }).map((_m, i) => (
+            <div
+              key={i}
+              className="flex py-1 px-2 border rounded items-center gap-2 bg-base-100/30 hover:bg-accent"
+            >
+              <div className="avatar flex-1 rounded-full overflow-hidden  w-10 h-10">
+                <img
+                  src="/assets/imgs/products/product-16-2.jpg"
+                  alt="profile"
+                  className="object-contain object-top w-10 h-10"
+                />
+              </div>
+              <div className="flex flex-none flex-col gap-1">
+                <span className="text-sm font-semibold">Fashion</span>
+                <span className="text-xs">Modern</span>
+              </div>
+            </div>
+          ))}
         </div>
-        <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
-          <div className="avatar rounded-full overflow-hidden row-span-2 w-14 h-14">
-            <img
-              src="/assets/imgs/products/product-16-2.jpg"
-              alt="profile"
-              className="object-cover object-top w-full h-full"
-            />
-          </div>
-          <span className="text-lg font-bold">Fashion</span>
-          <span className="text-sm">Modern fashion trends</span>
-        </div>
-        <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
-          <div className="avatar rounded-full overflow-hidden row-span-2 w-14 h-14">
-            <img
-              src="/assets/imgs/products/product-16-2.jpg"
-              alt="profile"
-              className="object-cover object-top w-full h-full"
-            />
-          </div>
-          <span className="text-lg font-bold">Fashion</span>
-          <span className="text-sm">Modern fashion trends</span>
-        </div>
-      </div>
+      </HorizontalScroll>
       {/* <div className="mx-auto max-w-7xl">
         <h3 className="my-3 text-xl">Shop By Categoies</h3>
       </div> */}
@@ -171,50 +166,49 @@ const NewHome = async () => {
             <h2 className="text-lg font-semibold">Shop by category</h2>
             <span className="link">All categories &rarr;</span>
           </div>
-          <div className="grid grid-cols-[auto,auto] md:flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <div
-                key={cat.id}
-                className="flex justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"
-              >
-                <div className="avatar rounded justify-self-end self-end overflow-hidden h-24 w-24 ">
-                  <img
-                    src={cat.image.secureUrl}
-                    alt={cat.name}
-                    className="object-contain object-center"
-                  />
+          <HorizontalScroll speed={500} className="bg-transparent">
+            <div className="flex gap-2">
+              {categories.map((cat) => (
+                <div
+                  key={cat.id}
+                  className="flex rounded justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"
+                >
+                  <div className="avatar rounded justify-self-end self-end overflow-hidden h-24 w-24 ">
+                    <img
+                      src={cat.image.secureUrl}
+                      alt={cat.name}
+                      className="object-contain object-center"
+                    />
+                  </div>
+                  <div className="text-xl font-bold">{cat.name}</div>
                 </div>
-                <div className="text-xl font-bold">{cat.name}</div>
-              </div>
-            ))}
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"
-              >
-                <div className="avatar rounded justify-self-end self-end overflow-hidden h-24 w-24 ">
-                  <img
-                    src={`/assets/imgs/products/product-${i + 1}-1.jpg`}
-                    alt="Category"
-                    className="object-contain object-center"
-                  />
+              ))}
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="flex justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"
+                >
+                  <div className="avatar rounded justify-self-end self-end overflow-hidden h-24 w-24 ">
+                    <img
+                      src={`/assets/imgs/products/product-${i + 1}-1.jpg`}
+                      alt="Category"
+                      className="object-contain object-center"
+                    />
+                  </div>
+                  <div className="text-xl font-bold">T-Shirts</div>
                 </div>
-                <div className="text-xl font-bold">T-Shirts</div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </HorizontalScroll>
         </div>
       </section>
       <section className="py-8">
         <div className="container grid md:grid-cols-2 gap-3 mx-auto">
-          <div className="rounded bg-amber-100/95 px-4 py-8 grid grid-cols-[1fr,auto] overflow-hidden">
+          <div className="rounded bg-accent/95 px-4 py-8 grid grid-cols-[1fr,auto] overflow-hidden">
             <div className="flex flex-col max-w-md gap-6 justify-between items-start">
               <div className="flex flex-col">
                 <h3 className="font-bold text-xl">Loyalty Program</h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Nesciunt, ut?
-                </p>
+                <p>Win prizes by purchasing you favorite products!</p>
               </div>
 
               <button className="btn btn-link btn-outline">See more</button>
@@ -227,14 +221,11 @@ const NewHome = async () => {
               />
             </div>
           </div>
-          <div className="rounded bg-amber-100/95 px-4 py-8 grid grid-cols-[1fr,auto] overflow-hidden">
+          <div className="rounded bg-accent/95 px-4 py-8 grid grid-cols-[1fr,auto] overflow-hidden">
             <div className="flex flex-col max-w-md gap-6 justify-between items-start">
               <div className="flex flex-col">
                 <h3 className="font-bold text-xl">Deals & offers</h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Nesciunt, ut?
-                </p>
+                <p>Cut the middle-men and by at wholesale prices 🔥</p>
               </div>
 
               <button className="btn btn-link btn-outline">See more</button>
@@ -261,10 +252,7 @@ const NewHome = async () => {
                 <h3 className="font-bold text-4xl uppercase">
                   Shaka delivers to your door.
                 </h3>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Nesciunt, ut?
-                </p>
+                <p>Wherever you are in Kigali, buy and we will be there 🚀</p>
               </div>
 
               <button className="btn btn-link btn-outline">See more</button>

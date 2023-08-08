@@ -6,7 +6,15 @@ import React from 'react';
 import AddShopForm from './forms/AddShopForm';
 import AddProductForm from './forms/AddProductForm';
 import { approveShop } from '@/app/_actions';
-import { MdEmojiObjects, MdShop, MdCheck, MdMenu } from 'react-icons/md';
+import {
+  MdEmojiObjects,
+  MdShop,
+  MdCheck,
+  MdMenu,
+  MdError,
+  MdPeople,
+  MdList,
+} from 'react-icons/md';
 import ProductList from './ProductList';
 import DashboardSideBar, { SideBarItem } from './server/DashboardSideBar';
 import { FaProductHunt, FaFan } from 'react-icons/fa6';
@@ -110,37 +118,41 @@ const SellerHome = async ({ user }: { user: User }) => {
                 </p> */}
               </div>
 
-              <div className="flex justify-center gap-2">
-                <div className="flex flex-col justify-between items-start p-4 border border-primary rounded-lg shadow-sm bg-base-200">
-                  <p className="text-xs uppercase  font-semibold mb-1 text-accent">
-                    Approval Status
-                  </p>
-                  <p className="font-extrabold text-lg md:text-2xl text-gray-600">
-                    {shop.approved ? 'Approved' : 'Pending Approval'}
-                  </p>
+              <div className="stats stats-vertical md:stats-horizontal max-w-3xl mx-auto w-full ">
+                {/* <div className="stat"> */}
+                <div className="stat">
+                  <div className="stat-figure text-accent">
+                    {shop.approved ? <MdCheck /> : <MdError />}
+                  </div>
+                  <div className="stat-title">Approve status</div>
+                  <div className="stat-value">
+                    {shop.approved ? 'YES' : 'NO'}
+                  </div>
+                  <div className="stat-desc">
+                    {shop.approved ? 'Approved' : 'Not approved'} by admins
+                  </div>
+                </div>
+                <div className="stat">
+                  <div className="stat-figure text-accent">
+                    <MdPeople />
+                  </div>
+                  <div className="stat-title">Followers</div>
+                  <div className="stat-value">{shop._count.followers}</div>
+                  <div className="stat-desc">No new followers today</div>
                 </div>
 
-                <div className="flex flex-col justify-between items-start p-4 border border-primary rounded-lg shadow-sm bg-base-200">
-                  <p className="text-xs uppercase  font-semibold  mb-1 text-accent ">
-                    Followers
-                  </p>
-                  <p className="font-extrabold text-3xl text-gray-600">
-                    {shop._count.followers}
-                  </p>
+                <div className="stat">
+                  <div className="stat-figure text-accent">
+                    <MdList />
+                  </div>
+                  <div className="stat-title">Products</div>
+                  <div className="stat-value">{shop._count.products}</div>
+                  <div className="stat-desc">50% sold in 1 month</div>
                 </div>
-
-                <div className="flex flex-col justify-between items-start p-4 border border-primary rounded-lg shadow-sm bg-base-200">
-                  <p className="text-xs uppercase  font-semibold mb-1 text-accent">
-                    Products
-                  </p>
-                  <p className="font-extrabold text-3xl text-gray-600">
-                    {shop._count.products}
-                  </p>
-                </div>
-
-                {/* Add more relevant shop information here */}
               </div>
+              {/* </div> */}
             </div>
+            <div className="divider" />
             {shop.approved ? (
               <AddProductForm shopId={shop.id} categories={categories} />
             ) : (
@@ -165,7 +177,8 @@ const SellerHome = async ({ user }: { user: User }) => {
           </div>
         )}
         {/* <ProductList products={products} /> */}
-        <SellerProductList products={products} />
+        {/* <SellerProductList products={} /> */}
+        <NewDynamicProductList products={products} isSeller />
       </div>
 
       <div className="drawer-side">

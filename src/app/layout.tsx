@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="bumblebee">
+    <html lang="en" data-theme="shaka-light">
       <body className={`flex min-h-screen flex-col ${inter.className}`}>
         <div className="flex-1">
           <AuthProvider>{children}</AuthProvider>

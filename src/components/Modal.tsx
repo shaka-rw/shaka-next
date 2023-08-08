@@ -21,7 +21,7 @@ export const Modal = ({
         {btnContent}
       </ModalBtn2>
       <dialog id={customId ?? modalId} className="modal">
-        <div className="modal-box ">
+        <div className="modal-box max-w-3xl ">
           {children}
 
           <div

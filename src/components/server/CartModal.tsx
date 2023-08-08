@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { Modal } from '../Modal';
 import {
@@ -12,6 +13,7 @@ import { revalidatePath } from 'next/cache';
 import { getPath } from '@/app/_actions';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { twMerge } from 'tailwind-merge';
 
 async function removeCart(formData: FormData) {
   'use server';
@@ -53,7 +55,12 @@ const CartModal = async () => {
       btn={
         <div className="indicator">
           {(cart?._count.quantities ?? 0) > 0 && (
-            <span className="indicator-item font-bold -translate-x-[.15rem] translate-y-[.05rem] text-sm  badge badge-primary border rounded-full">
+            <span
+              className={twMerge(
+                'indicator-item font-bold -translate-x-[.15rem] translate-y-[.05rem]  badge badge-primary border rounded-full',
+                'h-4 px-1'
+              )}
+            >
               {cart?._count.quantities ?? 0}
             </span>
           )}
@@ -78,7 +85,8 @@ const CartModal = async () => {
             <thead>
               <tr>
                 <th></th>
-                <th>Product</th>
+                <th></th>
+                <th>Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Total</th>
@@ -89,6 +97,15 @@ const CartModal = async () => {
               {(cart?.quantities ?? []).map((qty, i) => (
                 <tr key={qty.cartId + qty.productQuantityId}>
                   <th>{i + 1}</th>
+                  <th>
+                    <div className="avatar rounded overflow-hidden w-12 h-12 justify-center items-center  ">
+                      <img
+                        src={qty.productQuantity.color.mainImage.secureUrl}
+                        className="w-full h-full object-contain"
+                        alt={'Image'}
+                      />
+                    </div>
+                  </th>
                   <td>{qty.productQuantity.product.name}</td>
                   <td>{qty.price ?? qty.productQuantity.price}</td>
                   <td>{qty.quantity}</td>

@@ -21,6 +21,7 @@ export const productSchema = z.object({
   description: z.string().trim().min(10),
   shopId: z.string().trim(),
   sizes: z.array(z.string()),
+  gender: z.enum(['FEMALE', 'MALE', 'UNISEX']).default('UNISEX'),
   categories: z.array(z.string().trim()),
   mainImage: z.any(),
   colors: z
@@ -165,6 +166,27 @@ const AddProductForm = ({
             <label className="label">
               <span className="label-text-alt text-red-500">
                 {errors.name.message}
+              </span>
+            </label>
+          )}
+        </div>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Gender</span>
+          </label>
+          <select className="select select-bordered" {...register('gender')}>
+            <option disabled selected>
+              Select Gender
+            </option>
+            <option value={'UNISEX'}>All Genders (Unisex)</option>
+            <option value={'MALE'}>Male</option>
+            <option value={'FEMALE'}>Female</option>
+          </select>
+
+          {errors.gender && (
+            <label className="label">
+              <span className="label-text-alt text-red-500">
+                {errors.gender.message}
               </span>
             </label>
           )}

@@ -66,7 +66,7 @@ const AddToCartForm = ({ product }: { product: VariationProduct }) => {
       }
       btnContent={<></>}
     >
-      <div className="modal-box flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         {!session?.data?.user ? (
           <>
             <div className="flex flex-col gap-2">

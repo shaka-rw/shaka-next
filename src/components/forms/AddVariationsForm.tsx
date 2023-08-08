@@ -97,17 +97,17 @@ const AddVariationsForm = ({ product }: { product: VariationProduct }) => {
   //   const
   return (
     <Modal
-      btnPrimary={true}
       modalId={`variations_${product.id}`}
-      btnContent={
-        <>
-          <MdAddBox /> Add Variations
-        </>
+      btn={
+        <button className="btn btn-sm md:btn-md btn-primary  md:text-xl btn-circle">
+          <MdAddBox />
+        </button>
       }
+      btnContent={<></>}
     >
       <>
         <h3 className="font-bold flex items-centergap-2 text-lg mb-5">
-          <MdAdd /> Add varitations of{' '}
+          <MdAdd /> Add varitations to{' '}
           <span className="text-secondary ml-2 underline"> {product.name}</span>
         </h3>
         <form

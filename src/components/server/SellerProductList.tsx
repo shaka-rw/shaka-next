@@ -3,7 +3,7 @@ import { Product, Asset } from '@prisma/client';
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
 import { MdFavorite, MdAddShoppingCart, MdAddBox } from 'react-icons/md';
-import AddVariationsForm from '../forms/AddVariationsForm';
+import AddVariationsForm, { VariationProduct } from '../forms/AddVariationsForm';
 
 export const SellerProductList = ({
   isDiscover = false,
@@ -12,7 +12,7 @@ export const SellerProductList = ({
   products,
   className,
 }: {
-  products: Product[];
+  products: VariationProduct[];
   title?: ReactNode;
   link?: ReactNode;
   className?: string;
@@ -26,75 +26,57 @@ export const SellerProductList = ({
           {link && <>{link}</>}
         </div>
         <div
-          className={`grid grid-cols-2 ${
+          className={`grid md:flex flex-wrap xl:w-full mx-auto justify-items-start justify-start grid-cols-2 ${
             className ?? ''
-          }  md:grid-cols-3 gap-2 py-4`}
+          }  md:grid-cols-4 lg:grid-cols-5 gap-2 py-4`}
         >
-          {products.map((product, i) => (
-            <div
-              key={i}
-              className="max-w-xs flex flex-col bg-base-200 rounded-md p-3 gap-3"
-            >
-              <div className="avatar rounded justify-self-end self-end overflow-hidden h-52 w-full">
-                <img
-                  src={((product as any).mainImage as Asset).secureUrl}
-                  alt={product.name}
-                  className="object-contain object-center"
-                />
-              </div>
-              <div className="flex flex-col mt-2 gap-2">
-                <span className="text-sm text-gray-500">Ships to Kigali</span>
-                <Link
-                  href={`/products/${product.id}`}
-                  className="text-lg font-semibold"
-                >
-                  {product.name}
-                </Link>
-                <div className="flex gap-3">
-                  <div className="rating rating-sm">
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star-2 bg-secondary"
-                    />
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star-2 bg-secondary"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star-2 bg-secondary"
-                    />
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star-2 bg-secondary"
-                    />
-                    <input
-                      type="radio"
-                      name="rating-2"
-                      className="mask mask-star-2 bg-secondary"
+          {products.map((product, i) => {
+            const minPrice = Math.min(
+              ...product.quantities.map((q) => q.price)
+            );
+            const maxPrice = Math.max(
+              ...product.quantities.map((q) => q.price)
+            );
+            return (
+              <div
+                key={i}
+                className="bg-base-200/25 md:min-w-[200px] w-full max-w-[230px] lg:w-[230px] flex flex-col justify-between md:justify-stretch card rounded-md p-2 gap-2 border"
+              >
+                <figure className="flex justify-center items-center rounded bg-base-200">
+                  <div className="avatar rounded self-center justify-center overflow-hidden  w-36 h-36">
+                    <img
+                      src={((product as any).mainImage as Asset).secureUrl}
+                      alt={product.name.slice(0, 10)}
+                      className="object-contain object-center  w-36 h-36"
                     />
                   </div>
-                  <span className="text-sm text-gray-500">121 Reviews</span>
-                </div>
-                <div className="flex gap-2 items-center justify-between">
-                  <div className="p-3 flex-1  font-bold text-base md:text-2xl">
-                    347.99 RWF
+                </figure>
+                <span className="text-xs font-light text-accent">
+                  Ships to Kigali
+                </span>
+                <div className="flex flex-col mt-2 gap-2">
+                  <Link
+                    href={`/products/${product.id}`}
+                    className="text-sm md:text-base"
+                  >
+                    {product.name}
+                  </Link>
+                  <div className="font-bold flex items-center gap-2 text-xs md:text-sm">
+                    <span>{minPrice} RWF</span> - <span>{maxPrice} RWF</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <AddVariationsForm product={product as any} />
-                    {/* <button className="btn btn-sm md:btn-md btn-primary text-sm">
-                      <MdAddBox /> Add Variations
-                    </button> */}
+                  <div className="divider my-1"></div>
+                  <div className="card-actions justify-end">
+                    <div className="flex items-center gap-1">
+                      <button className="btn md:text-xl btn-sm md:btn-md btn-accent btn-outline btn-circle">
+                        <MdFavorite />
+                      </button>
+                      <AddVariationsForm product={product as any} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
