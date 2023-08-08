@@ -19,7 +19,7 @@ module.exports = {
       {
         'shaka-light': {
           primary: '#CAB9A7',
-          secondary: '#EBECE6',
+          secondary: '#EEB87E',
           accent: '#F4CCC0',
           neutral: '#f5f5f5',
           'base-100': '#fff',
