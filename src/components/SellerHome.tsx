@@ -117,37 +117,38 @@ const SellerHome = async ({ user }: { user: User }) => {
                   Esse, dolores?
                 </p> */}
               </div>
+              <div className="flex justify-center">
+                <div className="stats stats-vertical md:stats-horizontal max-w-3xl mx-auto w-full ">
+                  {/* <div className="stat"> */}
+                  <div className="stat">
+                    <div className="stat-figure text-accent">
+                      {shop.approved ? <MdCheck /> : <MdError />}
+                    </div>
+                    <div className="stat-title">Approve status</div>
+                    <div className="stat-value">
+                      {shop.approved ? 'YES' : 'NO'}
+                    </div>
+                    <div className="stat-desc">
+                      {shop.approved ? 'Approved' : 'Not approved'} by admins
+                    </div>
+                  </div>
+                  <div className="stat">
+                    <div className="stat-figure text-accent">
+                      <MdPeople />
+                    </div>
+                    <div className="stat-title">Followers</div>
+                    <div className="stat-value">{shop._count.followers}</div>
+                    <div className="stat-desc">No new followers today</div>
+                  </div>
 
-              <div className="stats stats-vertical md:stats-horizontal max-w-3xl mx-auto w-full ">
-                {/* <div className="stat"> */}
-                <div className="stat">
-                  <div className="stat-figure text-accent">
-                    {shop.approved ? <MdCheck /> : <MdError />}
+                  <div className="stat">
+                    <div className="stat-figure text-accent">
+                      <MdList />
+                    </div>
+                    <div className="stat-title">Products</div>
+                    <div className="stat-value">{shop._count.products}</div>
+                    <div className="stat-desc">50% sold in 1 month</div>
                   </div>
-                  <div className="stat-title">Approve status</div>
-                  <div className="stat-value">
-                    {shop.approved ? 'YES' : 'NO'}
-                  </div>
-                  <div className="stat-desc">
-                    {shop.approved ? 'Approved' : 'Not approved'} by admins
-                  </div>
-                </div>
-                <div className="stat">
-                  <div className="stat-figure text-accent">
-                    <MdPeople />
-                  </div>
-                  <div className="stat-title">Followers</div>
-                  <div className="stat-value">{shop._count.followers}</div>
-                  <div className="stat-desc">No new followers today</div>
-                </div>
-
-                <div className="stat">
-                  <div className="stat-figure text-accent">
-                    <MdList />
-                  </div>
-                  <div className="stat-title">Products</div>
-                  <div className="stat-value">{shop._count.products}</div>
-                  <div className="stat-desc">50% sold in 1 month</div>
                 </div>
               </div>
               {/* </div> */}

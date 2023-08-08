@@ -28,9 +28,9 @@ const SideSection = () => {
   return (
     <div className="w-full flex flex-col gap-2 p-2 md:w-60 h-full">
       <div className="flex items-center justify-between gap-2">
-        {!isMobile && (
-          <h2 className="text-lg font-semibold md:mb-4">Discover</h2>
-        )}
+        {/* {!isMobile && (
+          <h2 className="text-base font-semibold md:my-2">Discover</h2>
+        )} */}
       </div>
       <div className={` ${isMobile ? 'flex gap-2 items-center ' : ''} `}>
         <div className={`${isMobile ? 'dropdown' : ''} mb-4 `}>

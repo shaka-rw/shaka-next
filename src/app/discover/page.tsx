@@ -4,6 +4,7 @@ import React from 'react';
 import CategoryBar from '@/components/client/CategoryBar';
 import { NewDynamicProductList } from '@/components/server/NewProductList';
 import prisma from '@/prima';
+import { MdSearch } from 'react-icons/md';
 
 const Discover = async () => {
   const products = await prisma.product.findMany({
@@ -42,12 +43,14 @@ const Discover = async () => {
         products={products}
         title={
           <>
-            <input
-              type="search"
-              name=""
-              placeholder="Search here..."
-              className="input input-bordered"
-            />
+            <div className="form-control relative w-full max-w-xs">
+              <MdSearch className="text-xl absolute top-1/2 left-2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search.."
+                className="input input-bordered w-full max-w-xs pl-8"
+              />
+            </div>
           </>
         }
       />

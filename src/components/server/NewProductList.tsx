@@ -118,7 +118,7 @@ export const NewDynamicProductList = ({
   isDiscover?: boolean;
 }) => {
   return (
-    <section className={`${isDiscover ? 'my-4' : 'my-8'}`}>
+    <section className={`my-4`}>
       <div className="container flex-col flex gap-3 mx-auto px-3">
         <div className="flex gap-2 justify-between">
           {title && <>{title}</>}

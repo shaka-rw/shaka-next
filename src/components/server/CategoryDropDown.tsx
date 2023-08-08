@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdOutlineWindow } from 'react-icons/md';
 import { FaCaretRight } from 'react-icons/fa6';
+import { getPath } from '@/app/_actions';
 
 interface Category {
   name: string;
@@ -87,10 +88,12 @@ const categories: Category[] = [
   },
 ];
 
-const CategoryDropDown = () => {
+const CategoryDropDown = async () => {
+  const pathname = await getPath();
+
   return (
     <div className="dropdown dropdown-end">
-      <label tabIndex={0} className="btn m-1">
+      <label tabIndex={0} className={`btn bg-transparent m-1`}>
         <MdOutlineWindow /> All Categories
       </label>
       <ul

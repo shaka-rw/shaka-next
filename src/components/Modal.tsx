@@ -8,11 +8,15 @@ export const Modal = ({
   btnPrimary,
   modalId: customId,
   btn,
+  lg = false,
+  className = '',
   children,
 }: PropsWithChildren<{
   btnPrimary?: boolean;
   btn?: ReactNode;
   btnContent: React.ReactNode;
+  className?: string;
+  lg?: boolean;
   modalId?: string;
 }>) => {
   return (
@@ -21,7 +25,7 @@ export const Modal = ({
         {btnContent}
       </ModalBtn2>
       <dialog id={customId ?? modalId} className="modal">
-        <div className="modal-box max-w-3xl ">
+        <div className={`modal-box ${lg ? ' max-w-3xl ' : ''} ${className}`}>
           {children}
 
           <div

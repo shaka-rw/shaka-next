@@ -22,27 +22,42 @@ import prisma from '@/prima';
 import { FaCaretDown } from 'react-icons/fa6';
 import LogoutBtn from '../LogoutBtn';
 import CartModal from './CartModal';
+import { getPath } from '@/app/_actions';
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
   const user = session?.user
     ? await prisma.user.findUnique({ where: { id: session.user.id } })
     : null;
+  const pathname = await getPath();
 
   return (
     <>
-      <div className="btm-nav md:hidden  text-accent border-t max-w-full w-full border-secondary z-10">
+      <div className="btm-nav md:hidden text-primary border-t max-w-full w-full border-secondary z-10">
         {/* button */}
-        <Link className="w-fit active" href={'/'}>
+        <Link
+          className={`w-fit ${pathname === '/' ? 'active' : ''}`}
+          href={'/'}
+        >
           <MdHome className="text-lg" />
           <span className="btm-nav-label text-xs font-semibold">Home</span>
         </Link>
-        <Link className="w-fit" href={'/discover'}>
+        <Link
+          className={`w-fit ${
+            pathname.startsWith('/discover') ? 'active' : ''
+          }`}
+          href={'/discover'}
+        >
           <MdExplore className="text-lg" />
           <span className="btm-nav-label text-xs font-semibold">Discover</span>
         </Link>
         {session?.user && (
-          <Link className="w-fit" href={'dashboard'}>
+          <Link
+            className={`w-fit ${
+              pathname.startsWith('/dashboard') ? 'active' : ''
+            }`}
+            href={'dashboard'}
+          >
             <MdDashboard className="text-lg" />
             <span className="btm-nav-label text-xs font-semibold">
               Dashboard
@@ -70,7 +85,11 @@ const Navbar = async () => {
             <li>
               <Link
                 href="/discover"
-                className="btn btn-ghost gap-2 bg-transparent border-0 py-1"
+                className={`btn btn-ghost gap-2 ${
+                  pathname.startsWith('/discover')
+                    ? 'bg-base-200'
+                    : 'bg-transparent'
+                } border-0 py-1`}
               >
                 <MdExplore />
                 Discover
@@ -80,7 +99,11 @@ const Navbar = async () => {
               <li>
                 <Link
                   href="/dashboard"
-                  className="btn btn-ghost gap-2 bg-transparent border-0 py-1"
+                  className={`btn btn-ghost gap-2 ${
+                    pathname.startsWith('/dashboard')
+                      ? 'bg-base-200'
+                      : 'bg-transparent'
+                  } border-0 py-1`}
                 >
                   <MdDashboard />
                   Dashboard
@@ -99,9 +122,16 @@ const Navbar = async () => {
           </Link>
           <ul className="flex w-full md:w-auto justify-between  md:justify-end flex-1 items-center">
             <li>
-              <div className="btn mr-1 flex bg-transparent py-1  gap-2 [text-transform:unset] text-sm items-center">
-                <MdSearch className="text-lg" />
+              {/* <div className="btn mr-1 flex bg-transparent py-1  gap-2 [text-transform:unset] text-sm items-center">
                 <span className="text-sm">Search</span>
+              </div> */}
+              <div className="form-control relative w-full max-w-xs">
+                <MdSearch className="text-xl absolute top-1/2 left-2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search.."
+                  className="input input-bordered w-full max-w-xs pl-8"
+                />
               </div>
             </li>
             <ul className="flex items-center gap-1">

@@ -52,6 +52,7 @@ const CartModal = async () => {
     <Modal
       btnContent={''}
       modalId="cart_modal"
+      lg
       btn={
         <div className="indicator">
           {(cart?._count.quantities ?? 0) > 0 && (
@@ -131,7 +132,7 @@ const CartModal = async () => {
           </table>
         </div>
       )}
-      <div className="text-xl uppercase my-2 font-bold">
+      <div className="text-xl uppercase my-4 font-bold">
         Total:{' '}
         {(cart?.quantities ?? []).reduce(
           (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
