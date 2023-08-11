@@ -5,6 +5,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
 import { color, motion } from 'framer-motion';
 import { Asset, ProductColor } from '@prisma/client';
+import { twMerge } from 'tailwind-merge';
+
+export type ProductColorWithImages = ProductColor & {
+  images: Asset[];
+  mainImage: Asset;
+};
 
 const Carousel = ({
   images: plainImages,
@@ -15,7 +21,7 @@ const Carousel = ({
   images: string[];
   autoPlay?: boolean;
   duration?: number;
-  colors?: ProductColor[];
+  colors?: ProductColorWithImages[];
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [images, setImages] = useState<string[]>([]);
@@ -52,17 +58,15 @@ const Carousel = ({
 
   useEffect(() => {
     if (colors) {
+      const activeColor = colors[activeIndex];
+
       setImages(
-        ((colors as any[])[activeIndex].images as Asset[]).map(
+        ([activeColor.mainImage, ...activeColor.images] as Asset[]).map(
           (img) => img.secureUrl
         )
       );
     }
   }, [colors, activeIndex]);
-
-  useEffect(() => {
-    console.log({ images });
-  }, [images]);
 
   return (
     <div className="flex relative flex-col h-full">
@@ -77,14 +81,20 @@ const Carousel = ({
             </button>
           )}
           <div className="flex-1 flex justify-center items-center  md:h-96 h-64 w-full">
-            <motion.img
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              src={images[currentImageIndex]}
-              alt="Product"
-              className="max-w-full w-auto h-auto max-h-full animate-fade transition-opacity duration-200 object-contain rounded-md "
-            />
+            {images.map((src, i) => (
+              <motion.img
+                key={i}
+                initial={{ opacity: 0, translateX: 40, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1, translateX: 0 }}
+                transition={{ duration: 1, ease: 'easeInOut' }}
+                src={src}
+                alt="Product"
+                className={twMerge(
+                  'max-w-full w-auto h-auto max-h-full animate-fade transition-opacity duration-200 object-contain rounded-md ',
+                  `${i === currentImageIndex ? '' : 'hidden'}`
+                )}
+              />
+            ))}
           </div>
 
           {images.length > 1 && (
@@ -121,7 +131,10 @@ const Carousel = ({
             <div
               key={color.id}
               tabIndex={0}
-              onClick={() => setAtiveIndex(i)}
+              onClick={() => {
+                if (i !== activeIndex) setCurrentImageIndex(0);
+                setAtiveIndex(i);
+              }}
               className={`avatar w-12 h-12  transition-all join-item overflow-hidden rounded ${
                 activeIndex === i
                   ? ' border p-1 border-primary bg-secondary '

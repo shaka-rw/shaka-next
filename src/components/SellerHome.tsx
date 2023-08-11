@@ -27,6 +27,7 @@ import {
 } from 'react-icons/fa';
 import { NewDynamicProductList } from './server/NewProductList';
 import SellerProductList from './server/SellerProductList';
+import { notFound } from 'next/navigation';
 
 const SellerHome = async ({ user }: { user: User }) => {
   const shop = await prisma.shop.findFirst({
@@ -39,7 +40,17 @@ const SellerHome = async ({ user }: { user: User }) => {
     },
   });
 
-  const categories = await prisma.category.findMany();
+  if (!shop) return notFound();
+
+  const categories = await prisma.category.findMany({
+    take: 30,
+    where: { parent: null },
+  });
+  const subCategories = await prisma.category.findMany({
+    take: 30,
+    where: { parentId: shop?.categoryId },
+  });
+
   const products = await prisma.product.findMany({
     where: { shopId: shop?.id as string },
     include: {
@@ -100,7 +111,7 @@ const SellerHome = async ({ user }: { user: User }) => {
       <div className="drawer-content p-2">
         {shop ? (
           <>
-            <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 lg:p-10 border mb-3 border-gray-200">
+            <div className="rounded-lg shadow-lg p-6 md:p-8 lg:p-10 border mb-3 border-gray-200">
               <div className="text-center mb-6">
                 <div className="avatar border overflow-hidden w-52 h-52 rounded-full mb-3">
                   <img
@@ -155,7 +166,7 @@ const SellerHome = async ({ user }: { user: User }) => {
             </div>
             <div className="divider" />
             {shop.approved ? (
-              <AddProductForm shopId={shop.id} categories={categories} />
+              <AddProductForm shopId={shop.id} categories={subCategories} />
             ) : (
               <div className="text-xl font-bold text-accent my-1 ">
                 You can add products once your shop is approved

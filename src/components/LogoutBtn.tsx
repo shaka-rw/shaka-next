@@ -12,6 +12,7 @@ const LogoutBtn = () => {
     <button
       onClick={() => signOut({ redirect: true, callbackUrl: pathname ?? '/' })}
       type="button"
+      className="btn btn-outline justify-center items-center pt-4 btn-primary"
     >
       <MdLogout /> Logout
     </button>

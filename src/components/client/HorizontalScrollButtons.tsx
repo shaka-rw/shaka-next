@@ -24,7 +24,7 @@ const HorizontalScrollButtons = ({
         <MdArrowCircleLeft />
       </button>
       <div
-        className="flex flex-1 w-full p-1 scroll-smooth rounded-md  gap-2 overflow-x-auto"
+        className="flex flex-1 w-full p-1 scroll-smooth rounded-md  gap-2 overflow-y-hidden overflow-x-auto"
         ref={scrollRef as any}
       >
         {children}

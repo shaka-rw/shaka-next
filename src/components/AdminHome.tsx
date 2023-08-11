@@ -1,7 +1,7 @@
 import prisma from '@/prima';
 import React from 'react';
 import { MdMenu } from 'react-icons/md';
-import AddCategory from './forms/AddCategoryForm';
+import AddCategoryForm from './forms/AddCategoryForm';
 import CategoryList from './CategoryList';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
@@ -11,8 +11,17 @@ import { FaProductHunt, FaFan, FaUser, FaChartBar } from 'react-icons/fa6';
 import DashboardSideBar, { SideBarItem } from './server/DashboardSideBar';
 
 const AdminHome = async () => {
-  const categories = await prisma.category.findMany();
-  const shops = await prisma.shop.findMany();
+  const categories = await prisma.category.findMany({
+    where: { parent: null },
+    include: { image: true, subCategories: { include: { image: true } } },
+  });
+  const shops = await prisma.shop.findMany({
+    include: {
+      _count: { select: { followers: true } },
+      category: true,
+      image: true,
+    },
+  });
   const session = await getServerSession(authOptions);
 
   const items: SideBarItem[] = [
@@ -67,7 +76,7 @@ const AdminHome = async () => {
       <div className="drawer-content p-2">
         <div className="flex flex-col p-2">
           <div>
-            <AddCategory />
+            <AddCategoryForm />
           </div>
           <CategoryList categories={categories} />
           <div></div>

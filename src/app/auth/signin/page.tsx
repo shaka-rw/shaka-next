@@ -69,7 +69,7 @@ const LoginPage = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold ">Login</h2>
         </div>
         <form
-          className="card flex flex-col w-full md:w-[300px] placeholder:items-center p-2  gap-2 shadow"
+          className="card flex flex-col border w-full md:w-[300px] placeholder:items-center p-4  gap-2 shadow"
           onSubmit={(e) => {
             e.preventDefault();
             handleSubmit(onSubmit)(e);
@@ -85,65 +85,6 @@ const LoginPage = () => {
               <></>
             )}
           </div>
-          {/* <div className="w-full">
-              <label htmlFor="email" className="label">
-                <div className="label-text">Email address</div>
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="Your email"
-                autoComplete="email"
-                {...register('email', { required: 'Email is required' })}
-                className="input input-bordered w-full"
-              />
-              {errors.email && (
-                <p className="text-red-500">{errors.email.message}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="password" className="label">
-                <div className="label-text">Password</div>
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="Your password"
-                autoComplete="current-password"
-                {...register('password', { required: 'Password is required' })}
-                className="input input-bordered w-full"
-              />
-              {errors.password && (
-                <p className="text-red-500">{errors.password.message}</p>
-              )}
-            </div>
-          </div> */}
-
-          {/* <div className="flex flex-col md:flex-row justify-center  items-stretch md:items-center gap-2">
-            <button
-              disabled={isLoading}
-              type="submit"
-              className="btn btn-primary"
-            >
-              {isLoading ? (
-                <span className="loading loading-spinner loading-sm" />
-              ) : (
-                'Login'
-              )}
-              <span>
-                <MdLogin />
-              </span>
-            </button>
-            <span className=" h-10 w-[.07rem] rounded bg-gray-400 hidden md:inline-block font-bold text-sm"></span>
-
-            <Link href="/auth/signup" className="btn btn-outline link">
-              Signup
-              <span>
-                <SignupIcon />
-              </span>
-            </Link>
-          </div>
-          <div className="divider">OR</div> */}
 
           <button
             type="button"
@@ -151,10 +92,10 @@ const LoginPage = () => {
               signIn('auth0', { redirect: true, callbackUrl: '/' })
             }
             disabled={isLoading}
-            className="btn flex btn-secondary text-white items-center "
+            className="btn flex btn-primary flex-nowrap items-center "
           >
             <span className=" flex items-center pl-3">
-              <AiOutlineLogin className="h-5 w-5 text-xl text-yellow-500 group-hover:text-yellow-400" />
+              <AiOutlineLogin className="h-5 w-5 text-xl " />
             </span>
             Login or Signup
           </button>
@@ -165,12 +106,15 @@ const LoginPage = () => {
               signIn('google', { redirect: true, callbackUrl: '/' })
             }
             disabled={isLoading}
-            className="btn flex bg-yellow-600 text-white items-center "
+            className="btn flex shadow-md border border-yellow-600 btn-neutral items-center "
           >
-            <span className=" flex items-center pl-3">
-              <GoogleIcon className="h-5 w-5 text-xl text-yellow-500 group-hover:text-yellow-400" />
+            <span className=" flex items-center text-yellow-500 pl-3">
+              <GoogleIcon className="h-5 w-5 text-xl  group-hover:text-yellow-400" />
             </span>
-            Login with Google
+            Login with{' '}
+            <span className="bg-gradient-to-r bg-clip-text text-transparent from-yellow-500 to-red-500 ">
+              Google
+            </span>
           </button>
         </form>
       </div>

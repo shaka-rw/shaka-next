@@ -1,11 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
+import Logo from '../client/Logo';
 
 const Footer = () => {
   return (
     <footer className="footer p-10 pb-20 md:pb-5 bg-base-200 text-base-content">
       <div>
-        <Image alt="Shaka Logo" width={100} height={50} src={'/logo.png'} />
+        <Logo width={100} height={50} />
         <p>
           <span className="font-bold text-lg">Shaka E-Commerce</span>
           <br />

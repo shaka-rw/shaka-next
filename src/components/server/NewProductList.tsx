@@ -2,7 +2,12 @@
 import { Asset, Product } from '@prisma/client';
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
-import { MdAddBox, MdAddShoppingCart, MdFavorite } from 'react-icons/md';
+import {
+  MdAddBox,
+  MdAddShoppingCart,
+  MdEmojiObjects,
+  MdFavorite,
+} from 'react-icons/md';
 import AddToCartForm from '../forms/AddToCartForm';
 import AddVariationsForm, {
   VariationProduct,
@@ -102,7 +107,7 @@ const NewProductList = ({ isDiscover = false }: { isDiscover?: boolean }) => {
   );
 };
 
-export const NewDynamicProductList = ({
+export const NewDynamicProductList = async ({
   isDiscover = false,
   title,
   link,
@@ -118,12 +123,19 @@ export const NewDynamicProductList = ({
   isDiscover?: boolean;
 }) => {
   return (
-    <section className={`my-4`}>
-      <div className="container flex-col flex gap-3 mx-auto px-3">
+    <section className={`my-2`}>
+      <div className="container flex-col flex gap-3 mx-auto px-2">
         <div className="flex gap-2 justify-between">
           {title && <>{title}</>}
           {link && <>{link}</>}
         </div>
+        {products.length === 0 && (
+          <div className="flex justify-center items-center min-h-max w-full p-4">
+            <div className="alert alert-info flex gap-2">
+              <MdEmojiObjects /> No products found.
+            </div>
+          </div>
+        )}
         <div
           className={`grid md:flex flex-wrap xl:w-full mx-auto justify-items-start justify-start grid-cols-2 ${
             className ?? ''
@@ -161,7 +173,15 @@ export const NewDynamicProductList = ({
                     {product.name}
                   </Link>
                   <div className="font-bold flex items-center gap-2 text-xs md:text-sm">
-                    <span>{minPrice} RWF</span> - <span>{maxPrice} RWF</span>
+                    <span>{minPrice} RWF</span>
+                    {maxPrice !== minPrice ? (
+                      <>
+                        {' '}
+                        - <span>{maxPrice} RWF</span>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                   <div className="divider my-1"></div>
                   <div className="card-actions justify-end">
@@ -180,7 +200,7 @@ export const NewDynamicProductList = ({
               </div>
             );
           })}
-          {Array.from({ length: 5 }).map((_, i) => (
+          {/* {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
               // style={{
@@ -204,7 +224,7 @@ export const NewDynamicProductList = ({
               <div className="flex flex-col mt-2 gap-2">
                 <h3 className="text-base">Men T-Shirt</h3>
                 <div className=" font-bold text-xs md:text-sm flex items-center gap-1 ">
-                  347.99 RWF - 232.45 RWF
+                  347.99 RWF - 569.45 RWF
                 </div>
                 <div className="divider my-1"></div>
                 <div className="card-actions justify-end">
@@ -219,7 +239,7 @@ export const NewDynamicProductList = ({
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
     </section>

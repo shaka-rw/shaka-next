@@ -9,6 +9,9 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import prisma from '@/prima';
 import AddShopForm from '../forms/AddShopForm';
 import HorizontalScroll from './HorizontalScroll';
+import Image from 'next/image';
+import { MdPlayCircle } from 'react-icons/md';
+import VideoModal from './VideoModal';
 
 const NewHome = async () => {
   const session = await getServerSession(authOptions);
@@ -88,7 +91,19 @@ const NewHome = async () => {
             )}
           </div>
         </div>
-        <div className="hidden md:block">
+        <div className="avatar justify-self-center self-center h-96 relative">
+          <div className="absolute z-[1] p-4 bg-black/20 backdrop-blur-md border top-1/2 left-1/2 rounded-full -translate-y-1/2 -translate-x-1/2">
+            <VideoModal />
+          </div>
+          <Image
+            src={`/assets/imgs/shaka-banner.jpeg`}
+            width={300}
+            height={200}
+            alt={'Shaka Banner'}
+            className="mask mask-heart shadow border border-accent"
+          />
+        </div>
+        {/* <div className="hidden md:block">
           <Carousel
             autoPlay={true}
             images={[
@@ -97,7 +112,7 @@ const NewHome = async () => {
               '/assets/imgs/products/product-1-2.jpg',
             ]}
           />
-        </div>
+        </div> */}
       </div>
       <HorizontalScroll
         speed={500}
@@ -204,14 +219,16 @@ const NewHome = async () => {
       </section>
       <section className="py-8">
         <div className="container grid md:grid-cols-2 gap-3 mx-auto">
-          <div className="rounded bg-accent/95 px-4 py-8 grid grid-cols-[1fr,auto] overflow-hidden">
+          <div className="rounded bg-primary text-primary-content px-4 py-8 grid grid-cols-[1fr,auto] overflow-hidden">
             <div className="flex flex-col max-w-md gap-6 justify-between items-start">
-              <div className="flex flex-col">
+              <div className="flex gap-4 flex-col">
                 <h3 className="font-bold text-xl">Loyalty Program</h3>
                 <p>Win prizes by purchasing you favorite products!</p>
               </div>
 
-              <button className="btn btn-link btn-outline">See more</button>
+              <button className="btn btn-link text-primary-content btn-outline">
+                See more
+              </button>
             </div>
             <div className="avatar rounded justify-self-end self-end overflow-hidden h-40 w-40 ">
               <img
@@ -221,14 +238,16 @@ const NewHome = async () => {
               />
             </div>
           </div>
-          <div className="rounded bg-accent/95 px-4 py-8 grid grid-cols-[1fr,auto] overflow-hidden">
+          <div className="rounded bg-primary text-primary-content px-4 py-8 grid grid-cols-[1fr,auto] overflow-hidden">
             <div className="flex flex-col max-w-md gap-6 justify-between items-start">
-              <div className="flex flex-col">
+              <div className="flex gap-4 flex-col">
                 <h3 className="font-bold text-xl">Deals & offers</h3>
                 <p>Cut the middle-men and by at wholesale prices 🔥</p>
               </div>
 
-              <button className="btn btn-link btn-outline">See more</button>
+              <button className="btn btn-link text-primary-content btn-outline">
+                See more
+              </button>
             </div>
             <div className="avatar rounded justify-self-end self-end overflow-hidden h-40 w-40 ">
               <img

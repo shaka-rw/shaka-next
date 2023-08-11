@@ -1,15 +1,78 @@
 import Navbar from '@/components/server/Navbar';
 import SideSection from '@/components/client/SideSection';
-import React from 'react';
+import React, { Suspense } from 'react';
 import CategoryBar from '@/components/client/CategoryBar';
 import { NewDynamicProductList } from '@/components/server/NewProductList';
 import prisma from '@/prima';
 import { MdSearch } from 'react-icons/md';
+import { notFound } from 'next/navigation';
+import { ProductGender } from '@prisma/client';
 
-const Discover = async () => {
+const Discover = async ({
+  searchParams,
+}: {
+  searchParams: {
+    cat?: string;
+    g?: string;
+    q?: string;
+    sz?: string;
+    p?: string;
+  };
+}) => {
+  function parseInfinity(value: string) {
+    return value === '-Infinity'
+      ? -Infinity
+      : value === 'Infinity'
+      ? Infinity
+      : parseFloat(value);
+  }
+
+  const {
+    q: search,
+    sz: size,
+    g: gender,
+    cat: categoryId,
+    p: price,
+  } = searchParams;
+
+  const [minPrice, maxPrice] = price ? price.split('-').map(parseInfinity) : [];
+
   const products = await prisma.product.findMany({
     where: {
-      AND: { quantities: { some: { quantity: { gt: 0 } } }, available: true },
+      AND: {
+        quantities: {
+          some: {
+            AND: {
+              quantity: { gt: 0 },
+              ...(price
+                ? {
+                    price: {
+                      gte: isNaN(minPrice) ? undefined : minPrice,
+                      lte: isNaN(maxPrice) ? undefined : maxPrice,
+                    },
+                  }
+                : {}),
+            },
+          },
+        },
+        ...(search
+          ? {
+              OR: [
+                { name: { contains: search, mode: 'insensitive' } },
+                { description: { contains: search, mode: 'insensitive' } },
+              ],
+            }
+          : {}),
+        available: true,
+        ...(gender ? { gender: { equals: gender as ProductGender } } : {}),
+        ...(size
+          ? { sizes: { some: { size: { equals: size, mode: 'insensitive' } } } }
+          : {}),
+        ...(categoryId !== undefined && categoryId !== null
+          ? { categories: { some: { id: categoryId } } }
+          : {}),
+        // categories: { some: { id: catId || undefined } },
+      },
     },
     include: {
       mainImage: true,
@@ -26,34 +89,35 @@ const Discover = async () => {
   });
 
   const categories = await prisma.category.findMany({
-    take: 100,
-    include: { image: true },
+    take: 30,
+    // where: { NOT: { parent: null } },
+    include: { image: true, subCategories: { include: { image: true } } },
   });
 
+  const category = categories.find((c) => c.id === categoryId);
+
+  if (categoryId && !category) {
+    return notFound();
+  }
+
   return (
-    <div className=" grid items-start grid-cols-1 md:grid-cols-[auto,1fr]">
+    <div className=" grid items-start grid-cols-1 h-full md:grid-cols-[auto,1fr]">
       <div className="md:col-span-2">
         <Navbar />
-        <CategoryBar categories={categories} />
+        <CategoryBar catId={categoryId} categories={categories} />
       </div>
-      <div className="relative">
-        <SideSection />
+      <div className="relative h-full">
+        <SideSection catId={categoryId} />
       </div>
-      <NewDynamicProductList
-        products={products}
-        title={
-          <>
-            <div className="form-control relative w-full max-w-xs">
-              <MdSearch className="text-xl absolute top-1/2 left-2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search.."
-                className="input input-bordered w-full max-w-xs pl-8"
-              />
-            </div>
-          </>
+      <Suspense
+        fallback={
+          <div className="container flex justify-center items-center">
+            <span className="loading-dots loading-lg" />
+          </div>
         }
-      />
+      >
+        <NewDynamicProductList products={products} title={<></>} />
+      </Suspense>
       {/* <NewProductList isDiscover /> */}
     </div>
   );

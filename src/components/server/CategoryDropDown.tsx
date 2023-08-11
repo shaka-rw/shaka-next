@@ -2,94 +2,26 @@ import React from 'react';
 import { MdOutlineWindow } from 'react-icons/md';
 import { FaCaretRight } from 'react-icons/fa6';
 import { getPath } from '@/app/_actions';
+import prisma from '@/prima';
+import Link from 'next/link';
 
-interface Category {
-  name: string;
-  subCategories: SubCategory[];
-}
+// interface Category {
+//   name: string;
+//   subCategories: SubCategory[];
+// }
 
-interface SubCategory {
-  name: string;
-}
+// interface SubCategory {
+//   name: string;
+// }
 
 // Sample data for categories and subcategories
-const categories: Category[] = [
-  {
-    name: 'Electronics',
-    subCategories: [
-      { name: 'Phones' },
-      { name: 'Laptops' },
-      { name: 'Tablets' },
-    ],
-  },
-  {
-    name: 'Clothing',
-    subCategories: [{ name: 'Shirts' }, { name: 'Pants' }, { name: 'Dresses' }],
-  },
-  {
-    name: 'Home',
-    subCategories: [
-      { name: 'Furniture' },
-      { name: 'Decor' },
-      { name: 'Appliances' },
-    ],
-  },
-  {
-    name: 'Sports',
-    subCategories: [
-      { name: 'Soccer' },
-      { name: 'Basketball' },
-      { name: 'Tennis' },
-    ],
-  },
-  {
-    name: 'Books',
-    subCategories: [
-      { name: 'Fiction' },
-      { name: 'Non-Fiction' },
-      { name: 'Science Fiction' },
-    ],
-  },
-  {
-    name: 'Beauty',
-    subCategories: [
-      { name: 'Skincare' },
-      { name: 'Makeup' },
-      { name: 'Haircare' },
-    ],
-  },
-  {
-    name: 'Toys',
-    subCategories: [
-      { name: 'Action Figures' },
-      { name: 'Dolls' },
-      { name: 'Board Games' },
-    ],
-  },
-  {
-    name: 'Food',
-    subCategories: [
-      { name: 'Snacks' },
-      { name: 'Beverages' },
-      { name: 'Canned Goods' },
-    ],
-  },
-  {
-    name: 'Garden',
-    subCategories: [
-      { name: 'Plants' },
-      { name: 'Tools' },
-      { name: 'Outdoor Furniture' },
-    ],
-  },
-  {
-    name: 'Pets',
-    subCategories: [{ name: 'Dogs' }, { name: 'Cats' }, { name: 'Fish' }],
-  },
-];
 
 const CategoryDropDown = async () => {
-  const pathname = await getPath();
+  const categories = await prisma.category.findMany({
+    take: 50,
+    where: { parent: null },
+    include: { subCategories: true },
+  });
 
   return (
     <div className="dropdown dropdown-end">
@@ -112,7 +44,9 @@ const CategoryDropDown = async () => {
             >
               {cat.subCategories.map((subCat) => (
                 <li key={subCat.name}>
-                  <a>{subCat.name}</a>
+                  <Link href={`/discover/?cat=${subCat.id}`}>
+                    {subCat.name}
+                  </Link>
                 </li>
               ))}
             </ul>

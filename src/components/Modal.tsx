@@ -27,7 +27,6 @@ export const Modal = ({
       <dialog id={customId ?? modalId} className="modal">
         <div className={`modal-box ${lg ? ' max-w-3xl ' : ''} ${className}`}>
           {children}
-
           <div
             dangerouslySetInnerHTML={{
               __html: `<button class="btn" onclick="window['${

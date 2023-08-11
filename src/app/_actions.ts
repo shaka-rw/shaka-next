@@ -15,6 +15,7 @@ import {
 } from './helpers/upload';
 import { multiVariationSchema } from '@/components/forms/AddVariationsForm';
 import { cartSchema } from '@/components/forms/AddToCartForm';
+import { AssetFolder } from '@/components/forms/AddCategoryForm';
 
 export async function addProductVariation(formData: FormData) {
   const data = JSON.parse(formData.get('data') as string) as z.infer<
@@ -227,11 +228,11 @@ export async function getPath() {
   return `/${pathname.replace(/^\//, '')}`;
 }
 
-enum AssetFolder {
-  Categories = 'categories',
-  ProductImages = 'product_images',
-  Shops = 'shops',
-}
+// enum AssetFolder {
+//   Categories = 'categories',
+//   ProductImages = 'product_images',
+//   Shops = 'shops',
+// }
 
 export async function uploadAssetAndSave(file: File, assetFolder: AssetFolder) {
   const upload = await uploadAssetImage(file, assetFolder);

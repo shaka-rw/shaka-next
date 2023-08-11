@@ -7,10 +7,10 @@ import {
   MdPerson,
   MdLogin,
   MdFavorite,
-  MdShoppingCart,
   MdDashboard,
   MdHome,
   MdMenu,
+  MdSettings,
 } from 'react-icons/md';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 
@@ -23,6 +23,9 @@ import { FaCaretDown } from 'react-icons/fa6';
 import LogoutBtn from '../LogoutBtn';
 import CartModal from './CartModal';
 import { getPath } from '@/app/_actions';
+import Themes from '../client/Themes';
+import Logo from '../client/Logo';
+import { twMerge } from 'tailwind-merge';
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -74,12 +77,6 @@ const Navbar = async () => {
         <div className="navbar h-auto min-h-[auto] mx-auto flex-wrap justify-between gap-2 p-0">
           <ul className="flex-1 hidden md:flex">
             <li>
-              {/* <Link
-              href="/"
-              className="btn bg-transparent border-0 py-1 flex items-center gap-1"
-            >
-              <MdOutlineWindow /> All Categories
-            </Link> */}
               <CategoryDropDown />
             </li>
             <li>
@@ -112,15 +109,14 @@ const Navbar = async () => {
             )}
           </ul>
           <Link href={'/'} className="hidden md:inline-block flex-none">
-            <Image
-              height={40}
-              width={80}
-              src="/logo.png"
-              alt="Shaka"
-              className=""
-            />
+            <Logo width={80} height={40} />
           </Link>
-          <ul className="flex w-full md:w-auto justify-between  md:justify-end flex-1 items-center">
+          <ul className="flex w-full md:w-auto justify-between gap-1  md:justify-end flex-1 items-center">
+            <li>
+              <Link href={'/'} className="inline-block md:hidden flex-none">
+                <Logo width={140} height={60} />
+              </Link>
+            </li>
             <li>
               {/* <div className="btn mr-1 flex bg-transparent py-1  gap-2 [text-transform:unset] text-sm items-center">
                 <span className="text-sm">Search</span>
@@ -130,11 +126,14 @@ const Navbar = async () => {
                 <input
                   type="text"
                   placeholder="Search.."
-                  className="input input-bordered w-full max-w-xs pl-8"
+                  className={twMerge(
+                    'input input-sm md:input-md input-bordered w-full max-w-xs',
+                    'pl-8 md:pl-8'
+                  )}
                 />
               </div>
             </li>
-            <ul className="flex items-center gap-1">
+            <ul className="flex items-center ml-1 gap-1">
               {session?.user && user ? (
                 <>
                   <li>
@@ -157,7 +156,7 @@ const Navbar = async () => {
                   <li className="dropdown dropdown-bottom dropdown-end">
                     <label
                       tabIndex={0}
-                      className="btn gap-2 items-center btn-sm rounded-xl  border-0 text-lg h-10"
+                      className="btn gap-2 items-center btn-sm rounded-xl  border-0 text-lg h-10 w-[4.5rem] px-0 py-[.15rem]"
                     >
                       <span className="avatar p-1 w-8 h-8 overflow-hidden rounded-full">
                         {user.image ? (
@@ -174,10 +173,19 @@ const Navbar = async () => {
                     </label>
                     <ul
                       tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 border border-base-300 rounded-box w-52"
                     >
                       <li>
                         <a>{user.name}</a>
+                      </li>
+                      <div className="divider my-1"></div>
+                      <li>
+                        <Link href={'#'}>
+                          <MdSettings /> Settings
+                        </Link>
+                      </li>
+                      <li>
+                        <Themes />
                       </li>
                       <li>
                         <LogoutBtn />
@@ -190,7 +198,7 @@ const Navbar = async () => {
                   <li>
                     <Link
                       href="/api/auth/signin"
-                      className="btn mx-1 btn-primary  text-sm"
+                      className="btn flex-nowrap mx-1 btn-primary btn-sm md:btn-md text-xs  md:text-sm"
                     >
                       Login <MdLogin />
                     </Link>
@@ -198,7 +206,7 @@ const Navbar = async () => {
                   <li>
                     <Link
                       href="/api/auth/signin"
-                      className="btn mx-1 btn-secondary btn-outline text-sm"
+                      className="btn flex-nowrap mx-1 btn-secondary btn-sm md:btn-md btn-outline text-xs  md:text-sm"
                     >
                       Signup <AiOutlineUserAdd />
                     </Link>

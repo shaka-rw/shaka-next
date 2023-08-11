@@ -3,18 +3,21 @@ import React from 'react';
 import ModalBtn from '../ModalBtn';
 import { revalidatePath } from 'next/cache';
 import { MdAdd } from 'react-icons/md';
-import { uploadAssetImage } from '@/app/_actions';
+import { getPath, uploadAssetImage } from '@/app/_actions';
+import { Category } from '@prisma/client';
+import { Modal } from '../Modal';
 
 export enum AssetFolder {
   Categories = 'categories',
   Shops = 'shops',
-  ProductColors = 'product_colors',
+  ProductImages = 'product_images',
 }
 
 async function addCategory(data: FormData) {
   'use server';
   const name = data.get('name') as string;
   const image = data.get('image') as File;
+  const parentId = data.get('parentId') as string | null;
 
   if (!name.trim() || !image.size) return;
   const asset = await uploadAssetImage(image, AssetFolder.Categories);
@@ -29,57 +32,60 @@ async function addCategory(data: FormData) {
           assetId: asset.public_id,
         },
       },
+      ...(parentId ? { parent: { connect: { id: parentId as string } } } : {}),
     },
   });
-  revalidatePath('/');
+  revalidatePath(await getPath());
 }
 
-const AddCategory = () => {
+const AddCategoryForm = ({ parent }: { parent?: Category }) => {
   return (
     <>
       {/* Open the modal using ID.showModal() method */}
-      <ModalBtn modalId="my_modal_1" />
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box flex flex-col gap-2">
-          <h3 className="font-bold text-lg mb-2">Add Category</h3>
-          <form
-            className="flex flex-col items-start gap-2"
-            action={addCategory}
-          >
-            <input
-              type="text"
-              name="name"
-              className="input w-full input-bordered"
-              placeholder="Category Name"
-            />
-            <div className="form-control w-full max-w-xs">
-              <label className="label">
-                <span className="label-text">Category image</span>
-              </label>
-              <input
-                type="file"
-                className="file-input file-input-bordered w-full max-w-xs"
-                required
-                name="image"
-              />
-              <label className="label"></label>
-            </div>
-            <button type="submit" className="btn w-fit btn-primary">
-              <MdAdd /> Add Category
+      <Modal
+        btnContent={<></>}
+        modalId={`add_cat_${parent?.id ?? '0'}`}
+        btn={
+          <>
+            <button className={`btn btn-primary ${parent ? 'btn-sm' : ''}`}>
+              <MdAdd /> {!parent ? 'Add Category' : ''}
             </button>
-          </form>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: `<button class="btn" onclick="window.my_modal_1.close()">Close</button>`,
-            }}
-            className="modal-action"
-          >
-            {/* if there is a button in form, it will close the modal */}
+          </>
+        }
+      >
+        <h3 className="font-bold text-lg mb-4 mt-2">
+          Add {parent ? `Sub-category of "${parent.name}"` : 'Category'}
+        </h3>
+        <form className="flex flex-col items-start gap-2" action={addCategory}>
+          {parent && <input type="hidden" value={parent.id} name="parentId" />}
+          <input
+            type="text"
+            name="name"
+            className="input w-full input-bordered"
+            placeholder={(parent ? 'Sub-' : '') + 'Category Name'}
+          />
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">
+                {parent ? 'Sub-category' : 'Category'} image
+              </span>
+            </label>
+            <input
+              type="file"
+              className="file-input file-input-bordered w-full max-w-xs"
+              required
+              name="image"
+            />
+            <label className="label"></label>
           </div>
-        </div>
-      </dialog>
+          <button type="submit" className="btn w-fit btn-primary">
+            <MdAdd />
+            {!parent ? ' Add Category' : 'Add Sub-category'}
+          </button>
+        </form>
+      </Modal>
     </>
   );
 };
 
-export default AddCategory;
+export default AddCategoryForm;
