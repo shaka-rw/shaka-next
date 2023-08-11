@@ -26,7 +26,7 @@ export const ClientModal = ({
   const handleClose = () => {
     onClose && onClose();
     const dialog = document.querySelector(
-      `${customId ?? modalId}`
+      `#${customId ?? modalId}`
     ) as HTMLDialogElement | null;
     dialog?.close();
   };
