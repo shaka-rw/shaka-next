@@ -3,7 +3,7 @@ import { PropsWithChildren, ReactNode } from 'react';
 import { ModalBtn2 } from '../ModalBtn';
 import { MdClose } from 'react-icons/md';
 
-const modalId = '100'; //`${Math.random()}`.replace('.', '_');
+const modalId = 'modal-100'; //`${Math.random()}`.replace('.', '_');
 
 export const ClientModal = ({
   btnContent,
