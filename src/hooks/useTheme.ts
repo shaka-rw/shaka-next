@@ -10,7 +10,7 @@ const useTheme = () => {
   const [isPending, startTransition] = useTransition();
   const session = useSession();
   const [currentTheme, setCurrentTheme] = useState<Theme['name'] | null>(
-    (session.data?.user as any)?.theme === 'DARK' ? 'shaka-dark' : 'shaka-light'
+    (session?.data?.user as any)?.theme === 'DARK' ? 'shaka-dark' : 'shaka-light'
   );
 
   const themes: Theme[] = useMemo(
@@ -33,7 +33,7 @@ const useTheme = () => {
   }, [themes]);
 
   useEffect(() => {
-    if (currentTheme && session.status !== "loading") {
+    if (currentTheme &&  session?.status !== "loading") {
       document
         .getElementsByTagName('html')[0]
         ?.setAttribute('data-theme', currentTheme);
@@ -41,7 +41,7 @@ const useTheme = () => {
         changeUserTheme(currentTheme === 'shaka-dark' ? 'DARK' : 'LIGHT')
       );
     }
-  }, [currentTheme, session.status]);
+  }, [currentTheme, session?.status]);
 
   const changeTheme = (value: Theme['name']) => {
     if (themes.some((t) => t.name === value)) {
