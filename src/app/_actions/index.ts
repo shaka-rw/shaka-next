@@ -2,7 +2,7 @@
 
 import prisma from '@/prima';
 import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]/route';
+import { authOptions } from '../api/auth/[...nextauth]/route';
 import { revalidatePath } from 'next/cache';
 import { productSchema } from '@/components/forms/AddProductForm';
 import { z } from 'zod';
@@ -12,7 +12,7 @@ import {
   configCloudinary,
   uploadLocal,
   uploadToCloudinary,
-} from './helpers/upload';
+} from '../helpers/upload';
 import { multiVariationSchema } from '@/components/forms/AddVariationsForm';
 import { cartSchema } from '@/components/forms/AddToCartForm';
 import { AssetFolder } from '@/components/forms/AddCategoryForm';
@@ -189,11 +189,16 @@ export async function addToCart(formData: FormData) {
     include: { product: true },
   });
 
-  if ((prodQty?.quantity ?? 0) < data.quantity) return;
+  if ((prodQty?.quantity ?? 0) < data.quantity) {
+    return [
+      `You're adding "${data.quantity}", but only "${prodQty?.quantity}" is available!`,
+    ];
+  }
 
   const cartQty = await prisma.quantitiesOnCart.create({
     data: {
       quantity: data.quantity,
+      price: prodQty?.price,
       cart: {
         connectOrCreate: {
           create: {
@@ -210,14 +215,8 @@ export async function addToCart(formData: FormData) {
     },
   });
 
-  console.log({ cartQty });
-
-  // await prisma.cart.upsert({
-  //   create: { productId, quantity, userId: user.id },
-  //   update: { quantity },
-  //   where: { productId_userId: { userId: user.id, productId } },
-  // });
   revalidatePath(await getPath());
+  return;
 }
 
 export async function getPath() {
@@ -259,4 +258,15 @@ export async function uploadAssetImage(file: File, assetFolder: AssetFolder) {
   }
 
   throw new Error();
+}
+
+export async function removeItemFromCart(formData: FormData) {
+  'use server';
+  const [cartId, prdQtyId] = (formData.get('cartQtyId') as string).split('_');
+  await prisma.quantitiesOnCart.delete({
+    where: {
+      cartId_productQuantityId: { cartId, productQuantityId: prdQtyId },
+    },
+  });
+  revalidatePath(await getPath());
 }

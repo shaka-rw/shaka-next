@@ -1,10 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Theme as UserTheme } from '@prisma/client';
+import { useEffect, useMemo, useState, useTransition } from 'react';
+import { changeTheme as changeUserTheme } from '../app/_actions/theme';
 
 export type Theme = {
   name: 'shaka-light' | 'shaka-dark';
 };
 
 const useTheme = () => {
+  const [isPending, startTransition] = useTransition();
   const [currentTheme, setCurrentTheme] = useState<Theme['name'] | null>(null);
 
   const themes: Theme[] = useMemo(
@@ -31,6 +34,11 @@ const useTheme = () => {
       document
         .getElementsByTagName('html')[0]
         ?.setAttribute('data-theme', currentTheme);
+      startTransition(() =>
+        changeUserTheme(
+          currentTheme === 'shaka-dark' ? UserTheme.DARK : UserTheme.LIGHT
+        )
+      );
     }
   }, [currentTheme]);
 

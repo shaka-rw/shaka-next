@@ -18,6 +18,7 @@ import { useSession } from 'next-auth/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'react-hot-toast';
 
 export const cartSchema = z.object({
   color: z.string().nonempty(),
@@ -53,7 +54,14 @@ const AddToCartForm = ({ product }: { product: VariationProduct }) => {
   const onSubmit: SubmitHandler<z.infer<typeof cartSchema>> = (data) => {
     const formData = new FormData();
     formData.append('data', JSON.stringify(data));
-    startTransition(() => addToCart(formData));
+    startTransition(async () => {
+      const result = await addToCart(formData);
+      if (result) {
+        toast.error(result[0]);
+      } else {
+        toast.success(`Added to cart :)`);
+      }
+    });
   };
 
   return (

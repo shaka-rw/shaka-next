@@ -22,6 +22,7 @@ export const authOptions = {
             ? {
                 id: user.id,
                 role: user.role,
+                theme: user.theme,
               }
             : {}),
         },
@@ -90,4 +91,4 @@ export const authOptions = {
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

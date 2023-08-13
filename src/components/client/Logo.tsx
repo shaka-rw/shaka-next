@@ -13,7 +13,7 @@ const Logo = ({
   className?: string;
 }) => {
   const initUrl = useLogo();
-  const [logoURL, setLogoURL] = useState<'logo_.png' | 'logo.png'>();
+  const [logoURL, setLogoURL] = useState<'logo_.png' | 'logo.png'>(initUrl);
 
   useEffect(() => {
     setLogoURL(initUrl);

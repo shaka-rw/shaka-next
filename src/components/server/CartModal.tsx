@@ -10,21 +10,11 @@ import {
 import { User } from '@prisma/client';
 import prisma from '@/prima';
 import { revalidatePath } from 'next/cache';
-import { getPath } from '@/app/_actions';
+import { getPath, removeItemFromCart } from '@/app/_actions';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { twMerge } from 'tailwind-merge';
-
-async function removeCart(formData: FormData) {
-  'use server';
-  const [cartId, prdQtyId] = (formData.get('cartQtyId') as string).split('_');
-  await prisma.quantitiesOnCart.delete({
-    where: {
-      cartId_productQuantityId: { cartId, productQuantityId: prdQtyId },
-    },
-  });
-  revalidatePath(await getPath());
-}
+import Link from 'next/link';
 
 const CartModal = async () => {
   const session = await getServerSession(authOptions);
@@ -115,7 +105,7 @@ const CartModal = async () => {
                     RWF
                   </th>
                   <td>
-                    <form action={removeCart}>
+                    <form action={removeItemFromCart}>
                       <input
                         type="hidden"
                         name="cartQtyId"
@@ -142,9 +132,9 @@ const CartModal = async () => {
       </div>
       {cart && (
         <div className="my-3">
-          <button className="btn btn-primary">
+          <Link href={'/checkout'} className="btn btn-primary">
             <MdShoppingCartCheckout /> Checkout
-          </button>
+          </Link>
         </div>
       )}
     </Modal>

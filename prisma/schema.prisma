@@ -48,6 +48,11 @@ model Session {
   updatedAt    DateTime @default(now()) @updatedAt
 }
 
+enum Theme {
+  DARK
+  LIGHT
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -64,8 +69,8 @@ model User {
   cart          Cart?
   following     Shop[]    @relation(name: "UserFollowingRelation")
   shopId        String?
-  Shop          Shop?     @relation(fields: [shopId], references: [id])
   Order         Order[]
+  theme         Theme     @default(LIGHT)
 }
 
 model VerificationToken {
@@ -103,8 +108,7 @@ model Shop {
   category   Category  @relation(fields: [categoryId], references: [id])
   products   Product[]
   followers  User[]    @relation(name: "UserFollowingRelation")
-  User       User[]
-  Order      Order[]
+  orders     Order[]
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @default(now()) @updatedAt
 }
@@ -166,6 +170,21 @@ model QuantitiesOnCart {
   @@id([cartId, productQuantityId])
 }
 
+model OrderQuantities {
+  id                String          @id() @default(cuid())
+  order             Order           @relation(fields: [orderId], references: [id])
+  quantity          Int
+  price             Float
+  productQuantity   ProductQuantity @relation(fields: [productQuantityId], references: [id])
+  productQuantityId String
+  createAt          DateTime        @default(now())
+  updatedAt         DateTime        @default(now()) @updatedAt
+
+  orderId String
+
+  @@unique([orderId, productQuantityId])
+}
+
 model Asset {
   id        String     @id @default(cuid())
   assetId   String?
@@ -212,6 +231,7 @@ model ProductQuantity {
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @default(now()) @updatedAt
   QuantitiesOnCart QuantitiesOnCart[]
+  OrderQuantities  OrderQuantities[]
 
   @@unique([productSizeId, productColorId])
 }
@@ -226,17 +246,41 @@ enum OrderStatus {
 }
 
 model Order {
-  id          String            @id @default(uuid())
-  orderNumber BigInt            @unique @default(autoincrement())
-  customer    User              @relation(fields: [userId], references: [id])
+  id          String      @id @default(uuid())
+  orderNumber BigInt      @unique @default(autoincrement())
+  customer    User        @relation(fields: [userId], references: [id])
   userId      String
-  shop        Shop              @relation(fields: [shopId], references: [id])
-  shopId      String
-  quantities  ProductQuantity[]
-  isPaid      Boolean           @default(false)
-  status      OrderStatus       @default(PENDING)
+  shops       Shop[]
+  status      OrderStatus @default(PENDING)
+  isPaid      Boolean     @default(false)
+  payments    Payment[]
   totalCost   BigInt?
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @default(now()) @updatedAt
+  quantities        OrderQuantities[]
+  ProductQuantity   ProductQuantity?  @relation(fields: [productQuantityId], references: [id])
+  productQuantityId String?
+}
+
+enum PayStatus {
+  pending
+  failed
+  successful
+}
+
+model Payment {
+  id             String    @id @default(uuid())
+  status         PayStatus @default(pending)
+  transaction_id String?
+  amount         Float
+  name           String?
+  email          String
+  phoneNumber    String?
+  currency       String    @default("RWF")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  Order     Order?   @relation(fields: [orderId], references: [id])
+  orderId   String?
 }
