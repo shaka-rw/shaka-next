@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Flutterwave from 'flutterwave-node-v3';
+// import Flutterwave from 'flutterwave-node-v3';
 import prisma from '@/prima';
 import { Order, PayStatus } from '@prisma/client';
 import { checkout } from '@/app/_actions/orders';
@@ -31,88 +31,87 @@ export const GET = async (req: NextRequest) => {
   if (!payment)
     return NextResponse.json({ error: 'Payment not found' }, { status: 400 });
 
-  const flw = new Flutterwave(
-    process.env.FLW_PUBLIC_KEY,
-    process.env.FLW_SECRET_KEY
-  );
-  flw.Transaction.verify({ id: transId })
-    .then(async (response: any) => {
-      if (response.data.status === 'successful') {
-        if (
-          response.data.amount === payment.amount &&
-          response.data.currency === payment.currency
-        ) {
-          await prisma.payment.update({
-            where: { id: payment.id },
-            data: {
-              status: PayStatus.successful,
-              phoneNumber:
-                response.data.customer.phone_number ?? payment.phoneNumber,
-              transaction_id: transId,
-            },
-          });
+  // const flw = new Flutterwave(
+  //   process.env.FLW_PUBLIC_KEY,
+  //   process.env.FLW_SECRET_KEY
+  // );
+  // flw.Transaction.verify({ id: transId })
+  //   .then(async (response: any) => {
+  //     if (response.data.status === 'successful') {
+  if (status === 'successful') {
+    if (
+      true
+      // response.data.amount === payment.amount &&
+      // response.data.currency === payment.currency
+    ) {
+      await prisma.payment.update({
+        where: { id: payment.id },
+        data: {
+          status: PayStatus.successful,
+          // phoneNumber:
+          //   response.data.customer.phone_number ?? payment.phoneNumber,
+          transaction_id: transId,
+        },
+      });
 
-          const result = await checkout();
-          if (result[0])
-            return NextResponse.json({ message: result[0] }, { status: 400 });
+      const result = await checkout();
+      if (result[0])
+        return NextResponse.json({ message: result[0] }, { status: 400 });
 
-          const order = result[1] as Order;
-          await prisma.payment.update({
-            where: { id: payment.id },
-            data: { orderId: order.id },
-          });
-          const updatedOrder = await prisma.order.findUnique({
-            where: { id: order.id },
-            include: {
-              payments: true,
-              quantities: { include: { productQuantity: true } },
-            },
-          });
+      const order = result[1] as Order;
+      await prisma.payment.update({
+        where: { id: payment.id },
+        data: { orderId: order.id },
+      });
+      const updatedOrder = await prisma.order.findUnique({
+        where: { id: order.id },
+        include: {
+          payments: true,
+          quantities: { include: { productQuantity: true } },
+        },
+      });
 
-          const amountToPay =
-            updatedOrder?.quantities.reduce(
-              (a, c) => a + (c.price ?? c.productQuantity.price) * c.quantity,
-              0
-            ) ?? 0;
-          const amountPaid =
-            updatedOrder?.payments.reduce((a, c) => a + c.amount, 0) ?? 0;
+      const amountToPay =
+        updatedOrder?.quantities.reduce(
+          (a, c) => a + (c.price ?? c.productQuantity.price) * c.quantity,
+          0
+        ) ?? 0;
+      const amountPaid =
+        updatedOrder?.payments.reduce((a, c) => a + c.amount, 0) ?? 0;
 
-          if (amountToPay === amountPaid) {
-            await prisma.order.update({
-              where: { id: updatedOrder?.id },
-              data: { isPaid: true },
-            });
-          }
+      if (amountToPay === amountPaid) {
+        await prisma.order.update({
+          where: { id: updatedOrder?.id },
+          data: { isPaid: true },
+        });
+      }
 
-          // Clear cart
-          await prisma.quantitiesOnCart.deleteMany({
-            where: { cartId: user?.cart?.id },
-          });
+      // Clear cart
+      await prisma.quantitiesOnCart.deleteMany({
+        where: { cartId: user?.cart?.id },
+      });
 
-          if (updatedOrder) {
-            return NextResponse.json(
-              { message: 'Payment successfull' },
-              { status: 200 }
-            );
-          }
-        } else {
-          return NextResponse.json(
-            { message: "Payment amount and/or currency doesn't match" },
-            { status: 400 }
-          );
-        }
-      } else {
+      if (updatedOrder) {
         return NextResponse.json(
-          { message: 'Payment failed' },
-          { status: 400 }
+          { message: 'Payment successfull' },
+          { status: 200 }
         );
       }
-    })
-    .catch((err: unknown) => {
-      console.log(err);
+    } else {
       return NextResponse.json(
-        { message: 'Payment not verified, unknown error occured' },
-        { status: 500 }
+        { message: "Payment amount and/or currency doesn't match" },
+        { status: 400 }
       );
-    });
+    }
+  } else {
+    return NextResponse.json({ message: 'Payment failed' }, { status: 400 });
+  }
+  // })
+  // .catch((err: unknown) => {
+  //   console.log(err);
+  //   return NextResponse.json(
+  //     { message: 'Payment not verified, unknown error occured' },
+  //     { status: 500 }
+  //   );
+  // });
 };
