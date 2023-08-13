@@ -59,7 +59,7 @@ const CheckoutClient = ({ cart }: { cart: Cart }) => {
           ) : (
             <a
               href={payLink}
-              className="btn  btn-link btn-block animate-pulse btn-primary"
+              className="btn  btn-block animate-pulse btn-accent"
               target="_blank"
             >
               Pay <span className="font-mono font-bold ">({cartTotal}RWF)</span>{' '}

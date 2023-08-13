@@ -25,7 +25,7 @@ export default async function RootLayout({
     <html
       lang="en"
       data-theme={
-        (session?.user as any)?.theme === 'LIGHT' ? 'shaka-light' : 'shaka-dark'
+        (session?.user as any)?.theme === 'DARK' ? 'shaka-dark' : 'shaka-light'
       }
     >
       <body className={`flex min-h-screen flex-col ${inter.className}`}>
