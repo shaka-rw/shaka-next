@@ -31,7 +31,7 @@ const CheckoutPage = async () => {
     <div>
       <main className="min-h-screen">
         <Navbar />
-        <div className="flex justify-center items-center p-3">
+        <div className="flex flex-col p-3">
           <CheckoutClient cart={cart as Cart} />
         </div>
       </main>

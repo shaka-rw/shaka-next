@@ -10,15 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return (
-    <main className="grid min-h-screen grid-rows-[auto,1fr] grid-cols-[1fr]">
-      {/* <AppBar /> */}
-      <Navbar />
-      {/* <Sidebar />  */}
-      <div className="">
-        <HomeContent />
-      </div>
-    </main>
-  );
+  return <HomeContent />;
 }
 export const dynamic = 'force-dynamic';

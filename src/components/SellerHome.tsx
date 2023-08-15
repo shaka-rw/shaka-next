@@ -26,12 +26,22 @@ import {
   FaChartBar,
 } from 'react-icons/fa';
 import { NewDynamicProductList } from './server/NewProductList';
-import SellerProductList from './server/SellerProductList';
 import { notFound } from 'next/navigation';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth';
 
-const SellerHome = async ({ user }: { user: User }) => {
+const SellerHome = async () => {
+  const session = await getServerSession(authOptions);
+
+  const user = await prisma.user.findUnique({
+    where: { id: session?.user?.id },
+    include: {
+      cart: { include: { quantities: { include: { productQuantity: true } } } },
+    },
+  });
+
   const shop = await prisma.shop.findFirst({
-    where: { userId: user.id },
+    where: { userId: user?.id as string },
     include: {
       _count: { select: { followers: true, products: true } },
       category: true,

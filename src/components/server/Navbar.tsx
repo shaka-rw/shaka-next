@@ -185,6 +185,9 @@ const Navbar = async () => {
                       <li>
                         <a>{user.name}</a>
                       </li>
+                      <li>
+                        <Link href={'/dashboard/orders/customer'}>My Orders</Link>
+                      </li>
                       <div className="divider my-1"></div>
                       <li>
                         <Link href={'#'}>

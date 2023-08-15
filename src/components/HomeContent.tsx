@@ -12,14 +12,9 @@ const HomeContent = async () => {
   const user = session?.user;
   if (!user) return <GuestHome />;
 
-  const userData = await prisma.user.findUnique({
-    where: { email: user.email as string },
-  });
-  if (!userData) return <GuestHome />;
-
-  if (userData.role === 'CUSTOMER') return <CustomerHome />;
-  if (userData.role === 'ADMIN') return <AdminHome />;
-  if (userData.role === 'SELLER') return <SellerHome user={userData} />;
+  if (user.role === 'CUSTOMER') return <CustomerHome />;
+  if (user.role === 'ADMIN') return <AdminHome />;
+  if (user.role === 'SELLER') return <SellerHome />;
 };
 
 export default HomeContent;

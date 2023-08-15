@@ -106,6 +106,7 @@ const PaymentVerifyPage = async ({
       }
       return { error: `Payment failed (${response.status})` };
     } catch (error) {
+      console.log(error);
       return { error: `Payment verification failed!` };
     }
   }
@@ -117,8 +118,8 @@ const PaymentVerifyPage = async ({
     <main className="grid min-h-screen grid-rows-[auto,1fr] grid-cols-[1fr]">
       <Navbar />
       <div className="">
-        <div className="flex justify-center items-center p-3">
-          <div className="card max-w-md w-full  shadow border p-3 md:p-4 my-4">
+        <div className="flex flex-col">
+          <div className="card mx-auto max-w-lg w-full  shadow border p-3 md:p-4 my-4">
             <h3 className="card-title">Payment</h3>
             <div className="card-body">
               <div
