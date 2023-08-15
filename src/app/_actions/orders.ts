@@ -118,7 +118,7 @@ export async function createPayment(phoneNumber?: string) {
     amount: payment.amount,
     currency: payment.currency,
     payment_options: 'card, ussd, mobilemoneyrwanda',
-    redirect_url: 'http://localhost:3000/api/verifyPay',
+    redirect_url: `${process.env.NEXTAUTH_URL}/api/verifyPay`,
     meta: {
       consumer_name: payment.name,
       consumer_email: payment.email,
