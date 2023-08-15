@@ -73,7 +73,17 @@ export const checkout = async () => {
         ),
       },
     },
+    include: { quantities: true },
   });
+
+  // Reduce stock
+  const updateStock = order.quantities.map(async (qty) => {
+    await prisma.productQuantity.update({
+      data: { quantity: { decrement: qty.quantity } },
+      where: { id: qty.productQuantityId },
+    });
+  });
+  await Promise.all(updateStock);
 
   return [null, order];
 };
@@ -118,7 +128,7 @@ export async function createPayment(phoneNumber?: string) {
     amount: payment.amount,
     currency: payment.currency,
     payment_options: 'card, ussd, mobilemoneyrwanda',
-    redirect_url: `${process.env.NEXTAUTH_URL}/api/verifyPay`,
+    redirect_url: `${process.env.NEXTAUTH_URL}/payments/verify`,
     meta: {
       consumer_name: payment.name,
       consumer_email: payment.email,

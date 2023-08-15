@@ -5,15 +5,19 @@ import React from 'react';
 import { MdHourglassEmpty } from 'react-icons/md';
 
 const CartTable = ({ cart }: { cart: Cart }) => {
+  const cartTotal = ((cart as any)?.quantities ?? []).reduce(
+    (a: any, c: any) => a + c.quantity * (c.price ?? c.productQuantity.price),
+    0
+  );
   return (
     <>
-      {!cart && (
+      {cartTotal === 0 && (
         <div className="alert  flex gap-2">
           <MdHourglassEmpty /> Empty cart.
         </div>
       )}
-      {cart && (
-        <div className="overflow-x-auto">
+      {cartTotal > 0 && (
+        <div className="max-w-full overflow-x-auto">
           <table className="table table-zebra">
             {/* head */}
             <thead>
@@ -66,13 +70,7 @@ const CartTable = ({ cart }: { cart: Cart }) => {
         </div>
       )}
       <div className="text-xl uppercase my-4 font-bold">
-        Total:{' '}
-        {((cart as any)?.quantities ?? []).reduce(
-          (a: any, c: any) =>
-            a + c.quantity * (c.price ?? c.productQuantity.price),
-          0
-        )}{' '}
-        RWF
+        Total: {cartTotal} RWF
       </div>
     </>
   );

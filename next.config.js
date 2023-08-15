@@ -4,6 +4,7 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {

@@ -23,7 +23,7 @@ import { FaCaretDown } from 'react-icons/fa6';
 import LogoutBtn from '../LogoutBtn';
 import CartModal from './CartModal';
 import { getPath } from '@/app/_actions';
-import Themes from '../client/Themes';
+import Themes, { ThemeButton } from '../client/Themes';
 import Logo from '../client/Logo';
 import { twMerge } from 'tailwind-merge';
 
@@ -117,22 +117,29 @@ const Navbar = async () => {
                 <Logo width={140} height={60} />
               </Link>
             </li>
-            <li>
+            <ul className="flex flex-row gap-2">
+              {!session?.user && (
+                <li>
+                  <ThemeButton />
+                </li>
+              )}
               {/* <div className="btn mr-1 flex bg-transparent py-1  gap-2 [text-transform:unset] text-sm items-center">
                 <span className="text-sm">Search</span>
               </div> */}
-              <div className="form-control relative w-full max-w-xs">
-                <MdSearch className="text-xl absolute top-1/2 left-2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search.."
-                  className={twMerge(
-                    'input input-sm md:input-md input-bordered w-full max-w-xs',
-                    'pl-8 md:pl-8'
-                  )}
-                />
-              </div>
-            </li>
+              <li>
+                <div className="form-control relative w-full max-w-xs">
+                  <MdSearch className="text-xl absolute top-1/2 left-2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search.."
+                    className={twMerge(
+                      'input input-sm md:input-md input-bordered w-full max-w-xs',
+                      'pl-8 md:pl-8'
+                    )}
+                  />
+                </div>
+              </li>
+            </ul>
             <ul className="flex items-center ml-1 gap-1">
               {session?.user && user ? (
                 <>
@@ -206,7 +213,7 @@ const Navbar = async () => {
                   <li>
                     <Link
                       href="/api/auth/signin"
-                      className="btn flex-nowrap mx-1 btn-secondary btn-sm md:btn-md btn-outline text-xs  md:text-sm"
+                      className="btn hidden md:inline-flex flex-nowrap mx-1 btn-secondary btn-sm md:btn-md btn-outline text-xs  md:text-sm"
                     >
                       Signup <AiOutlineUserAdd />
                     </Link>

@@ -38,6 +38,12 @@ const CartModal = async () => {
       },
     },
   });
+
+  const cartTotal = (cart?.quantities ?? []).reduce(
+    (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
+    0
+  );
+
   return (
     <Modal
       btnContent={''}
@@ -64,12 +70,12 @@ const CartModal = async () => {
       <h3 className="text-2xl flex items-center gap-2 mb-3 font-bold">
         <MdShoppingCart /> <span>Cart</span>
       </h3>
-      {!cart && (
+      {cartTotal === 0 && (
         <div className="alert  flex gap-2">
           <MdHourglassEmpty /> Empty cart.
         </div>
       )}
-      {cart && (
+      {cartTotal > 0 && (
         <div className="overflow-x-auto">
           <table className="table table-zebra">
             {/* head */}
@@ -123,14 +129,9 @@ const CartModal = async () => {
         </div>
       )}
       <div className="text-xl uppercase my-4 font-bold">
-        Total:{' '}
-        {(cart?.quantities ?? []).reduce(
-          (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
-          0
-        )}{' '}
-        RWF
+        Total: {cartTotal} RWF
       </div>
-      {cart && (
+      {cartTotal > 0 && (
         <div className="my-3">
           <Link href={'/checkout'} className="btn btn-primary">
             <MdShoppingCartCheckout /> Checkout

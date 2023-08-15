@@ -195,6 +195,23 @@ export async function addToCart(formData: FormData) {
     ];
   }
 
+  const user = await prisma.user.findUnique({
+    where: { id: session?.user?.id },
+    include: { cart: true },
+  });
+
+  if (user?.cart) {
+    const exists = await prisma.quantitiesOnCart.count({
+      where: {
+        AND: {
+          cartId: user.cart.id,
+          productQuantityId: prodQty?.id as string,
+        },
+      },
+    });
+    if (exists > 0) return ['Item already exists on the cart!'];
+  }
+
   const cartQty = await prisma.quantitiesOnCart.create({
     data: {
       quantity: data.quantity,

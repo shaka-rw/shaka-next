@@ -2,6 +2,7 @@
 
 import useTheme, { Theme } from '@/hooks/useTheme';
 import React from 'react';
+import { MdDarkMode, MdLightMode } from 'react-icons/md';
 
 const Themes = () => {
   const { themes, currentTheme, changeTheme } = useTheme();
@@ -31,6 +32,28 @@ const Themes = () => {
         </div>
       ))}
     </div>
+  );
+};
+
+export const ThemeButton = () => {
+  const { themes, currentTheme, changeTheme } = useTheme();
+
+  const handleChange = (value: Theme['name']) => {
+    changeTheme(value);
+  };
+
+  return (
+    <button
+      onClick={() =>
+        handleChange(
+          currentTheme === 'shaka-dark' ? 'shaka-light' : 'shaka-dark'
+        )
+      }
+      className="btn btn-circle btn-sm md:btn-md text-lg"
+    >
+      {' '}
+      {currentTheme === 'shaka-dark' ? <MdLightMode /> : <MdDarkMode />}{' '}
+    </button>
   );
 };
 

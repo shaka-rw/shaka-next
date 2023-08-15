@@ -38,24 +38,26 @@ const CheckoutClient = ({ cart }: { cart: Cart }) => {
 
   return (
     <div>
-      <div className="card shadow border p-3 md:p-4 my-4">
+      <div className="card max-w-md w-full shadow border p-3 md:p-4 my-4">
         <h3 className="card-title">Checkout</h3>
         <div className="card-body">
           <CartTable cart={cart} />
         </div>
         <div className="card-actions">
           {!payLink ? (
-            <button
-              onClick={startPayProcess}
-              disabled={isPending}
-              className="btn btn-primary"
-            >
-              <MdShoppingCartCheckout /> Checkout{' '}
-              <span className="font-mono font-bold ">({cartTotal}RWF)</span>
-              {isPending && (
-                <span className="loading loading-spinner loading-sm" />
-              )}
-            </button>
+            cartTotal > 0 && (
+              <button
+                onClick={startPayProcess}
+                disabled={isPending}
+                className="btn btn-primary"
+              >
+                <MdShoppingCartCheckout /> Checkout{' '}
+                <span className="font-mono font-bold ">({cartTotal}RWF)</span>
+                {isPending && (
+                  <span className="loading loading-spinner loading-sm" />
+                )}
+              </button>
+            )
           ) : (
             <a
               href={payLink}
