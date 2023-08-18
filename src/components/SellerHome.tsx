@@ -15,9 +15,8 @@ import {
   MdPeople,
   MdList,
 } from 'react-icons/md';
-import ProductList from './ProductList';
 import DashboardSideBar, { SideBarItem } from './server/DashboardSideBar';
-import { FaProductHunt, FaFan } from 'react-icons/fa6';
+import { FaFan } from 'react-icons/fa6';
 import {
   FaHome,
   FaShoppingCart,
@@ -133,14 +132,9 @@ const SellerHome = async () => {
                 <h2 className="text-3xl font-semibold text-accent">
                   {shop.name}
                 </h2>
-                {/* <p className="text-gray-600">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Esse, dolores?
-                </p> */}
               </div>
               <div className="flex justify-center">
                 <div className="stats stats-vertical md:stats-horizontal max-w-3xl mx-auto w-full ">
-                  {/* <div className="stat"> */}
                   <div className="stat">
                     <div className="stat-figure text-accent">
                       {shop.approved ? <MdCheck /> : <MdError />}
@@ -198,8 +192,7 @@ const SellerHome = async () => {
             <MdEmojiObjects /> No products added yet.
           </div>
         )}
-        {/* <ProductList products={products} /> */}
-        {/* <SellerProductList products={} /> */}
+
         <NewDynamicProductList products={products} isSeller />
       </div>
 
@@ -216,40 +209,5 @@ const SellerHome = async () => {
     </div>
   );
 };
-
-// function ShopProfile({ shop }: { shop: Shop }) {
-//   return (
-//     <div className="bg-white rounded-lg shadow-md p-6 mb-4 md:p-8 lg:p-10">
-//       <div className="text-center mb-6">
-//         <h2 className="text-2xl font-semibold">{shop.name}</h2>
-//         <p className="text-gray-500">
-//           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate,
-//           praesentium?
-//         </p>
-//       </div>
-
-//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//         <div className="flex flex-col items-center md:border-r md:pr-4">
-//           <p className="text-xl font-semibold">Approved Status</p>
-//           <p className="text-gray-600">
-//             {shop.approved ? 'Approved' : 'Pending Approval'}
-//           </p>
-//         </div>
-
-//         <div className="flex flex-col items-center">
-//           <p className="text-xl font-semibold">Number of Followers</p>
-//           <p className="text-gray-600">{}</p>
-//         </div>
-
-//         <div className="flex flex-col items-center md:border-t md:pt-4">
-//           <p className="text-xl font-semibold">Number of Products</p>
-//           <p className="text-gray-600">{}</p>
-//         </div>
-
-//         {/* Add more relevant shop information here */}
-//       </div>
-//     </div>
-//   );
-// }
 
 export default SellerHome;

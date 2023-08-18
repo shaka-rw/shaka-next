@@ -1,6 +1,5 @@
 import prisma from '@/prima';
 import React from 'react';
-import { MdMenu } from 'react-icons/md';
 import AddCategoryForm from './forms/AddCategoryForm';
 import CategoryList from './CategoryList';
 import { getServerSession } from 'next-auth';

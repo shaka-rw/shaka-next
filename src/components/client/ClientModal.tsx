@@ -5,6 +5,11 @@ import { MdClose } from 'react-icons/md';
 
 const modalId = 'modal-100'; //`${Math.random()}`.replace('.', '_');
 
+export function closeModal(modalId: string) {
+  const modal = document.getElementById(modalId) as HTMLDialogElement;
+  if (modal) modal.close();
+}
+
 export const ClientModal = ({
   btnContent,
   btnPrimary,

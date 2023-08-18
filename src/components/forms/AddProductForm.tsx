@@ -175,7 +175,7 @@ const AddProductForm = ({
             <span className="label-text">Gender</span>
           </label>
           <select className="select select-bordered" {...register('gender')}>
-            <option disabled selected>
+            <option disabled defaultChecked>
               Select Gender
             </option>
             <option value={'UNISEX'}>All Genders (Unisex)</option>

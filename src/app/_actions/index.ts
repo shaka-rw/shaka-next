@@ -16,6 +16,7 @@ import {
 import { multiVariationSchema } from '@/components/forms/AddVariationsForm';
 import { cartSchema } from '@/components/forms/AddToCartForm';
 import { AssetFolder } from '@/components/forms/AddCategoryForm';
+import { editProductSchema } from '@/components/forms/EditProductForm';
 
 export async function addProductVariation(formData: FormData) {
   const data = JSON.parse(formData.get('data') as string) as z.infer<
@@ -23,17 +24,66 @@ export async function addProductVariation(formData: FormData) {
   >;
 
   try {
-    await prisma.productQuantity.createMany({
-      data: data.variations.map(({ color, price, quantity, size }) => ({
-        price,
-        quantity,
-        productColorId: color,
-        productId: data.productId,
-        productSizeId: size,
-      })),
+    data.variations.map(async ({ color, price, quantity, size }) => {
+      await prisma.productQuantity.upsert({
+        where: {
+          productSizeId_productColorId: {
+            productColorId: color,
+            productSizeId: size,
+          },
+        },
+        create: {
+          productColorId: color,
+          productSizeId: size,
+          quantity,
+          price,
+          productId: data.productId,
+        },
+        update: { quantity, price },
+      });
     });
+    // await prisma.productQuantity.createMany({
+    //   data: data.variations.map(({ color, price, quantity, size }) => ({
+    //     price,
+    //     quantity,
+    //     productColorId: color,
+    //     productId: data.productId,
+    //     productSizeId: size,
+    //   })),
+    // });
   } catch (error) {
     console.log(error);
+  }
+
+  revalidatePath(await getPath());
+}
+
+export async function editProduct(formData: FormData) {
+  const data = JSON.parse(formData.get('data') as string) as z.infer<
+    typeof editProductSchema
+  >;
+  try {
+    const newProduct = await prisma.product.update({
+      where: { id: data.productId },
+      data: {
+        gender: 'UNISEX',
+        available: data.available,
+        description: data.description,
+        categories: {
+          connect: data.categories.map((id) => ({ id })),
+        },
+        sizes: {
+          connectOrCreate: data.sizes.map((size) => ({
+            create: { size },
+            where: { size },
+          })),
+        },
+      },
+    });
+    return [];
+  } catch (error) {
+    console.log({ error });
+    return ['Something went wrong!'];
   }
 
   revalidatePath(await getPath());

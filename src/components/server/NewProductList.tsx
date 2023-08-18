@@ -1,18 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import { Asset, Product } from '@prisma/client';
+import { Asset } from '@prisma/client';
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
-import {
-  MdAddBox,
-  MdAddShoppingCart,
-  MdEmojiObjects,
-  MdFavorite,
-} from 'react-icons/md';
+import { MdAddShoppingCart, MdEmojiObjects, MdFavorite } from 'react-icons/md';
 import AddToCartForm from '../forms/AddToCartForm';
 import AddVariationsForm, {
   VariationProduct,
 } from '../forms/AddVariationsForm';
-import { twMerge } from 'tailwind-merge';
+import EditProductForm from '../forms/EditProductForm';
+import prisma from '@/prima';
 
 const NewProductList = ({ isDiscover = false }: { isDiscover?: boolean }) => {
   return (
@@ -122,6 +118,7 @@ export const NewDynamicProductList = async ({
   isSeller?: boolean;
   isDiscover?: boolean;
 }) => {
+  const sizes = isSeller ? await prisma.productSize.findMany({ take: 50 }) : [];
   return (
     <section className={`my-2`}>
       <div className="container flex-col flex gap-3 mx-auto px-2">
@@ -141,13 +138,21 @@ export const NewDynamicProductList = async ({
             className ?? ''
           }  md:grid-cols-4 lg:grid-cols-5 gap-2 py-4`}
         >
-          {products.map((product, i) => {
+          {products.map(async (product, i) => {
             const minPrice = Math.min(
               ...product.quantities.map((q) => q.price)
             );
             const maxPrice = Math.max(
               ...product.quantities.map((q) => q.price)
             );
+
+            const productCategories = await prisma.category.findMany({
+              where: { products: { some: { id: product.id } } },
+            });
+            const subCategories = await prisma.category.findMany({
+              where: { parent: { shops: { some: { id: product.shopId } } } },
+            });
+
             return (
               <div
                 key={i}
@@ -162,9 +167,7 @@ export const NewDynamicProductList = async ({
                     />
                   </div>
                 </figure>
-                <span className="text-xs font-light text-accent">
-                  Ships to Kigali
-                </span>
+
                 <div className="flex flex-col mt-2 gap-2">
                   <Link
                     href={`/products/${product.id}`}
@@ -186,11 +189,25 @@ export const NewDynamicProductList = async ({
                   <div className="divider my-1"></div>
                   <div className="card-actions justify-end">
                     <div className="flex items-center gap-1">
-                      <button className="btn md:text-xl btn-sm md:btn-md btn-accent btn-outline btn-circle">
-                        <MdFavorite />
-                      </button>
+                      {!isSeller ? (
+                        <button className="btn md:text-xl btn-sm md:btn-md btn-accent btn-outline btn-circle">
+                          <MdFavorite />
+                        </button>
+                      ) : (
+                        <>
+                          {' '}
+                          <EditProductForm
+                            categories={subCategories}
+                            productCategories={productCategories}
+                            sizes={sizes}
+                            product={product as any}
+                          />{' '}
+                        </>
+                      )}
                       {isSeller ? (
-                        <AddVariationsForm product={product as any} />
+                        <>
+                          <AddVariationsForm product={product as any} />
+                        </>
                       ) : (
                         <AddToCartForm product={product as any} />
                       )}
@@ -200,46 +217,6 @@ export const NewDynamicProductList = async ({
               </div>
             );
           })}
-          {/* {Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={i}
-              // style={{
-              //   boxShadow:
-              //     'rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;',
-              // }}
-              className="bg-base-200/25 md:min-w-[200px] w-full f justify-between md:justify-stretch max-w-[230px] lg:w-[230px] flex flex-col card rounded-md p-2 gap-2 border"
-            >
-              <figure className="flex justify-center items-center rounded bg-base-200">
-                <div className="avatar rounded self-center justify-center items-center overflow-hidden w-36 h-36 ">
-                  <img
-                    src={`/assets/imgs/products/product-${i + 1}-1.jpg`}
-                    alt="Product"
-                    className="object-contain w-36 h-36  object-center"
-                  />
-                </div>
-              </figure>
-              <span className="text-xs font-light text-accent">
-                Ships to Kigali
-              </span>
-              <div className="flex flex-col mt-2 gap-2">
-                <h3 className="text-base">Men T-Shirt</h3>
-                <div className=" font-bold text-xs md:text-sm flex items-center gap-1 ">
-                  347.99 RWF - 569.45 RWF
-                </div>
-                <div className="divider my-1"></div>
-                <div className="card-actions justify-end">
-                  <div className="flex items-center gap-2">
-                    <button className="btn md:text-xl btn-sm md:btn-md btn-accent btn-outline btn-circle">
-                      <MdFavorite />
-                    </button>
-                    <button className="btn btn-sm md:btn-md btn-primary  md:text-xl btn-circle">
-                      {!isSeller ? <MdAddShoppingCart /> : <MdAddBox />}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))} */}
         </div>
       </div>
     </section>

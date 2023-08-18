@@ -6,6 +6,7 @@ import { MdAdd, MdAddBox, MdSave, MdClose } from 'react-icons/md';
 import { Modal } from '../Modal';
 import {
   Asset,
+  Category,
   Product,
   ProductColor,
   ProductQuantity,
@@ -17,6 +18,7 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FaCaretDown } from 'react-icons/fa';
 import { addProductVariation } from '@/app/_actions';
+import EditVariations from '../client/EditVariations';
 
 const variationSchema = z.object({
   color: z
@@ -50,6 +52,7 @@ export const multiVariationSchema = z.object({
 export type VariationProduct = Product & {
   colors: (ProductColor & { mainImage: Asset })[];
   sizes: ProductSize[];
+  // categories: (Category & { image: Asset })[];
   quantities: (ProductQuantity & {
     color: ProductColor & { mainImage: Asset };
     size: ProductSize;
@@ -106,10 +109,11 @@ const AddVariationsForm = ({ product }: { product: VariationProduct }) => {
       btnContent={<></>}
     >
       <>
-        <h3 className="font-bold flex items-centergap-2 text-lg mb-5">
-          <MdAdd /> Add varitations to{' '}
+        <h3 className="font-bold flex items-center gap-2 text-lg mb-5">
+          <MdAdd /> Varitations of{' '}
           <span className="text-secondary ml-2 underline"> {product.name}</span>
         </h3>
+        <EditVariations product={product as any} />
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-start gap-2"
