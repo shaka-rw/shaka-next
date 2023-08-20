@@ -29,7 +29,7 @@ const ShopList = ({
       )}
 
       <HorizontalScroll className="bg-transparent md:p-2 rounded">
-        <div className="flex items-stretch gap-2 p-2">
+        <div className="flex justify-center items-center gap-2 p-2">
           {shops.map((shop) => (
             <div
               key={shop.id}

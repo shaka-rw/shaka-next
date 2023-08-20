@@ -57,7 +57,7 @@ const CategoryBar = ({
                     ? '?'
                     : ''
                 }${cat.id === catId ? '' : `cat=${cat.id}`}`}
-                className={`btn border-0 gap-2 items-center flex-nowrap w-fit py-2  ${
+                className={`btn border-0 gap-2 items-center hover:btn-secondary flex-nowrap w-fit py-2  ${
                   cat.id === catId ? ' btn-secondary border ' : 'bg-base-100'
                 }`}
               >

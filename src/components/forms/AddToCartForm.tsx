@@ -26,7 +26,13 @@ export const cartSchema = z.object({
   quantity: z.number().positive(),
 });
 
-const AddToCartForm = ({ product }: { product: VariationProduct }) => {
+const AddToCartForm = ({
+  product,
+  btnText = '',
+}: {
+  product: VariationProduct;
+  btnText?: string;
+}) => {
   const session = useSession();
   const [isPending, startTransition] = useTransition();
 
@@ -68,8 +74,8 @@ const AddToCartForm = ({ product }: { product: VariationProduct }) => {
     <Modal
       modalId={`add_to_cart_${product.id}`}
       btn={
-        <button className="btn btn-sm md:btn-md btn-primary  md:text-xl btn-circle">
-          <MdAddShoppingCart />
+        <button className="btn btn-sm btn-primary ">
+          <MdAddShoppingCart /> {btnText && <span>{btnText}</span>}
         </button>
       }
       btnContent={<></>}
@@ -95,7 +101,7 @@ const AddToCartForm = ({ product }: { product: VariationProduct }) => {
           </>
         ) : (
           <>
-            <h3 className="font-bold flex gap-2 text-lg mb-2">
+            <h3 className="font-bold flex items-center gap-2 text-lg mb-2">
               <MdAdd /> Add &quot;{product.name}&quot; to cart
             </h3>
             <form
@@ -115,7 +121,7 @@ const AddToCartForm = ({ product }: { product: VariationProduct }) => {
                     .map((sz, i) => (
                       <>
                         <label
-                          className="text-lg flex border shadow items-center rounded gap-2 p-2 "
+                          className="flex items-center "
                           htmlFor={sz.id + i}
                           key={sz.id}
                         >
@@ -123,10 +129,12 @@ const AddToCartForm = ({ product }: { product: VariationProduct }) => {
                             type="radio"
                             id={sz.id + i}
                             value={sz.id}
-                            className="radio radio-primary"
+                            className="radio peer/size hidden radio-primary"
                             {...register('size')}
                           />
-                          {sz.size}
+                          <span className="rounded-md text-sm capitalize inline-block peer-checked/size:bg-base-300 peer-checked/size:border-2 border-secondary bg-base-200 p-1">
+                            {sz.size}
+                          </span>
                         </label>
                         {errors.size && (
                           <label className="label">
@@ -149,7 +157,7 @@ const AddToCartForm = ({ product }: { product: VariationProduct }) => {
                     .map((color, i) => (
                       <>
                         <label
-                          className="text-lg flex border shadow items-center rounded gap-2 p-2 "
+                          className="text-lg flex shadow items-center "
                           htmlFor={color.id + i}
                           key={color.id}
                         >
@@ -157,10 +165,10 @@ const AddToCartForm = ({ product }: { product: VariationProduct }) => {
                             type="radio"
                             id={color.id + i}
                             value={color.id}
-                            className="radio radio-primary"
+                            className="radio hidden peer/color radio-primary"
                             {...register('color')}
                           />
-                          <div className="avatar w-10 h-10 bg-base-200 rounded overflow-hidden">
+                          <div className="avatar  peer-checked/color:bg-secondary peer-checked/color:border-2 peer-checked/color:p-[.15rem] w-10 h-10 bg-base-200 rounded overflow-hidden">
                             <img
                               src={color.mainImage.secureUrl}
                               alt="Color image"

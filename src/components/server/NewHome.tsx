@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import Carousel from '../client/Carousel';
 import Navbar from './Navbar';
 import { NewDynamicProductList } from './NewProductList';
 import { getServerSession } from 'next-auth';
@@ -10,7 +9,6 @@ import prisma from '@/prima';
 import AddShopForm from '../forms/AddShopForm';
 import HorizontalScroll from './HorizontalScroll';
 import Image from 'next/image';
-import { MdPlayCircle } from 'react-icons/md';
 import VideoModal from './VideoModal';
 
 const NewHome = async () => {
@@ -50,7 +48,14 @@ const NewHome = async () => {
 
       {/* Hero Section */}
 
-      <div className="md:grid gap-3 flex flex-col items-center  md:grid-cols-[auto,1fr,1fr] bg-base-200 mx-auto container md:px-3 rounded px-2 py-8 md:py-20">
+      <div className="md:grid gap-3 flex flex-col items-center relative  md:grid-cols-[auto,1fr,1fr] bg-base-200/30 mx-auto container md:px-3 rounded px-2 py-8 backdrop-sm md:py-20">
+        {/* <video
+          src="/assets/videos/shaka.mp4"
+          poster="/assets/imgs/shaka-banner.jpeg"
+          className="h-full w-full object-cover -z-[1] absolute inset-0 rounded"
+          controls={false}
+          autoPlay
+        /> */}
         <div className="hidden md:flex flex-col gap-4 p-2">
           <button className="text-3xl rounded-full border h-10 w-10">
             <span className="inline-block text-center -translate-y-2">.</span>
@@ -68,7 +73,7 @@ const NewHome = async () => {
           </button>
         </div>
         <div className=" flex flex-col md:ml-5 items-start gap-3 p-2">
-          <div className=" text-4xl md:text-5xl  font-extrabold">
+          <div className="z text-4xl md:text-5xl  font-extrabold">
             SHOP QUICKLY, CHEAPLY & COMFORTABLY
           </div>
           <p className="text-lg mt-5">
@@ -100,7 +105,7 @@ const NewHome = async () => {
             width={300}
             height={200}
             alt={'Shaka Banner'}
-            className="mask mask-heart shadow border border-accent"
+            className="mask mask-heart opacity-30 shadow border border-accent"
           />
         </div>
         {/* <div className="hidden md:block">

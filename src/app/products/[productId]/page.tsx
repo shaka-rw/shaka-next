@@ -41,7 +41,7 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
 
       <div className="container mx-auto ">
         <div className="p-3 flex flex-col gap-2">
-          <section className="w-full rounded pt-3 bg-base-200">
+          <section className="w-full rounded pt-3">
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col justify-center w-full gap-2 items-start">
                 <div className="bg-base-200 w-full rounded border-r-2 px-2">
@@ -49,7 +49,7 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
                 </div>
               </div>
               <div className="flex h-full flex-col  px-2 mb:px-0 gap-2 py-1 items-start">
-                <h2 className="text-2xl font-semibold mb-2">{product?.name}</h2>
+                <h2 className="text-2xl font-semibold mb-1">{product?.name}</h2>
 
                 <p className="text-lg  font-extrabold mb-2 text-secondary">
                   {product.quantities.map((q, i) =>
@@ -67,8 +67,20 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
                     )
                   )}
                 </p>
-
-                <div className="mb-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="text-xs font-semibold">
+                    <span className="font-mono mr-2">
+                      {product.sizes.length}
+                    </span>
+                    Size(s)
+                  </span>
+                  <span className="font-bold -translate-y-1">.</span>
+                  <span className="text-xs font-semibold">
+                    <span className="mr-2">{product.colors.length}</span>
+                    Color(s)
+                  </span>
+                </div>
+                {/* <div className="mb-4">
                   <h3 className="text-sm font-semibold mb-2">Size</h3>
                   <div className="p-2 border bg-base-100 rounded flex gap-2 items-center flex-wrap">
                     {product.sizes.map((size) => (
@@ -87,12 +99,15 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
                       </label>
                     ))}
                   </div>
-                </div>
+                </div> */}
                 <div className="flex gap-2 flex-row items-center">
-                  <AddToCartForm product={product as any} />
-                  <button className="btn btn-secondary">
-                    <MdFavorite /> Add to wishlist
+                  <button className="btn btn-secondary btn-sm btn-outline btn-circle">
+                    <MdFavorite />
                   </button>
+                  <AddToCartForm
+                    btnText="Add to cart"
+                    product={product as any}
+                  />
                 </div>
                 <div className="flex flex-col mt-2 gap-2">
                   <div className="text-sm mb-2 font-semibold">Retailer</div>

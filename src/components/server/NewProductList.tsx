@@ -9,6 +9,7 @@ import AddVariationsForm, {
 } from '../forms/AddVariationsForm';
 import EditProductForm from '../forms/EditProductForm';
 import prisma from '@/prima';
+import { twMerge } from 'tailwind-merge';
 
 const NewProductList = ({ isDiscover = false }: { isDiscover?: boolean }) => {
   return (
@@ -86,10 +87,10 @@ const NewProductList = ({ isDiscover = false }: { isDiscover?: boolean }) => {
                     347.99 RWF
                   </div>
                   <div className="flex items-center gap-2">
-                    <button className="btn md:text-xl btn-sm md:btn-md btn-secondary btn-outline btn-circle">
+                    <button className="btn btn-sm btn-secondary btn-outline btn-circle">
                       <MdFavorite />
                     </button>
-                    <button className="btn btn-sm md:btn-md btn-primary  md:text-xl btn-circle">
+                    <button className="btn btn-sm btn-primary  btn-circle">
                       <MdAddShoppingCart />
                     </button>
                   </div>
@@ -134,7 +135,7 @@ export const NewDynamicProductList = async ({
           </div>
         )}
         <div
-          className={`grid md:flex flex-wrap xl:w-full mx-auto justify-items-start justify-start grid-cols-2 ${
+          className={`grid md:flex flex-wrap xl:w-full md:mx-auto justify-items-start justify-start grid-cols-2 ${
             className ?? ''
           }  md:grid-cols-4 lg:grid-cols-5 gap-2 py-4`}
         >
@@ -156,41 +157,52 @@ export const NewDynamicProductList = async ({
             return (
               <div
                 key={i}
-                className="bg-base-200/25 md:min-w-[200px] w-full max-w-[230px] lg:w-[230px] flex flex-col justify-between md:justify-stretch card rounded-md p-2 gap-2 border"
+                className="bg-base-200 md:min-w-[200px] w-full max-w-[230px] lg:w-[230px] flex flex-col justify-between card rounded-md overflow-hidden p-0 gap-2"
               >
-                <figure className="flex justify-center items-center rounded bg-base-200">
-                  <div className="avatar rounded self-center justify-center overflow-hidden  w-36 h-36">
+                <figure className="flex justify-center items-center overflow-hidden bg-base-200">
+                  <Link
+                    href={`/products/${product.id}`}
+                    className="avatar h-44 w-full"
+                  >
                     <img
                       src={((product as any).mainImage as Asset).secureUrl}
                       alt={product.name.slice(0, 10)}
-                      className="object-contain object-center  w-36 h-36"
+                      className="object-center w-full"
                     />
-                  </div>
+                  </Link>
                 </figure>
 
-                <div className="flex flex-col mt-2 gap-2">
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="text-sm md:text-base"
-                  >
+                <div className="flex p-2 flex-col gap-2">
+                  <Link href={`/products/${product.id}`} className="text-sm">
                     {product.name}
                   </Link>
-                  <div className="font-bold flex items-center gap-2 text-xs md:text-sm">
-                    <span>{minPrice} RWF</span>
-                    {maxPrice !== minPrice ? (
-                      <>
-                        {' '}
-                        - <span>{maxPrice} RWF</span>
-                      </>
-                    ) : (
-                      <></>
+                  <Link
+                    href={`/products/${product.id}`}
+                    className="text-xs font-light"
+                  >
+                    {product.description.slice(0, 50)}...
+                  </Link>
+                  {/* <div className="divider my-1" /> */}
+                  <div
+                    className={twMerge(
+                      'card-actions border-t items-center p-2 justify-between',
+                      'flex-nowrap'
                     )}
-                  </div>
-                  <div className="divider my-1"></div>
-                  <div className="card-actions justify-end">
+                  >
+                    <div className="font-bold flex justify-self-center self-center items-center flex-col md:flex-row text-xs">
+                      <span>{minPrice}Rwf</span>
+                      {maxPrice !== minPrice ? (
+                        <>
+                          <span className="hidden md:inline">-</span>
+                          <span>{maxPrice}Rwf</span>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
                     <div className="flex items-center gap-1">
                       {!isSeller ? (
-                        <button className="btn md:text-xl btn-sm md:btn-md btn-accent btn-outline btn-circle">
+                        <button className="btn btn-sm btn-accent btn-outline btn-circle">
                           <MdFavorite />
                         </button>
                       ) : (

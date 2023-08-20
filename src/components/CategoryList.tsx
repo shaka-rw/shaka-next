@@ -22,7 +22,7 @@ const CategoryList = ({ categories }: { categories: CategoryWithSubs[] }) => {
         </div>
       )}
       {/* <HorizontalScroll className="bg-transparent md:p-2 rounded h-auto"> */}
-      <div className="flex items-center gap-2 p-2">
+      <div className="flex flex-wrap items-center gap-2 p-2">
         {categories.map((cat) => (
           <div key={cat.id} className="dropdown dropdown-bottom ">
             <div className="flex gap-2 p-1 border pr-2 rounded-md items-center">

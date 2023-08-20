@@ -10,7 +10,7 @@ const HorizontalScroll = ({
   return (
     <div
       className={twMerge(
-        'flex w-full items-center gap-1 md:gap-2 overflow-x-auto bg-base-300 p-2 md:p-4',
+        'flex w-full items-center max-w-full gap-1 md:gap-2 overflow-x-hidden bg-base-300 p-2 md:p-4',
         className
       )}
     >
