@@ -19,7 +19,7 @@ async function addCategory(data: FormData) {
   const image = data.get('image') as File;
   const parentId = data.get('parentId') as string | null;
 
-  if (!name.trim() || !image.size) return;
+  if (!name.trim() || !image?.size) return;
   const asset = await uploadAssetImage(image, AssetFolder.Categories);
 
   const category = await prisma.category.create({
@@ -48,7 +48,7 @@ const AddCategoryForm = ({ parent }: { parent?: Category }) => {
         btn={
           <>
             <button className={`btn btn-primary ${parent ? 'btn-sm' : ''}`}>
-              <MdAdd /> {!parent ? 'Add Category' : ''}
+              <MdAdd /> {!parent ? 'Add Category' : 'Add'}
             </button>
           </>
         }

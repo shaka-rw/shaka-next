@@ -14,6 +14,7 @@ const Discover = async ({
   searchParams: {
     cat?: string;
     g?: string;
+    st?: 'products' | 'shops';
     q?: string;
     sz?: string;
     p?: string;
@@ -30,6 +31,7 @@ const Discover = async ({
   const {
     q: search,
     sz: size,
+    st: searchType,
     g: gender,
     cat: categoryId,
     p: price,
@@ -37,56 +39,88 @@ const Discover = async ({
 
   const [minPrice, maxPrice] = price ? price.split('-').map(parseInfinity) : [];
 
-  const products = await prisma.product.findMany({
-    where: {
-      AND: {
-        quantities: {
-          some: {
+  const products =
+    searchType !== 'products'
+      ? []
+      : await prisma.product.findMany({
+          where: {
             AND: {
-              quantity: { gt: 0 },
-              ...(price
+              quantities: {
+                some: {
+                  AND: {
+                    quantity: { gt: 0 },
+                    ...(price
+                      ? {
+                          price: {
+                            gte: isNaN(minPrice) ? undefined : minPrice,
+                            lte: isNaN(maxPrice) ? undefined : maxPrice,
+                          },
+                        }
+                      : {}),
+                  },
+                },
+              },
+              ...(search
                 ? {
-                    price: {
-                      gte: isNaN(minPrice) ? undefined : minPrice,
-                      lte: isNaN(maxPrice) ? undefined : maxPrice,
+                    OR: [
+                      { name: { contains: search, mode: 'insensitive' } },
+                      {
+                        description: { contains: search, mode: 'insensitive' },
+                      },
+                    ],
+                  }
+                : {}),
+              available: true,
+              ...(gender
+                ? { gender: { equals: gender as ProductGender } }
+                : {}),
+              ...(size
+                ? {
+                    sizes: {
+                      some: { size: { equals: size, mode: 'insensitive' } },
                     },
                   }
                 : {}),
+              ...(categoryId !== undefined && categoryId !== null
+                ? { categories: { some: { id: categoryId } } }
+                : {}),
+              // categories: { some: { id: catId || undefined } },
             },
           },
-        },
-        ...(search
-          ? {
-              OR: [
-                { name: { contains: search, mode: 'insensitive' } },
-                { description: { contains: search, mode: 'insensitive' } },
-              ],
-            }
-          : {}),
-        available: true,
-        ...(gender ? { gender: { equals: gender as ProductGender } } : {}),
-        ...(size
-          ? { sizes: { some: { size: { equals: size, mode: 'insensitive' } } } }
-          : {}),
-        ...(categoryId !== undefined && categoryId !== null
-          ? { categories: { some: { id: categoryId } } }
-          : {}),
-        // categories: { some: { id: catId || undefined } },
-      },
-    },
-    include: {
-      mainImage: true,
-      shop: { include: { image: true } },
-      categories: { include: { image: true } },
-      quantities: {
-        where: { quantity: { gt: 0 } },
-        distinct: ['productColorId', 'productSizeId'],
-        include: { color: { include: { mainImage: true } }, size: true },
-      },
-      sizes: true,
-      colors: { include: { mainImage: true, images: true } },
-    },
-  });
+          include: {
+            mainImage: true,
+            shop: { include: { image: true } },
+            categories: { include: { image: true } },
+            quantities: {
+              where: { quantity: { gt: 0 } },
+              distinct: ['productColorId', 'productSizeId'],
+              include: { color: { include: { mainImage: true } }, size: true },
+            },
+            sizes: true,
+            colors: { include: { mainImage: true, images: true } },
+          },
+        });
+
+  const shops =
+    searchType !== 'shops'
+      ? []
+      : await prisma.shop.findMany({
+          where: {
+            ...(search
+              ? {
+                  OR: [
+                    { name: { contains: search, mode: 'insensitive' } },
+                    {
+                      about: { contains: search, mode: 'insensitive' },
+                    },
+                  ],
+                }
+              : {}),
+            ...(categoryId !== undefined && categoryId !== null
+              ? { categoryId }
+              : {}),
+          },
+        });
 
   const categories = await prisma.category.findMany({
     take: 30,
@@ -109,6 +143,7 @@ const Discover = async ({
       <div className="relative h-full">
         <SideSection catId={categoryId} />
       </div>
+
       <Suspense
         fallback={
           <div className="container flex justify-center items-center">

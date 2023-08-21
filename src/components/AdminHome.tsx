@@ -6,8 +6,15 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import ShopList from './server/ShopList';
 import { FaHome, FaShoppingCart, FaMoneyBillAlt } from 'react-icons/fa';
-import { FaProductHunt, FaFan, FaUser, FaChartBar } from 'react-icons/fa6';
+import {
+  FaProductHunt,
+  FaFan,
+  FaUser,
+  FaChartBar,
+  FaPeopleGroup,
+} from 'react-icons/fa6';
 import DashboardSideBar, { SideBarItem } from './server/DashboardSideBar';
+import { MdCategory } from 'react-icons/md';
 
 const AdminHome = async () => {
   const categories = await prisma.category.findMany({
@@ -25,7 +32,7 @@ const AdminHome = async () => {
 
   const items: SideBarItem[] = [
     {
-      name: 'My Shop',
+      name: 'Dashboard',
       icon: <FaHome />,
       link: '/dashboard',
       tooltip: 'Dashboard Home',
@@ -37,16 +44,22 @@ const AdminHome = async () => {
       tooltip: 'My products',
     },
     {
+      icon: <FaPeopleGroup />,
+      link: '#',
+      name: 'Users',
+      tooltip: 'My products',
+    },
+    {
       name: 'Orders',
       icon: <FaShoppingCart />,
       link: '/dashboard/orders',
       tooltip: 'View Orders',
     },
     {
-      icon: <FaFan />,
+      icon: <MdCategory />,
       link: '#',
-      name: 'Followers',
-      tooltip: 'Followers',
+      name: 'Categories',
+      tooltip: 'Categories',
     },
     {
       name: 'Customers',

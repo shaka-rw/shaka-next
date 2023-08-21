@@ -14,6 +14,7 @@ export type Size = '' | 'small' | 'medium' | 'large';
 const SideSection = ({ catId }: { catId?: string }) => {
   const [selectedGender, setSelectedGender] = useState(ProductGender.UNISEX);
   const [selectedSize, setSelectedSize] = useState('');
+  const [selectedSearchType, setSelectedSearchType] = useState('products');
   const [selectedPrice, setSelectedPrice] = useState('');
   const isMobile = useMobile();
   const router = useRouter();
@@ -24,6 +25,7 @@ const SideSection = ({ catId }: { catId?: string }) => {
     ProductGender.MALE,
     ProductGender.UNISEX,
   ];
+  const searchTypes: ('products' | 'shops')[] = ['products', 'shops'];
   const sizes: Size[] = ['', 'small', 'medium', 'large'];
   const prices: PriceRange[] = [
     { start: '', end: '' },
@@ -40,6 +42,7 @@ const SideSection = ({ catId }: { catId?: string }) => {
   const handleGenderChange = (value: any) => setSelectedGender(value);
   const handleSizeChange = (value: any) => setSelectedSize(value);
   const handlePriceChange = (value: any) => setSelectedPrice(value);
+  const handleSearchTypeChange = (value: any) => setSelectedSearchType(value);
 
   const handleResetFilters = () => {
     setSelectedGender(ProductGender.UNISEX);
@@ -57,7 +60,6 @@ const SideSection = ({ catId }: { catId?: string }) => {
       }
     }
     const query = params.toString();
-    // console
     router.replace(`${pathname}?${query}`);
   };
 
@@ -68,11 +70,7 @@ const SideSection = ({ catId }: { catId?: string }) => {
       className="w-full flex flex-col gap-2 p-2 md:w-60 xl:w-72 border-r-0 md:border-r md:bg-base-200 h-full"
     >
       {catId && <input type="hidden" name="cat" value={catId} />}
-      <div className="flex items-center justify-between gap-2">
-        {/* {!isMobile && (
-          <h2 className="text-base font-semibold md:my-2">Discover</h2>
-        )} */}
-      </div>
+      <div className="flex items-center justify-between gap-2"></div>
       <div className="form-control relative w-full max-w-xs">
         <MdSearch className="text-xl absolute top-1/2 left-2 -translate-y-1/2" />
         <input
@@ -90,9 +88,42 @@ const SideSection = ({ catId }: { catId?: string }) => {
               isMobile ? 'btn gap-2' : ''
             }  font-semibold mb-2`}
           >
+            {isMobile ? selectedSearchType : 'Search For'}{' '}
+            {isMobile && <FaCaretDown />}
+          </label>
+          <div className="bg-base-100 z-10 dropdown-content min-w-[12rem] p-2 shadow border rounded-lg flex gap-2 items-center flex-wrap">
+            {searchTypes.map((st) => (
+              <label
+                key={st}
+                className="flex items-center space-x-2 label cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="st"
+                  value={st}
+                  checked={selectedSearchType === st}
+                  onChange={() => handleSearchTypeChange(st)}
+                  className="radio radio-primary"
+                />
+                <span className="text-sm label-text capitalize">{st}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div
+          className={`${selectedSearchType !== 'products' ? 'hidden' : ''} ${
+            isMobile ? 'dropdown' : ''
+          } md:mb-4 `}
+        >
+          <label
+            tabIndex={0}
+            className={`flex-nowrap text-xs md:text-sm ${
+              isMobile ? 'btn gap-2' : ''
+            }  font-semibold mb-2`}
+          >
             {isMobile ? selectedGender : 'Gender'} {isMobile && <FaCaretDown />}
           </label>
-          <div className="bg-base-100 z-10 dropdown-content min-w-[12rem] p-2 shadow border rounded flex gap-2 items-center flex-wrap">
+          <div className="bg-base-100 z-10 dropdown-content min-w-[12rem] p-2 shadow border rounded-lg flex gap-2 items-center flex-wrap">
             {genders.map((gender) => (
               <label
                 key={gender}
@@ -114,7 +145,11 @@ const SideSection = ({ catId }: { catId?: string }) => {
           </div>
         </div>
 
-        <div className={`${isMobile ? 'dropdown' : ''} md:mb-4 `}>
+        <div
+          className={`${selectedSearchType !== 'products' ? 'hidden' : ''} ${
+            isMobile ? 'dropdown' : ''
+          } md:mb-4 `}
+        >
           <label
             tabIndex={0}
             className={`flex-nowrap text-xs md:text-sm ${
@@ -123,7 +158,7 @@ const SideSection = ({ catId }: { catId?: string }) => {
           >
             {isMobile ? selectedSize : 'Size'} {isMobile && <FaCaretDown />}
           </label>
-          <div className="z-10 dropdown-content min-w-[12rem] bg-base-100 p-2 shadow border rounded flex gap-2 items-center flex-wrap">
+          <div className="z-10 dropdown-content min-w-[12rem] bg-base-100 p-2 shadow border rounded-lg flex gap-2 items-center flex-wrap">
             {sizes.map((size) => (
               <label
                 key={size}
@@ -145,7 +180,11 @@ const SideSection = ({ catId }: { catId?: string }) => {
           </div>
         </div>
 
-        <div className={`${isMobile ? 'dropdown dropdown-end' : ''} md:mb-4 `}>
+        <div
+          className={`${selectedSearchType !== 'products' ? 'hidden' : ''} ${
+            isMobile ? 'dropdown dropdown-end' : ''
+          } md:mb-4 `}
+        >
           <label
             tabIndex={0}
             className={`flex-nowrap text-xs md:text-sm ${
@@ -154,7 +193,7 @@ const SideSection = ({ catId }: { catId?: string }) => {
           >
             {isMobile ? selectedPrice : 'Price'} {isMobile && <FaCaretDown />}
           </label>
-          <div className="z-10 dropdown-content min-w-[12rem] bg-base-100 p-2 shadow border rounded flex gap-2 items-center flex-wrap">
+          <div className="z-10  dropdown-content min-w-[12rem] bg-base-100 p-2 shadow border rounded-lg flex gap-2 items-center flex-wrap">
             {prices.map((price) => (
               <label
                 key={`${price.start}${price.end}`}
@@ -187,7 +226,7 @@ const SideSection = ({ catId }: { catId?: string }) => {
           </div>
         </div>
       </div>
-      <div className="flex w-full items-center gap-2">
+      <div className="flex w-full -order-1 items-center gap-2">
         <button
           type="submit"
           className="btn-primary btn btn-sm md:btn-md  font-semibold"

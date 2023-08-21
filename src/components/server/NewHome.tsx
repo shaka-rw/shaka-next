@@ -10,6 +10,7 @@ import AddShopForm from '../forms/AddShopForm';
 import HorizontalScroll from './HorizontalScroll';
 import Image from 'next/image';
 import VideoModal from './VideoModal';
+import { Asset, Category } from '@prisma/client';
 
 const NewHome = async () => {
   const session = await getServerSession(authOptions);
@@ -188,7 +189,7 @@ const NewHome = async () => {
           </div>
           <HorizontalScroll speed={500} className="bg-transparent">
             <div className="flex gap-2">
-              {categories.map((cat) => (
+              {categories.map((cat: Category & { image: Asset }) => (
                 <div
                   key={cat.id}
                   className="flex rounded justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"

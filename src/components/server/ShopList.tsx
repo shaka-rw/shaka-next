@@ -35,12 +35,14 @@ const ShopList = ({
               key={shop.id}
               className="card flex items-center px-3 border card-side bg-base-100"
             >
-              <figure className="w-10 flex justify-center items-center h-w-10">
-                <img
-                  src={shop.image.secureUrl}
-                  alt={shop.name}
-                  className="w-full object-contain h-full"
-                />
+              <figure className="w-10 flex justify-center items-center h-10">
+                <div className="avatar overflow-hidden rounded-full h-10 w-10 border">
+                  <img
+                    src={shop.image.secureUrl}
+                    alt={shop.name}
+                    className="w-full object-contain h-full"
+                  />
+                </div>
               </figure>
               <div className="card-body p-2">
                 <h2 className="card-title">{shop.name}</h2>

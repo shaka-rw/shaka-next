@@ -86,7 +86,6 @@ const AddShopForm = ({
             placeholder="Shop name"
             {...register('name')}
           />
-          ,
           {errors.name && (
             <label className="label">
               <span className="label-text-alt text-red-500">
