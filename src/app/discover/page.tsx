@@ -7,6 +7,7 @@ import prisma from '@/prima';
 import { MdSearch } from 'react-icons/md';
 import { notFound } from 'next/navigation';
 import { ProductGender } from '@prisma/client';
+import NewShopList from '@/components/server/NewShopList';
 
 const Discover = async ({
   searchParams,
@@ -31,7 +32,7 @@ const Discover = async ({
   const {
     q: search,
     sz: size,
-    st: searchType,
+    st: searchType = 'products',
     g: gender,
     cat: categoryId,
     p: price,
@@ -120,6 +121,12 @@ const Discover = async ({
               ? { categoryId }
               : {}),
           },
+          include: {
+            _count: { select: { followers: true } },
+            image: true,
+            owner: true,
+            category: true,
+          },
         });
 
   const categories = await prisma.category.findMany({
@@ -151,7 +158,10 @@ const Discover = async ({
           </div>
         }
       >
-        <NewDynamicProductList products={products} title={<></>} />
+        {searchType === 'products' && (
+          <NewDynamicProductList products={products} title={<></>} />
+        )}
+        {searchType === 'shops' && <NewShopList shops={shops} />}
       </Suspense>
       {/* <NewProductList isDiscover /> */}
     </div>
