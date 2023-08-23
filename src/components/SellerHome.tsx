@@ -57,7 +57,7 @@ const SellerHome = async () => {
   });
   const subCategories = await prisma.category.findMany({
     take: 30,
-    where: { parentId: shop?.categoryId },
+    where: { parent: { id: shop.category.id ?? '1' } },
   });
 
   const products = await prisma.product.findMany({

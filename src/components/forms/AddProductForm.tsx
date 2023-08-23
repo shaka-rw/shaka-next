@@ -240,8 +240,6 @@ const AddProductForm = ({
                   ref={field.ref}
                   name={field.name}
                   onChange={(value) => {
-                    console.log({ value, fValue: field.value });
-                    field.value;
                     field.onChange(value.map((v) => (v as any).value));
                   }}
                   options={categoriesOptions as any}
@@ -276,7 +274,6 @@ const AddProductForm = ({
                   ref={field.ref}
                   name={field.name}
                   onChange={(value) => {
-                    field.value;
                     field.onChange(value.map((v) => (v as any).value));
                   }}
                   options={sizesOptions as any}

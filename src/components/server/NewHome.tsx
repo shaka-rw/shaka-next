@@ -136,28 +136,29 @@ const NewHome = async () => {
             <div className="row-span-2 text-base">Recommended for you.</div>
           </div> */}
           {shops.map((shop) => (
-            <div
+            <Link
+              href={`/shops/${shop.id}`}
               key={shop.id}
               className="flex py-1 px-2 border rounded items-center gap-2 bg-base-100/30 hover:bg-accent"
             >
-              <div className="avatar rounded-full overflow-hidden w-10 h-10">
+              <span className="avatar rounded-full overflow-hidden w-10 h-10">
                 <img
                   src={shop.image.secureUrl}
                   alt="profile"
                   className="object-contain object-top w-10 h-10"
                 />
-              </div>
-              <div className="flex flex-col gap-1">
+              </span>
+              <span className="flex flex-col gap-1">
                 <span className="text-sm font-semibold">
                   {shop.name?.slice(0, 6)}
                 </span>
                 <span className="text-xs">
-                  {((shop as any).about ?? 'Modern fashion trends').slice(0, 6)}
+                  {((shop as any).about ?? 'More..').slice(0, 6)}
                 </span>
-              </div>
-            </div>
+              </span>
+            </Link>
           ))}
-          {Array.from({ length: 12 }).map((_m, i) => (
+          {/* {Array.from({ length: 12 }).map((_m, i) => (
             <div
               key={i}
               className="flex py-1 px-2 border rounded items-center gap-2 bg-base-100/30 hover:bg-accent"
@@ -174,7 +175,7 @@ const NewHome = async () => {
                 <span className="text-xs">Modern</span>
               </div>
             </div>
-          ))}
+          ))} */}
         </div>
       </HorizontalScroll>
       {/* <div className="mx-auto max-w-7xl">
@@ -190,21 +191,22 @@ const NewHome = async () => {
           <HorizontalScroll speed={500} className="bg-transparent">
             <div className="flex gap-2">
               {categories.map((cat: Category & { image: Asset }) => (
-                <div
+                <Link
+                  href={!cat.parentId ? '/discover' : `/discover?cat=${cat.id}`}
                   key={cat.id}
                   className="flex rounded justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"
                 >
-                  <div className="avatar rounded justify-self-end self-end overflow-hidden h-24 w-24 ">
+                  <span className="avatar rounded justify-self-end self-end overflow-hidden h-24 w-24 ">
                     <img
                       src={cat.image.secureUrl}
                       alt={cat.name}
                       className="object-contain object-center"
                     />
-                  </div>
-                  <div className="text-xl font-bold">{cat.name}</div>
-                </div>
+                  </span>
+                  <span className="text-xl font-bold">{cat.name}</span>
+                </Link>
               ))}
-              {Array.from({ length: 12 }).map((_, i) => (
+              {/* {Array.from({ length: 12 }).map((_, i) => (
                 <div
                   key={i}
                   className="flex justify-between flex-col w-32 md:w-40 h-36  md:h-44 p-3 bg-base-200 gap-2"
@@ -218,7 +220,7 @@ const NewHome = async () => {
                   </div>
                   <div className="text-xl font-bold">T-Shirts</div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </HorizontalScroll>
         </div>
