@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { AuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import Auth0Provider from 'next-auth/providers/auth0';
@@ -9,6 +9,7 @@ import bcrypt from 'bcrypt';
 export const authOptions = {
   adapter: PrismaAdapter(prisma) as any,
   pages: { signIn: '/auth/signin' },
+    
   callbacks: {
     authorized({ req, token }: any) {
       if (token) return true; // If there is a token, the user is authenticated

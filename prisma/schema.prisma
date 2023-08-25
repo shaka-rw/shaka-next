@@ -33,6 +33,7 @@ model Account {
 }
 
 enum UserRole {
+  ANONYMOUS
   ADMIN
   SELLER
   CUSTOMER
@@ -148,8 +149,8 @@ model ProductSize {
 
 model Cart {
   id            String             @id @default(cuid())
-  user          User               @relation(fields: [userId], references: [id])
-  userId        String             @unique
+  user          User?              @relation(fields: [userId], references: [id])
+  userId        String?            @unique
   totalQuantity Int?
   totalAmount   Int?
   createdAt     DateTime           @default(now())
@@ -248,8 +249,8 @@ enum OrderStatus {
 model Order {
   id          String      @id @default(uuid())
   orderNumber BigInt      @unique @default(autoincrement())
-  customer    User        @relation(fields: [userId], references: [id])
-  userId      String
+  customer    User?       @relation(fields: [userId], references: [id])
+  userId      String?
   shops       Shop[]
   status      OrderStatus @default(PENDING)
   isPaid      Boolean     @default(false)

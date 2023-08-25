@@ -1,6 +1,7 @@
 'use client';
 import React, { PropsWithChildren, useRef } from 'react';
 import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
+import Simplebar from 'simplebar-react';
 
 const HorizontalScrollButtons = ({
   speed = 200,
@@ -23,12 +24,13 @@ const HorizontalScrollButtons = ({
       >
         <MdArrowCircleLeft />
       </button>
-      <div
+      <Simplebar
+        style={{ maxHeight: '100%' }}
         className="flex flex-1 w-full max-w-full p-1 scroll-smooth rounded-md  gap-2 overflow-x-auto"
         ref={scrollRef as any}
       >
         {children}
-      </div>
+      </Simplebar>
       <button
         className="btn btn-sm btn-circle text-xl"
         onClick={handleScrollRight}

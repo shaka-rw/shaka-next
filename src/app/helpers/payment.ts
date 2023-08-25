@@ -5,9 +5,7 @@ import { WaveLinkResponse } from '@/types';
 export const createFlutterWavePayment = async (
   config: FlutterWaveTypes.FlutterwaveConfig
 ): Promise<WaveLinkResponse | null> => {
-  console.log({ config });
   try {
-    console.log({ FLW_SECRET_KEY: process.env.FLW_SECRET_KEY });
     const response = await got
       .post('https://api.flutterwave.com/v3/payments', {
         headers: {
@@ -18,9 +16,6 @@ export const createFlutterWavePayment = async (
       .json();
     return response as WaveLinkResponse;
   } catch (err: any) {
-    console.log({ err });
-    console.log(err?.code);
-    console.log(err?.response?.body);
     return null;
   }
 };

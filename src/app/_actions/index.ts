@@ -17,6 +17,7 @@ import { multiVariationSchema } from '@/components/forms/AddVariationsForm';
 import { cartSchema } from '@/components/forms/AddToCartForm';
 import { AssetFolder } from '@/components/forms/AddCategoryForm';
 import { editProductSchema } from '@/components/forms/EditProductForm';
+import { getCartId } from './orders';
 
 export async function addProductVariation(formData: FormData) {
   const data = JSON.parse(formData.get('data') as string) as z.infer<
@@ -232,7 +233,9 @@ export async function addToCart(formData: FormData) {
   >;
 
   const session = await getServerSession(authOptions);
-  if (!session?.user) return;
+  const [error, cartId] = await getCartId();
+
+  if (error) return [error];
 
   const prodQty = await prisma.productQuantity.findFirst({
     where: { AND: { productColorId: data.color, productSizeId: data.size } },
@@ -245,35 +248,30 @@ export async function addToCart(formData: FormData) {
     ];
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session?.user?.id },
-    include: { cart: true },
-  });
-
-  if (user?.cart) {
-    const exists = await prisma.quantitiesOnCart.count({
-      where: {
-        AND: {
-          cartId: user.cart.id,
-          productQuantityId: prodQty?.id as string,
-        },
+  const exists = await prisma.quantitiesOnCart.count({
+    where: {
+      AND: {
+        cartId,
+        productQuantityId: prodQty?.id as string,
       },
-    });
-    if (exists > 0) return ['Item already exists on the cart!'];
-  }
+    },
+  });
+  if (exists && exists > 0) return ['Item already exists on the cart!'];
 
-  const cartQty = await prisma.quantitiesOnCart.create({
+  await prisma.quantitiesOnCart.create({
     data: {
       quantity: data.quantity,
       price: prodQty?.price,
-      cart: {
-        connectOrCreate: {
-          create: {
-            userId: session?.user?.id,
-          },
-          where: { userId: session?.user?.id },
-        },
-      },
+      cart: session?.user
+        ? {
+            connectOrCreate: {
+              create: {
+                userId: session?.user?.id,
+              },
+              where: { userId: session?.user?.id },
+            },
+          }
+        : { connect: { id: cartId as string } },
       productQuantity: {
         connect: {
           id: (prodQty as any).id,
@@ -283,7 +281,7 @@ export async function addToCart(formData: FormData) {
   });
 
   revalidatePath(await getPath());
-  return;
+  return [];
 }
 
 export async function getPath() {

@@ -5,12 +5,15 @@ const LoadingPage = () => {
   return (
     <div>
       <Navbar />
+      <div className="progress w-full container mx-auto mt-1" />
       <div className="flex gap-2 flex-wrap container mx-auto my-2">
         {Array.from({ length: 20 }).map((_, i) => (
           <div
             key={i}
-            className="bg-base-200 animate-pulse aspect-square w-48 h-48 shadow rounded"
-          ></div>
+            className="bg-base-200 flex items-center justify-center animate-pulse aspect-square w-48 h-48 shadow rounded"
+          >
+            <div className="loading loading-infinity" />
+          </div>
         ))}
       </div>
     </div>

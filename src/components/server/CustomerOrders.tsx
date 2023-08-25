@@ -39,7 +39,7 @@ export const OrderCard = ({
   price,
   order,
 }: {
-  customer: User;
+  customer: User | null;
   itemsCount: number;
   price: number;
   order: Order;
@@ -48,7 +48,9 @@ export const OrderCard = ({
     <div className="bg-base-200 card w-full shadow-md rounded-lg p-4">
       <div className="flex justify-between mb-2">
         <h2 className="font-semibold">
-          <span className="text-lg">Customer: {customer.name}</span>
+          <span className="text-lg">
+            Customer: {customer?.name ?? 'Anonymous'}
+          </span>
         </h2>
         <span
           className={`px-2 py-1 text-sm rounded ${

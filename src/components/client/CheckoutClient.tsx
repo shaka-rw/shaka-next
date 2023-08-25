@@ -1,13 +1,9 @@
 'use client';
-import { createPayment } from '@/app/_actions/orders';
-import { Cart, Payment } from '@prisma/client';
-import Script from 'next/script';
+import { Cart } from '@prisma/client';
 import React, { useState, useTransition } from 'react';
-import { MdShoppingCartCheckout } from 'react-icons/md';
 import CartTable from '../server/CartTable';
-import { toast } from 'react-hot-toast';
 
-import { WaveLinkResponse } from '@/types';
+import CheckoutForm from '../forms/CheckoutForm';
 
 const CheckoutClient = ({ cart }: { cart: Cart }) => {
   const cartTotal = ((cart as any)?.quantities ?? []).reduce(
@@ -16,25 +12,7 @@ const CheckoutClient = ({ cart }: { cart: Cart }) => {
     0
   ) as number;
 
-  const [isPending, startTransition] = useTransition();
   const [payLink, setPayLink] = useState<string>();
-
-  const startPayProcess = () => {
-    startTransition(async () => {
-      const result = await createPayment();
-      if (result[0]) {
-        toast.error(result[0] as string);
-        return;
-      }
-      const response = result[1] as WaveLinkResponse | null;
-      if (!response || !response?.data) {
-        toast.error('Something went wrong, try again!');
-        return;
-      }
-
-      setPayLink(response.data.link);
-    });
-  };
 
   return (
     <div>
@@ -46,17 +24,10 @@ const CheckoutClient = ({ cart }: { cart: Cart }) => {
         <div className="card-actions">
           {!payLink ? (
             cartTotal > 0 && (
-              <button
-                onClick={startPayProcess}
-                disabled={isPending}
-                className="btn btn-primary"
-              >
-                <MdShoppingCartCheckout /> Checkout{' '}
-                <span className="font-mono font-bold ">({cartTotal}RWF)</span>
-                {isPending && (
-                  <span className="loading loading-spinner loading-sm" />
-                )}
-              </button>
+              <CheckoutForm
+                onPayLink={(link) => setPayLink(link)}
+                cartTotal={cartTotal}
+              />
             )
           ) : (
             <a

@@ -5,13 +5,30 @@ import { authOptions } from '../api/auth/[...nextauth]/route';
 import prisma from '@/prima';
 import { FlutterWaveTypes } from 'flutterwave-react-v3';
 import { createFlutterWavePayment } from '../helpers/payment';
+import { cookies } from 'next/headers';
+import { SafeSession } from '@/components/server/CartModal';
+import { revalidatePath } from 'next/cache';
+import { getPath } from '.';
+import { checkoutSchema } from '@/components/forms/CheckoutForm';
+import { z } from 'zod';
 
 export const checkout = async () => {
   const session = await getServerSession(authOptions);
-  if (!session) return ["You're not logged in!"];
+  let user = null;
+  let cartId: string | undefined;
+
+  if (session) {
+    user = await prisma.user.findUnique({
+      where: { id: session.user?.id },
+      include: { cart: true },
+    });
+    cartId = user?.cart?.id;
+  } else {
+    cartId = cookies().get('cartId')?.value;
+  }
 
   const cart = await prisma.cart.findUnique({
-    where: { userId: session.user.id },
+    where: { id: cartId },
     include: {
       quantities: {
         include: {
@@ -62,7 +79,7 @@ export const checkout = async () => {
           id: productQuantity.product.shop.id,
         })),
       },
-      userId: session.user.id,
+      userId: session?.user?.id as string | undefined,
       quantities: {
         create: qties.map(
           ({ productQuantityId, productQuantity, quantity, price }) => ({
@@ -90,37 +107,53 @@ export const checkout = async () => {
 
 // tx_ref=ref&transaction_id=30490&status=successful
 
-export async function createPayment(phoneNumber?: string) {
+export async function createPayment(formData: FormData) {
   const session = await getServerSession(authOptions);
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      cart: { include: { quantities: { include: { productQuantity: true } } } },
-    },
+  let user = null;
+  let cartId: string | undefined;
+  let userData: z.infer<typeof checkoutSchema> | null = null;
+
+  if (session) {
+    user = await prisma.user.findUnique({
+      where: { id: session.user?.id },
+      include: { cart: true },
+    });
+    cartId = user?.cart?.id;
+  } else {
+    cartId = cookies().get('cartId')?.value;
+    userData = JSON.parse(
+      (formData?.get('userData') as string) ?? '{}'
+    ) as z.infer<typeof checkoutSchema>;
+  }
+
+  const cart = await prisma.cart.findUnique({
+    where: { id: cartId },
+    include: { quantities: { include: { productQuantity: true } } },
   });
 
-  const amountToPay = user?.cart?.quantities.reduce(
+  const amountToPay = cart?.quantities.reduce(
     (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
     0
   ) as number;
 
-  console.log({
-    amountToPay,
-    cart: user?.cart?.quantities.map((q) => q),
-    userId: user?.id,
-  });
+  if (amountToPay < 1) return [`Payment amount is less than 1!`];
 
-  if (amountToPay < 1) return [`Payment amount is not valid`];
+  const payment = await prisma.payment
+    .create({
+      data: {
+        amount: amountToPay,
+        email: (user?.email as string) ?? (userData?.email as string),
+        phoneNumber: userData?.phoneNumber as string,
+        name: user?.name ?? (userData?.name as string),
+      },
+    })
+    .catch((err) => {
+      console.log(err);
+      return null;
+    });
 
-  const payment = await prisma.payment.create({
-    data: {
-      amount: amountToPay,
-      email: user?.email as string,
-      phoneNumber,
-      name: user?.name,
-    },
-  });
+  if (!payment) return ['Initiating payment failed! Try again.'];
 
   const waveConfig: FlutterWaveTypes.FlutterwaveConfig = {
     // public_key: process.env.FLW_PUBLIC_KEY as string,
@@ -152,4 +185,40 @@ export async function createPayment(phoneNumber?: string) {
   }
 
   return [null, payLink];
+}
+
+export async function createCartCookie() {
+  let cartId: string | undefined = cookies().get('cartId')?.value;
+  if (cartId) {
+    const existingCart = await prisma.cart.findUnique({
+      where: { id: cartId },
+    });
+    if (existingCart) return [, cartId];
+  }
+  let newCart = await prisma.cart.create({ data: {} });
+  cookies().set('cartId', newCart.id, {
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
+  });
+
+  revalidatePath(await getPath());
+  return [, newCart.id];
+}
+
+export async function getCartId() {
+  const session = (await getServerSession(authOptions)) as SafeSession;
+
+  let cartId: string | undefined = cookies().get('cartId')?.value;
+
+  if (!session?.user && !cartId) {
+    return ['No cart found!'];
+  } else if (session?.user && !cartId) {
+    const user = await prisma.user.findUnique({
+      where: { id: session?.user?.id },
+      include: { cart: true },
+    });
+    cartId = user?.cart?.id;
+  }
+  return [, cartId];
 }

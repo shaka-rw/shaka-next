@@ -3,12 +3,13 @@ import Flutterwave from 'flutterwave-node-v3';
 
 import prisma from '@/prima';
 import { Order, PayStatus } from '@prisma/client';
-import { checkout } from '@/app/_actions/orders';
+import { checkout, getCartId } from '@/app/_actions/orders';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Navbar from '@/components/server/Navbar';
 import Link from 'next/link';
 import { MdCheckCircleOutline, MdError, MdHome } from 'react-icons/md';
+import { cookies } from 'next/headers';
 
 const PaymentVerifyPage = async ({
   searchParams,
@@ -19,15 +20,6 @@ const PaymentVerifyPage = async ({
     status: 'cancelled' | 'successful' | 'failed';
   };
 }) => {
-  const session = await getServerSession(authOptions);
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      cart: true,
-    },
-  });
-
   async function handleVerifyPayment(): Promise<
     { error: string; message?: string } | { error?: string; message: string }
   > {
@@ -37,7 +29,12 @@ const PaymentVerifyPage = async ({
       where: { id: payId ?? '' },
     });
 
-    if (!payment) return { error: 'Payment not found' };
+    if (!payment) return { error: 'Payment not found!' };
+    if (payment.status === PayStatus.successful) {
+      return {
+        message: `Payment of ${payment.amount}${payment.currency} was verified!`,
+      };
+    }
 
     try {
       const flw = new Flutterwave(
@@ -55,6 +52,8 @@ const PaymentVerifyPage = async ({
             where: { id: payment.id },
             data: {
               status: PayStatus.successful,
+              amount: response.data.amount,
+              currency: response.data.currency,
               phoneNumber:
                 response.data.customer.phone_number ?? payment.phoneNumber,
               transaction_id: transId,
@@ -92,13 +91,21 @@ const PaymentVerifyPage = async ({
             });
           }
 
+          const [error, cartId] = await getCartId();
+          if (error)
+            return {
+              error: 'Payment was successfull! Clearing the cart failed!',
+            };
+
           // Clear cart
           await prisma.quantitiesOnCart.deleteMany({
-            where: { cartId: user?.cart?.id },
+            where: { cart: { id: cartId } },
           });
 
           if (updatedOrder) {
-            return { message: 'Payment successfull' };
+            return {
+              message: `Payment of ${payment.amount}${payment.currency} was successfull`,
+            };
           }
         } else {
           return { error: "Payment amount and/or currency doesn't match" };
@@ -119,13 +126,13 @@ const PaymentVerifyPage = async ({
       <Navbar />
       <div className="">
         <div className="flex flex-col">
-          <div className="card mx-auto max-w-lg w-full  shadow border p-3 md:p-4 my-4">
+          <div className="card mx-auto bg-base-100 max-w-lg w-full  shadow-lg rounded-lg border p-3 md:p-4 my-4">
             <h3 className="card-title">Payment</h3>
             <div className="card-body">
               <div
                 className={`flex items-center flex-col p-3 ${
                   result.error ? ' text-error' : 'text-success'
-                } text-xl`}
+                } text-xl md:text-3xl`}
               >
                 <span className="text-3xl">
                   {result.error ? <MdError /> : <MdCheckCircleOutline />}
@@ -133,8 +140,8 @@ const PaymentVerifyPage = async ({
                 <span>{result.error ?? result.message}</span>
               </div>
             </div>
-            <div className="card-actions justify-end">
-              <Link href={'/'} className="btn btn-primary  ">
+            <div className="card-actions justify-center">
+              <Link href={'/'} className="btn btn-sm text-sm btn-primary  ">
                 <MdHome /> Go home
               </Link>
             </div>

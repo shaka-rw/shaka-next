@@ -11,6 +11,7 @@ import {
   MdHome,
   MdMenu,
   MdSettings,
+  MdAccountCircle,
 } from 'react-icons/md';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 
@@ -54,7 +55,7 @@ const Navbar = async () => {
           <MdExplore className="text-lg" />
           <span className="btm-nav-label text-xs font-semibold">Discover</span>
         </Link>
-        {session?.user && (
+        {session?.user && session.user.role !== 'CUSTOMER' && (
           <Link
             className={`w-fit ${
               pathname.startsWith('/dashboard') ? 'active' : ''
@@ -127,7 +128,13 @@ const Navbar = async () => {
                 <span className="text-sm">Search</span>
               </div> */}
               <li>
-                <div className="form-control relative w-full max-w-xs">
+                <Link
+                  href="#"
+                  className="btn btn-square bg-transparent border-0 text-lg [padding:.15rem!important]"
+                >
+                  <MdSearch />
+                </Link>
+                {/* <div className="form-control relative w-full max-w-xs">
                   <MdSearch className="text-xl absolute top-1/2 left-2 -translate-y-1/2" />
                   <input
                     type="text"
@@ -137,10 +144,19 @@ const Navbar = async () => {
                       'pl-8 md:pl-8'
                     )}
                   />
-                </div>
+                </div> */}
               </li>
             </ul>
             <ul className="flex items-center ml-1 gap-1">
+              <li>
+                <CartModal />
+                {/* <a
+                      href="#"
+                      className="btn btn-square bg-transparent border-0 text-lg [padding:.15rem!important]"
+                    >
+                      <MdShoppingCart />
+                    </a> */}
+              </li>
               {session?.user && user ? (
                 <>
                   <li>
@@ -151,15 +167,7 @@ const Navbar = async () => {
                       <MdFavorite />
                     </a>
                   </li>
-                  <li>
-                    <CartModal />
-                    {/* <a
-                      href="#"
-                      className="btn btn-square bg-transparent border-0 text-lg [padding:.15rem!important]"
-                    >
-                      <MdShoppingCart />
-                    </a> */}
-                  </li>
+
                   <li className="dropdown dropdown-bottom dropdown-end">
                     <label
                       tabIndex={0}
@@ -186,7 +194,9 @@ const Navbar = async () => {
                         <a>{user.name}</a>
                       </li>
                       <li>
-                        <Link href={'/dashboard/orders/customer'}>My Orders</Link>
+                        <Link href={'/dashboard/orders/customer'}>
+                          My Orders
+                        </Link>
                       </li>
                       <div className="divider my-1"></div>
                       <li>
@@ -205,7 +215,36 @@ const Navbar = async () => {
                 </>
               ) : (
                 <>
-                  <li>
+                  <li className="dropdown dropdown-end">
+                    <label
+                      tabIndex={0}
+                      className="btn btn-square bg-transparent border-0 text-lg [padding:.15rem!important]"
+                    >
+                      <MdAccountCircle />
+                    </label>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content z-[1] menu p-2 gap-2 shadow bg-base-100 border border-base-300 rounded-box w-52"
+                    >
+                      <li>
+                        <Link
+                          href={'/api/auth/signin'}
+                          className="p-2 btn-primary btn btn-sm gap-2 "
+                        >
+                          <MdLogin /> Login
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href={'/api/auth/signin'}
+                          className="p-2 btn btn-secondary btn-outline btn-sm gap-2 "
+                        >
+                          <AiOutlineUserAdd /> Signup
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                  {/* <li>
                     <Link
                       href="/api/auth/signin"
                       className="btn flex-nowrap mx-1 btn-primary btn-sm md:btn-md text-xs  md:text-sm"
@@ -220,7 +259,7 @@ const Navbar = async () => {
                     >
                       Signup <AiOutlineUserAdd />
                     </Link>
-                  </li>
+                  </li> */}
                 </>
               )}
             </ul>

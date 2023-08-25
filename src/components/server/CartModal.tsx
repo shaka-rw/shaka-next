@@ -2,42 +2,45 @@
 import React from 'react';
 import { Modal } from '../Modal';
 import {
-  MdEmojiObjects,
   MdHourglassEmpty,
   MdShoppingCart,
   MdShoppingCartCheckout,
 } from 'react-icons/md';
-import { User } from '@prisma/client';
+import { UserRole } from '@prisma/client';
 import prisma from '@/prima';
-import { revalidatePath } from 'next/cache';
-import { getPath, removeItemFromCart } from '@/app/_actions';
+import { removeItemFromCart } from '@/app/_actions';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { getCartId } from '@/app/_actions/orders';
+import PlantAnonymousCookie from '../client/PlantAnonymousCookie';
+
+export type SafeSession = { user?: any; role?: UserRole } | undefined;
 
 const CartModal = async () => {
-  const session = await getServerSession(authOptions);
+  let [error, cartId] = await getCartId();
 
-  if (!session?.user) return <></>;
-
-  const cart = await prisma.cart.findUnique({
-    where: { userId: session?.user?.id },
-    include: {
-      _count: { select: { quantities: true } },
-      quantities: {
+  const cart = !cartId
+    ? null
+    : await prisma.cart.findUnique({
+        where: { id: cartId },
         include: {
-          productQuantity: {
+          _count: { select: { quantities: true } },
+          quantities: {
             include: {
-              product: true,
-              color: { include: { mainImage: true } },
-              size: true,
+              productQuantity: {
+                include: {
+                  product: true,
+                  color: { include: { mainImage: true } },
+                  size: true,
+                },
+              },
             },
           },
         },
-      },
-    },
-  });
+      });
 
   const cartTotal = (cart?.quantities ?? []).reduce(
     (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
@@ -51,14 +54,14 @@ const CartModal = async () => {
       lg
       btn={
         <div className="indicator">
-          {(cart?._count.quantities ?? 0) > 0 && (
+          {(cart?._count?.quantities ?? 0) > 0 && (
             <span
               className={twMerge(
                 'indicator-item font-bold -translate-x-[.15rem] translate-y-[.05rem]  badge badge-primary border rounded-full',
                 'h-4 px-1'
               )}
             >
-              {cart?._count.quantities ?? 0}
+              {cart?._count?.quantities ?? 0}
             </span>
           )}
           <button className="btn relative btn-square bg-transparent border-0 text-lg [padding:.15rem!important]">
@@ -67,6 +70,7 @@ const CartModal = async () => {
         </div>
       }
     >
+      <PlantAnonymousCookie />
       <h3 className="text-2xl flex items-center gap-2 mb-3 font-bold">
         <MdShoppingCart /> <span>Cart</span>
       </h3>

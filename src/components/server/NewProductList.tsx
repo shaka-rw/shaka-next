@@ -167,7 +167,7 @@ export const NewDynamicProductList = async ({
                     <img
                       src={((product as any).mainImage as Asset).secureUrl}
                       alt={product.name.slice(0, 10)}
-                      className="object-center w-full"
+                      className="object-center max-w-full max-h-full w-full"
                     />
                   </Link>
                 </figure>

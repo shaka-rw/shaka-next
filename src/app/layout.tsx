@@ -1,4 +1,5 @@
 import './globals.css';
+import 'simplebar-react/dist/simplebar.min.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { SessionProvider } from './providers/AuthProvider';

@@ -2,7 +2,6 @@
 import prisma from '@/prima';
 import React from 'react';
 import { MdEmojiObjects } from 'react-icons/md';
-import ProductList from './ProductList';
 import CategoryList from './CategoryList';
 import { NewDynamicProductList } from './server/NewProductList';
 
@@ -26,7 +25,9 @@ const GuestHome = async () => {
     orderBy: { createdAt: 'desc' },
   });
 
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    include: { image: true, subCategories: { include: { image: true } } },
+  });
   return (
     <div className="p-3">
       <CategoryList categories={categories} />

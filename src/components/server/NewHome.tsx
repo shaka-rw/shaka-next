@@ -49,7 +49,7 @@ const NewHome = async () => {
 
       {/* Hero Section */}
 
-      <div className="md:grid gap-3 flex flex-col items-center relative  md:grid-cols-[auto,1fr,1fr] bg-base-200/30 mx-auto container md:px-3 rounded px-2 py-8 backdrop-sm md:py-20">
+      <div className="md:grid gap-3 flex flex-col items-center relative  md:grid-cols-[1fr,1fr] bg-base-200/30 mx-auto container md:px-3 rounded px-2 py-8 backdrop-sm md:py-20">
         {/* <video
           src="/assets/videos/shaka.mp4"
           poster="/assets/imgs/shaka-banner.jpeg"
@@ -57,7 +57,7 @@ const NewHome = async () => {
           controls={false}
           autoPlay
         /> */}
-        <div className="hidden md:flex flex-col gap-4 p-2">
+        <div className="hidden flex-col gap-4 p-2">
           <button className="text-3xl rounded-full border h-10 w-10">
             <span className="inline-block text-center -translate-y-2">.</span>
           </button>
@@ -106,7 +106,7 @@ const NewHome = async () => {
             width={300}
             height={200}
             alt={'Shaka Banner'}
-            className="mask mask-heart opacity-30 shadow border border-accent"
+            className="mask mask-heart shadow border border-accent"
           />
         </div>
         {/* <div className="hidden md:block">
@@ -120,12 +120,13 @@ const NewHome = async () => {
           />
         </div> */}
       </div>
-      <HorizontalScroll
-        speed={500}
-        className="bg-accent/50 container mx-auto p-2 my-5"
-      >
-        <div className="items-center rounded flex w-full gap-2">
-          {/* <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
+      <div className="container mx-auto">
+        <HorizontalScroll
+          speed={500}
+          className="bg-accent/50 container mx-auto p-2 my-5"
+        >
+          <div className="items-center rounded flex w-full gap-2">
+            {/* <div className="grid grid-cols-1 justify-items-center text-center md:text-start md:justify-items-start md:grid-cols-[auto,1fr] items-center bg-base-100/30 backdrop-blur border rounded-lg px-2 py-1 md:join-item grid-rows-2 gap-y-0 gap-x-2">
             <div className="avatar rounded-full overflow-hidden row-span-2 w-10 h-10">
               <img
                 src="/assets/imgs/products/product-16-2.jpg"
@@ -135,30 +136,30 @@ const NewHome = async () => {
             </div>
             <div className="row-span-2 text-base">Recommended for you.</div>
           </div> */}
-          {shops.map((shop) => (
-            <Link
-              href={`/shops/${shop.id}`}
-              key={shop.id}
-              className="flex py-1 px-2 border rounded items-center gap-2 bg-base-100/30 hover:bg-accent"
-            >
-              <span className="avatar rounded-full overflow-hidden w-10 h-10">
-                <img
-                  src={shop.image.secureUrl}
-                  alt="profile"
-                  className="object-contain object-top w-10 h-10"
-                />
-              </span>
-              <span className="flex flex-col gap-1">
-                <span className="text-sm font-semibold">
-                  {shop.name?.slice(0, 6)}
+            {shops.map((shop) => (
+              <Link
+                href={`/shops/${shop.id}`}
+                key={shop.id}
+                className="flex py-1 px-2 border rounded items-center gap-2 bg-base-100/30 hover:bg-accent"
+              >
+                <span className="avatar rounded-full overflow-hidden w-10 h-10">
+                  <img
+                    src={shop.image.secureUrl}
+                    alt="profile"
+                    className="object-contain object-top w-10 h-10"
+                  />
                 </span>
-                <span className="text-xs">
-                  {((shop as any).about ?? 'More..').slice(0, 6)}
+                <span className="flex flex-col gap-1">
+                  <span className="text-sm font-semibold">
+                    {shop.name?.slice(0, 6)}
+                  </span>
+                  <span className="text-xs">
+                    {((shop as any).about ?? 'More..').slice(0, 6)}
+                  </span>
                 </span>
-              </span>
-            </Link>
-          ))}
-          {/* {Array.from({ length: 12 }).map((_m, i) => (
+              </Link>
+            ))}
+            {/* {Array.from({ length: 12 }).map((_m, i) => (
             <div
               key={i}
               className="flex py-1 px-2 border rounded items-center gap-2 bg-base-100/30 hover:bg-accent"
@@ -176,8 +177,9 @@ const NewHome = async () => {
               </div>
             </div>
           ))} */}
-        </div>
-      </HorizontalScroll>
+          </div>
+        </HorizontalScroll>
+      </div>
       {/* <div className="mx-auto max-w-7xl">
         <h3 className="my-3 text-xl">Shop By Categoies</h3>
       </div> */}
