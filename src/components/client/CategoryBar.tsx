@@ -5,6 +5,7 @@ import { MdArrowCircleLeft, MdArrowCircleRight } from 'react-icons/md';
 import { CategoryWithSubs } from '../CategoryList';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import SimpleBar from 'simplebar-react';
 
 const CategoryBar = ({
   categories,
@@ -43,7 +44,7 @@ const CategoryBar = ({
       >
         <MdArrowCircleLeft />
       </button>
-      <div
+      <SimpleBar  
         className="flex flex-1 w-full p-2 scroll-smooth rounded-md  gap-2 overflow-x-auto"
         ref={scrollRef as any}
       >
@@ -97,7 +98,7 @@ const CategoryBar = ({
             </ul> */}
           </div>
         ))}
-      </div>
+      </SimpleBar>
       <button
         className="btn btn-sm btn-circle text-xl"
         onClick={handleScrollRight}

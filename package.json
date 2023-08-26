@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "deploy": "prisma migrate deploy && prisma generate && pm2 restart shaka-next-02",
+    "deploy": "git pull origin main && pnpm install && pnpm run build && pnpm run db",
+    "db": "prisma migrate deploy && prisma generate && pm2 restart shaka-next-02",
     "start": "next start",
     "lint": "next lint"
   },
