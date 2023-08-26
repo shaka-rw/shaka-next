@@ -162,7 +162,7 @@ export const NewDynamicProductList = async ({
                 <figure className="flex justify-center items-center overflow-hidden bg-base-200">
                   <Link
                     href={`/products/${product.id}`}
-                    className="avatar pt-3 h-44 flex justify-center items-center w-full"
+                    className="p-2 h-44 flex justify-center items-center w-full"
                   >
                     <img
                       src={((product as any).mainImage as Asset).secureUrl}
