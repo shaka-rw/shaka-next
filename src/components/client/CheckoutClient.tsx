@@ -20,6 +20,9 @@ const CheckoutClient = ({ cart }: { cart: Cart }) => {
         <h3 className="card-title">Checkout</h3>
         <div className="card-body">
           <CartTable cart={cart} />
+          <div className="flex my-2 underline underline-offset-4 font-bold">
+            Delivery Fee: 2000RWF
+          </div>
         </div>
         <div className="card-actions">
           {!payLink ? (
@@ -35,7 +38,10 @@ const CheckoutClient = ({ cart }: { cart: Cart }) => {
               className="btn  btn-block animate-pulse btn-accent"
               target="_blank"
             >
-              Pay <span className="font-mono font-bold ">({cartTotal}RWF)</span>{' '}
+              Pay{' '}
+              <span className="font-mono font-bold ">
+                ({cartTotal + 2000}RWF)
+              </span>{' '}
               now &rarr;
             </a>
           )}

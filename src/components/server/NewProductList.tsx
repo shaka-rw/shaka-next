@@ -157,7 +157,7 @@ export const NewDynamicProductList = async ({
             return (
               <div
                 key={i}
-                className="bg-base-200 md:min-w-[200px] w-full max-w-[230px] lg:w-[230px] flex flex-col justify-between card rounded-md overflow-hidden p-0 gap-2"
+                className="bg-base-100 border-b shadow-sm md:min-w-[200px] w-full max-w-[230px] lg:w-[230px] flex flex-col justify-between card rounded-md overflow-hidden p-0 gap-2"
               >
                 <figure className="flex justify-center items-center overflow-hidden bg-base-200">
                   <Link
@@ -175,7 +175,7 @@ export const NewDynamicProductList = async ({
 
                 <div className="flex p-2 flex-col gap-2">
                   <Link href={`/products/${product.id}`} className="text-sm">
-                    {product.name}
+                    {product.name.slice(0, 50)}
                   </Link>
                   <Link
                     href={`/products/${product.id}`}
@@ -183,24 +183,31 @@ export const NewDynamicProductList = async ({
                   >
                     {product.description.slice(0, 50)}...
                   </Link>
-                  {/* <div className="divider my-1" /> */}
                   <div
                     className={twMerge(
-                      'card-actions border-t items-center p-2 justify-between',
-                      'flex-nowrap'
+                      'card-actions border-t py-2 justify-between flex-col',
+                      'flex-nowrap items-start  flex-col'
                     )}
                   >
-                    <div className="font-bold flex justify-self-center self-center items-center flex-col md:flex-row text-xs">
-                      <span>{minPrice}Rwf</span>
-                      {maxPrice !== minPrice ? (
-                        <>
-                          <span className="hidden md:inline">-</span>
-                          <span>{maxPrice}Rwf</span>
-                        </>
-                      ) : (
-                        <></>
+                    <div className="flex items-center gap-1">
+                      <div className="font-bold flex items-center gap-1 flex-row text-xs">
+                        <span>{minPrice}RWF</span>
+                        {maxPrice !== minPrice ? (
+                          <>
+                            <span className="">-</span>
+                            <span>{maxPrice}RWF</span>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                      {product.prevPrice && (
+                        <span className="italic text-sm font-light line-through">
+                          {product.prevPrice}RWF
+                        </span>
                       )}
                     </div>
+                    <div className="border-t w-full mt-1" />
                     <div className="flex items-center gap-1">
                       {!isSeller ? (
                         <button className="btn btn-sm btn-accent btn-outline btn-circle">

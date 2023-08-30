@@ -78,9 +78,9 @@ const CheckoutForm = ({
           type="text"
           defaultValue={session?.data?.user?.name ?? ''}
           className="input input-bordered w-full"
-          disabled={!!session?.data?.user?.name}
+          // disabled={!!session?.data?.user?.name}
           placeholder="Shop name"
-          {...register('name')}
+          {...register('name', { value: session?.data?.user?.name ?? '' })}
         />
         {errors.name && (
           <label className="label">
@@ -97,10 +97,10 @@ const CheckoutForm = ({
         <input
           defaultValue={session?.data?.user?.email ?? ''}
           type="text"
-          disabled={!!session?.data?.user?.email}
+          // disabled={!!session?.data?.user?.email}
           className="input input-bordered w-full"
           placeholder="Email"
-          {...register('email')}
+          {...register('email', { value: session?.data?.user?.email ?? '' })}
         />
         {errors.email && (
           <label className="label">
@@ -153,7 +153,7 @@ const CheckoutForm = ({
         className="btn btn-primary w-fit"
       >
         <MdShoppingCartCheckout /> Checkout{' '}
-        <span className="font-mono font-bold ">({cartTotal}RWF)</span>
+        <span className="font-mono font-bold ">({cartTotal + 2000}RWF)</span>
         {isPending && <span className="loading loading-spinner loading-sm" />}
       </button>
     </form>

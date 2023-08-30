@@ -133,6 +133,7 @@ model Product {
   shopId      String
   colors      ProductColor[]
   available   Boolean           @default(true)
+  prevPrice   Float?
   published   Boolean           @default(false)
   quantities  ProductQuantity[]
   createdAt   DateTime          @default(now())

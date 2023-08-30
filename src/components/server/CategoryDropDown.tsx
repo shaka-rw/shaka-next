@@ -34,8 +34,11 @@ const CategoryDropDown = async () => {
       >
         {categories.map((cat) => (
           <div key={cat.name} className="group/cat dropdown dropdown-right">
-            <label tabIndex={0} className="btn justify-between w-full my-1">
-              {cat.name}
+            <label
+              tabIndex={0}
+              className="btn flex-nowrap justify-between capitalize text-sm w-full my-1"
+            >
+              {cat.name.slice(0, 20)}
               <FaCaretRight />
             </label>
             <ul

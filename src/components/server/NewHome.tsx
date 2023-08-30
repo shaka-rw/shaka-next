@@ -36,6 +36,7 @@ const NewHome = async () => {
 
   const categories = await prisma.category.findMany({
     take: 100,
+    where: { parent: null },
     include: { image: true },
   });
   const shops = await prisma.shop.findMany({

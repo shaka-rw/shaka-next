@@ -132,10 +132,12 @@ export async function createPayment(formData: FormData) {
     include: { quantities: { include: { productQuantity: true } } },
   });
 
-  const amountToPay = cart?.quantities.reduce(
-    (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
-    0
-  ) as number;
+  // Cart amount + delivery fee(2000)
+  const amountToPay =
+    (cart?.quantities.reduce(
+      (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
+      0
+    ) as number) + 2000;
 
   if (amountToPay < 1) return [`Payment amount is less than 1!`];
 

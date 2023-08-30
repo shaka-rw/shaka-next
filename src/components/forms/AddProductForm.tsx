@@ -19,6 +19,7 @@ const colorImageSchema = z.object({
 export const productSchema = z.object({
   name: z.string().trim().min(3),
   description: z.string().trim().min(10),
+  prevPrice: z.number().step(0.01).min(0).optional(),
   shopId: z.string().trim(),
   sizes: z.array(z.string()),
   gender: z.enum(['FEMALE', 'MALE', 'UNISEX']).default('UNISEX'),
@@ -199,6 +200,24 @@ const AddProductForm = ({
             className="textarea textarea-bordered w-full"
             {...register('description')}
           ></textarea>
+          {errors.description && (
+            <label className="label">
+              <span className="label-text-alt text-red-500">
+                {errors.description.message}
+              </span>
+            </label>
+          )}
+        </div>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Previous Price (Not required)</span>
+          </label>
+          <input
+            className="input input-bordered w-full"
+            type="number"
+            placeholder="Previous Price (optional)"
+            {...register('prevPrice', { valueAsNumber: true })}
+          />
           {errors.description && (
             <label className="label">
               <span className="label-text-alt text-red-500">

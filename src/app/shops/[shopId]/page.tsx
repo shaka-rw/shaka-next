@@ -95,6 +95,16 @@ const ShopProfilePage = async ({
       owner: true,
       category: true,
       products: {
+        where: {
+          AND: {
+            quantities: {
+              some: {
+                quantity: { gt: 0 },
+              },
+            },
+            available: true,
+          },
+        },
         include: {
           mainImage: true,
           colors: { include: { mainImage: true, images: true } },

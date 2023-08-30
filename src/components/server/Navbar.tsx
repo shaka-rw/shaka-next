@@ -55,7 +55,7 @@ const Navbar = async () => {
           <MdExplore className="text-lg" />
           <span className="btm-nav-label text-xs font-semibold">Discover</span>
         </Link>
-        {session?.user && session.user.role !== 'CUSTOMER' && (
+        {user && ['SELLER', 'ADMIN'].includes(user?.role ?? '') && (
           <Link
             className={`w-fit ${
               pathname.startsWith('/dashboard') ? 'active' : ''
@@ -93,7 +93,7 @@ const Navbar = async () => {
                 Discover
               </Link>
             </li>
-            {session?.user && (
+            {session?.user && session?.user?.role !== 'CUSTOMER' && (
               <li>
                 <Link
                   href="/dashboard"

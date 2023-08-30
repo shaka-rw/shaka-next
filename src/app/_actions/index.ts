@@ -64,7 +64,7 @@ export async function editProduct(formData: FormData) {
     typeof editProductSchema
   >;
   try {
-    const newProduct = await prisma.product.update({
+    const updatedProduct = await prisma.product.update({
       where: { id: data.productId },
       data: {
         gender: 'UNISEX',
@@ -79,6 +79,7 @@ export async function editProduct(formData: FormData) {
             where: { size },
           })),
         },
+        prevPrice: data.prevPrice,
       },
     });
     return [];
