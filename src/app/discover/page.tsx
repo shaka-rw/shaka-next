@@ -2,12 +2,12 @@ import Navbar from '@/components/server/Navbar';
 import SideSection from '@/components/client/SideSection';
 import React, { Suspense } from 'react';
 import CategoryBar from '@/components/client/CategoryBar';
-import { NewDynamicProductList } from '@/components/server/NewProductList';
 import prisma from '@/prima';
-import { MdSearch } from 'react-icons/md';
 import { notFound } from 'next/navigation';
 import { ProductGender } from '@prisma/client';
 import NewShopList from '@/components/server/NewShopList';
+import Products from '@/components/server/Products';
+import Filters from '@/components/server/Filters';
 
 const Discover = async ({
   searchParams,
@@ -90,7 +90,7 @@ const Discover = async ({
           },
           include: {
             mainImage: true,
-            shop: { include: { image: true } },
+            shop: { include: { image: true, category: true } },
             categories: { include: { image: true } },
             quantities: {
               where: { quantity: { gt: 0 } },
@@ -142,24 +142,28 @@ const Discover = async ({
   }
 
   return (
-    <div className=" grid items-start grid-cols-1 h-full md:grid-cols-[auto,1fr]">
+    <div className=" flex flex-col h-full">
       <div className="md:col-span-2">
         <Navbar />
         <CategoryBar catId={categoryId} categories={categories} />
       </div>
-      <div className="relative h-full">
+      {/* <div className="relative h-full">
         <SideSection catId={categoryId} />
-      </div>
+      </div> */}
+      <Filters />
 
       <Suspense
         fallback={
-          <div className="container flex justify-center items-center">
+          <div className="container flex p-3 justify-center items-center">
             <span className="loading-dots loading-lg" />
           </div>
         }
       >
         {searchType === 'products' && (
-          <NewDynamicProductList products={products} title={<></>} />
+          <div className="mx-auto container p-1">
+            <Products products={products} />
+          </div>
+          // <NewDynamicProductList products={products} title={<></>} />
         )}
         {searchType === 'shops' && <NewShopList shops={shops} />}
       </Suspense>

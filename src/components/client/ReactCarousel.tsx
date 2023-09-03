@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 
@@ -14,7 +15,7 @@ export const ReactCarousel = ({ imageUrls }: { imageUrls: string[] }) => {
     >
       {imageUrls.map((imageUrl, index) => (
         <div key={index}>
-          <img src={imageUrl} alt={`Slide ${index}`} />
+          <Image height={300} width={300} src={imageUrl} alt={`Slide ${index}`} />
         </div>
       ))}
     </Carousel>

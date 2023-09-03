@@ -157,7 +157,7 @@ export const NewDynamicProductList = async ({
             return (
               <div
                 key={i}
-                className="bg-base-100 border-b shadow-sm md:min-w-[200px] w-full max-w-[230px] lg:w-[230px] flex flex-col justify-between card rounded-md overflow-hidden p-0 gap-2"
+                className="bg-base-100 shadow-sm md:min-w-[200px] w-full max-w-[230px] lg:w-[230px] flex flex-col justify-between card rounded-md overflow-hidden p-0 gap-2"
               >
                 <figure className="flex justify-center items-center overflow-hidden bg-base-200">
                   <Link

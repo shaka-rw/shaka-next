@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "export NODE_OPTIONS=\"--max-old-space-size=3072\" && next dev",
     "build": "next build",
     "deploy": "git pull origin main && pnpm install && pnpm run build && pnpm run db",
     "db": "prisma migrate deploy && prisma generate && pm2 restart shaka-next-02",

@@ -9,17 +9,14 @@ import {
 import { UserRole } from '@prisma/client';
 import prisma from '@/prima';
 import { removeItemFromCart } from '@/app/_actions';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import { getCartId } from '@/app/_actions/orders';
 import PlantAnonymousCookie from '../client/PlantAnonymousCookie';
 
 export type SafeSession = { user?: any; role?: UserRole } | undefined;
 
-const CartModal = async () => {
+const CartModal = async ({ notHome = true }: { notHome?: boolean }) => {
   let [error, cartId] = await getCartId();
 
   const cart = !cartId
@@ -64,7 +61,11 @@ const CartModal = async () => {
               {cart?._count?.quantities ?? 0}
             </span>
           )}
-          <button className="btn relative btn-square bg-transparent border-0 text-lg [padding:.15rem!important]">
+          <button
+            className={`btn btn-sm bg-transparent border-0 btn-square font-extrabold text-xl ${
+              notHome ? '  ' : ' text-base-content '
+            }`}
+          >
             <MdShoppingCart />
           </button>
         </div>

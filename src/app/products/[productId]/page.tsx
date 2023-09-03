@@ -23,6 +23,7 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
       colors: { include: { mainImage: true, images: true } },
       shop: { include: { image: true } },
       categories: true,
+
       quantities: {
         include: { color: { include: { mainImage: true } }, size: true },
       },
@@ -80,26 +81,6 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
                     Color(s)
                   </span>
                 </div>
-                {/* <div className="mb-4">
-                  <h3 className="text-sm font-semibold mb-2">Size</h3>
-                  <div className="p-2 border bg-base-100 rounded flex gap-2 items-center flex-wrap">
-                    {product.sizes.map((size) => (
-                      <label
-                        key={size.id}
-                        className="flex items-center space-x-2 label cursor-pointer"
-                      >
-                        <input
-                          type="radio"
-                          name="size"
-                          className="radio radio-primary"
-                        />
-                        <span className="text-sm label-text capitalize">
-                          {size.size}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </div> */}
                 <div className="flex gap-2 flex-row items-center">
                   <button className="btn btn-secondary btn-sm btn-outline btn-circle">
                     <MdFavorite />

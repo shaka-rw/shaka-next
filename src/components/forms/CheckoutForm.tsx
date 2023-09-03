@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import React, { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { MdAdd, MdShoppingCartCheckout } from 'react-icons/md';
+import { MdShoppingCartCheckout } from 'react-icons/md';
 import { z } from 'zod';
 
 export const checkoutSchema = z.object({

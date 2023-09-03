@@ -17,6 +17,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-hot-toast';
 import useAnonymousCartId from '@/hooks/useAnonymousCartId';
+import { twMerge } from 'tailwind-merge';
 
 export const cartSchema = z.object({
   color: z.string().nonempty(),
@@ -27,9 +28,11 @@ export const cartSchema = z.object({
 const AddToCartForm = ({
   product,
   btnText = '',
+  className = '',
 }: {
   product: VariationProduct;
   btnText?: string;
+  className?: string;
 }) => {
   const [isPending, startTransition] = useTransition();
   useAnonymousCartId();
@@ -72,7 +75,7 @@ const AddToCartForm = ({
     <Modal
       modalId={`add_to_cart_${product.id}`}
       btn={
-        <button className="btn btn-sm btn-primary ">
+        <button className={twMerge(`btn btn-sm btn-primary`, className)}>
           <MdAddShoppingCart /> {btnText && <span>{btnText}</span>}
         </button>
       }

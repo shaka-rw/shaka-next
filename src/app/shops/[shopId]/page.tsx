@@ -2,6 +2,7 @@
 import Navbar from '@/components/server/Navbar';
 import { NewDynamicProductList } from '@/components/server/NewProductList';
 import prisma from '@/prima';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
@@ -36,7 +37,7 @@ const ShopProfile = ({
         <div className="flex gap-2 flex-wrap justify-center md:justify-normal mb-4">
           <div className="avatar p-1 md:pr-2 ">
             <div className="w-48 h-48">
-              <img src={image} className="mask-squircle" alt={`Shop ${name}`} />
+              <Image src={image} height={192} width={192} className="mask-squircle" alt={`Shop ${name}`} />
             </div>
           </div>
           <div className="flex md:pl-3 items-center md:items-start md:border-l flex-col gap-1">

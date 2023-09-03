@@ -2,6 +2,7 @@
 import { Product } from '@prisma/client';
 import React from 'react';
 import { VariationProduct } from '../forms/AddVariationsForm';
+import Image from 'next/image';
 
 const EditVariations = ({ product }: { product: VariationProduct }) => {
   return (
@@ -24,7 +25,7 @@ const EditVariations = ({ product }: { product: VariationProduct }) => {
                   <div className="flex items-center space-x-2">
                     <div className="avatar">
                       <div className="mask mask-squircle w-10 h-10">
-                        <img src={q.color.mainImage.secureUrl} alt="Image" />
+                        <Image height={40} width={40} src={q.color.mainImage.secureUrl} alt="Image" />
                       </div>
                     </div>
                   </div>

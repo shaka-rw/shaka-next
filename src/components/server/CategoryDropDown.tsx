@@ -16,7 +16,7 @@ import Link from 'next/link';
 
 // Sample data for categories and subcategories
 
-const CategoryDropDown = async () => {
+const CategoryDropDown = async ({ notHome = true }: { notHome?: boolean }) => {
   const categories = await prisma.category.findMany({
     take: 50,
     where: { parent: null },
@@ -24,13 +24,20 @@ const CategoryDropDown = async () => {
   });
 
   return (
-    <div className="dropdown dropdown-end">
-      <label tabIndex={0} className={`btn bg-transparent m-1`}>
+    <div className="dropdown z-10 dropdown-end">
+      <label
+        tabIndex={0}
+        className={`btn rounded-3xl btn-outline tex btn-sm ${
+          notHome
+            ? '  '
+            : ' border-base-100 text-base-100 hover:bg-base-100/20 '
+        } `}
+      >
         <MdOutlineWindow /> All Categories
       </label>
       <ul
         tabIndex={0}
-        className="dropdown-content z-[1] left-2 menu p-2 shadow bg-base-100 rounded-box w-52"
+        className="dropdown-content z-10 left-2 menu p-2 shadow bg-base-100 rounded-box w-fit min-w-[13rem]"
       >
         {categories.map((cat) => (
           <div key={cat.name} className="group/cat dropdown dropdown-right">
@@ -43,11 +50,14 @@ const CategoryDropDown = async () => {
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content left-[104%] m-0 hidden group-focus-within/cat:[display:flex] z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+              className="dropdown-content left-[104%] m-0 hidden group-focus-within/cat:[display:flex] z-[1] menu p-2 shadow bg-base-100 rounded-box w-fit"
             >
               {cat.subCategories.map((subCat) => (
                 <li key={subCat.name}>
-                  <Link href={`/discover/?cat=${subCat.id}`}>
+                  <Link
+                    className="bg-base-100 text-base-content"
+                    href={`/discover/?cat=${subCat.id}`}
+                  >
                     {subCat.name}
                   </Link>
                 </li>

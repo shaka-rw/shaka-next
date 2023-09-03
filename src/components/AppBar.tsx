@@ -50,7 +50,7 @@ const AppBar = async () => {
             />
           </div>
         </div>
-        {session?.user && <CartModal user={session.user} />}
+        {session?.user && <CartModal />}
         <div className="flex-none hidden md:block">
           {session?.user ? (
             <>

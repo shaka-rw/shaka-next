@@ -2,6 +2,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { Asset, Product as SingleProduct, ProductColor } from '@prisma/client';
+import Image from 'next/image';
 
 const SingleProduct = ({ product }: { product: SingleProduct }) => {
   const settings = {
@@ -32,7 +33,12 @@ const SingleProduct = ({ product }: { product: SingleProduct }) => {
             <Slider {...settings}>
               {((color as any).images as Asset[]).map((image) => (
                 <div key={image.id}>
-                  <img src={image.secureUrl} alt={color.name ?? ''} />
+                  <Image
+                    width={300}
+                    height={300}
+                    src={image.secureUrl}
+                    alt={color.name ?? ''}
+                  />
                 </div>
               ))}
             </Slider>

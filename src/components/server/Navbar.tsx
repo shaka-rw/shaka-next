@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import React from 'react';
@@ -28,7 +29,7 @@ import Themes, { ThemeButton } from '../client/Themes';
 import Logo from '../client/Logo';
 import { twMerge } from 'tailwind-merge';
 
-const Navbar = async () => {
+const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
   const session = await getServerSession(authOptions);
   const user = session?.user
     ? await prisma.user.findUnique({ where: { id: session.user.id } })
@@ -38,7 +39,6 @@ const Navbar = async () => {
   return (
     <>
       <div className="btm-nav md:hidden text-primary border-t max-w-full w-full border-secondary z-10">
-        {/* button */}
         <Link
           className={`w-fit ${pathname === '/' ? 'active' : ''}`}
           href={'/'}
@@ -74,20 +74,30 @@ const Navbar = async () => {
         </label>
       </div>
 
-      <div className="navbar shadow-sm border-b ">
-        <div className="navbar h-auto min-h-[auto] mx-auto flex-wrap justify-between gap-2 p-0">
-          <ul className="flex-1 hidden md:flex">
+      <header
+        className={`navbar z-10 hidden md:flex items-center top-0 bottom-auto left-0 ring-0 h-[60px] justify-between ${
+          isNotHome
+            ? ' border-b shadow-sm bg-base-100 [color:hsl(var(--bc)_/_var(--tw-text-opacity))!important] '
+            : ' bg-transparent bg-gradient-to-b from-black to-transparent absolute '
+        }`}
+      >
+        <div className="container items-center navbar w-full justify-between mx-auto">
+          <ul className="flex-1 gap-2 hidden md:flex">
             <li>
-              <CategoryDropDown />
+              <CategoryDropDown notHome={isNotHome} />
             </li>
             <li>
               <Link
                 href="/discover"
-                className={`btn btn-ghost gap-2 ${
+                className={`${
                   pathname.startsWith('/discover')
-                    ? 'bg-base-200'
-                    : 'bg-transparent'
-                } border-0 py-1`}
+                    ? 'bg-[hsl(var(--b3)_/_var(--tw-bg-opacity))]'
+                    : ''
+                } btn rounded-3xl btn-outline tex btn-sm ${
+                  isNotHome
+                    ? '  '
+                    : ' border-base-100 text-base-100 hover:bg-base-100/20 '
+                }`}
               >
                 <MdExplore />
                 Discover
@@ -97,11 +107,15 @@ const Navbar = async () => {
               <li>
                 <Link
                   href="/dashboard"
-                  className={`btn btn-ghost gap-2 ${
+                  className={`${
                     pathname.startsWith('/dashboard')
-                      ? 'bg-base-200'
-                      : 'bg-transparent'
-                  } border-0 py-1`}
+                      ? 'bg-[hsl(var(--b3)_/_var(--tw-bg-opacity))]'
+                      : ''
+                  } btn rounded-3xl btn-outline tex btn-sm ${
+                    isNotHome
+                      ? '  '
+                      : ' border-base-100 text-base-100 hover:bg-base-100/20 '
+                  }`}
                 >
                   <MdDashboard />
                   Dashboard
@@ -110,59 +124,61 @@ const Navbar = async () => {
             )}
           </ul>
           <Link href={'/'} className="hidden md:inline-block flex-none">
-            <Logo width={80} height={40} />
+            <span className="">
+              <Image
+                alt={'Shaka'}
+                width={80}
+                height={60}
+                className="h-[60px] mt-1"
+                src={'/logo_.png'}
+              />
+            </span>
           </Link>
           <ul className="flex w-full md:w-auto justify-between gap-1  md:justify-end flex-1 items-center">
             <li>
               <Link href={'/'} className="inline-block md:hidden flex-none">
-                <Logo width={140} height={60} />
+                <span className="">
+                  <Image
+                    alt={'Shaka'}
+                    width={80}
+                    height={60}
+                    className="h-[60px] mt-1"
+                    src={'/logo_.png'}
+                  />
+                </span>
               </Link>
             </li>
-            <ul className="flex flex-row gap-2">
-              {!session?.user && (
+            <ul className="flex items-center flex-row gap-2">
+              {!session?.user && process.env.NODE_ENV === 'development' && (
                 <li>
                   <ThemeButton />
                 </li>
               )}
-              {/* <div className="btn mr-1 flex bg-transparent py-1  gap-2 [text-transform:unset] text-sm items-center">
-                <span className="text-sm">Search</span>
-              </div> */}
               <li>
                 <Link
                   href="#"
-                  className="btn btn-square bg-transparent border-0 text-lg [padding:.15rem!important]"
+                  className={`btn btn-sm bg-transparent border-0 btn-square font-extrabold text-xl ${
+                    isNotHome ? '  ' : ' text-base-100 hover:text-base-content '
+                  }`}
                 >
                   <MdSearch />
                 </Link>
-                {/* <div className="form-control relative w-full max-w-xs">
-                  <MdSearch className="text-xl absolute top-1/2 left-2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    placeholder="Search.."
-                    className={twMerge(
-                      'input input-sm md:input-md input-bordered w-full max-w-xs',
-                      'pl-8 md:pl-8'
-                    )}
-                  />
-                </div> */}
               </li>
             </ul>
             <ul className="flex items-center ml-1 gap-1">
               <li>
-                <CartModal />
-                {/* <a
-                      href="#"
-                      className="btn btn-square bg-transparent border-0 text-lg [padding:.15rem!important]"
-                    >
-                      <MdShoppingCart />
-                    </a> */}
+                <CartModal notHome={false} />
               </li>
               {session?.user && user ? (
                 <>
                   <li>
                     <a
                       href="#"
-                      className="btn btn-square bg-transparent border-0 text-lg [padding:.15rem!important]"
+                      className={`btn btn-sm bg-transparent border-0 btn-square font-extrabold text-xl ${
+                        isNotHome
+                          ? '  '
+                          : ' text-base-100 hover:text-base-content '
+                      }`}
                     >
                       <MdFavorite />
                     </a>
@@ -171,7 +187,11 @@ const Navbar = async () => {
                   <li className="dropdown dropdown-bottom dropdown-end">
                     <label
                       tabIndex={0}
-                      className="btn gap-2 items-center btn-sm rounded-xl  border-0 text-lg h-10 w-[4.5rem] px-0 py-[.15rem]"
+                      className={`btn btn-outline py-1 rounded-3xl text-sm ${
+                        isNotHome
+                          ? '  '
+                          : ' items-center border-base-100 text-base-100 hover:bg-base-100/20 '
+                      }`}
                     >
                       <span className="avatar p-1 w-8 h-8 overflow-hidden rounded-full">
                         {user.image ? (
@@ -199,14 +219,18 @@ const Navbar = async () => {
                         </Link>
                       </li>
                       <div className="divider my-1"></div>
-                      <li>
-                        <Link href={'#'}>
-                          <MdSettings /> Settings
-                        </Link>
-                      </li>
-                      <li>
-                        <Themes />
-                      </li>
+                      {process.env.NODE_ENV === 'development' && (
+                        <>
+                          <li>
+                            <Link href={'#'}>
+                              <MdSettings /> Settings
+                            </Link>
+                          </li>
+                          <li>
+                            <Themes />
+                          </li>
+                        </>
+                      )}
                       <li>
                         <LogoutBtn />
                       </li>
@@ -218,7 +242,11 @@ const Navbar = async () => {
                   <li className="dropdown dropdown-end">
                     <label
                       tabIndex={0}
-                      className="btn btn-square bg-transparent border-0 text-lg [padding:.15rem!important]"
+                      className={`btn btn-sm bg-transparent border-0 btn-square font-extrabold text-xl ${
+                        isNotHome
+                          ? '  '
+                          : ' items-center text-xl justify-center text-base-100 hover:text-base-content '
+                      }`}
                     >
                       <MdAccountCircle />
                     </label>
@@ -244,28 +272,12 @@ const Navbar = async () => {
                       </li>
                     </ul>
                   </li>
-                  {/* <li>
-                    <Link
-                      href="/api/auth/signin"
-                      className="btn flex-nowrap mx-1 btn-primary btn-sm md:btn-md text-xs  md:text-sm"
-                    >
-                      Login <MdLogin />
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/api/auth/signin"
-                      className="btn hidden md:inline-flex flex-nowrap mx-1 btn-secondary btn-sm md:btn-md btn-outline text-xs  md:text-sm"
-                    >
-                      Signup <AiOutlineUserAdd />
-                    </Link>
-                  </li> */}
                 </>
               )}
             </ul>
           </ul>
         </div>
-      </div>
+      </header>
     </>
   );
 };
