@@ -7,7 +7,7 @@ const AdminOrders = async () => {
     take: 50,
     orderBy: { updatedAt: 'desc' },
     include: {
-      payments: true,
+      payments: { where: { status: 'successful' } },
       shops: true,
       customer: true,
       _count: { select: { quantities: true } },

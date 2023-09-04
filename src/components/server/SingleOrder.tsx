@@ -51,7 +51,7 @@ const SingleOrderCard = async ({ order }: { order: FullOrder }) => {
       quantity: quantity.quantity,
       price: quantity.price,
     })),
-
+    totalPaid: order.payments.reduce((acc, curr) => acc + curr.amount, 0),
     totalCost: order.quantities.reduce(
       (acc, curr) => acc + curr.price * curr.quantity,
       0
@@ -70,20 +70,24 @@ const SingleOrderCard = async ({ order }: { order: FullOrder }) => {
           </h2>
         </div>
         <div className="text-right">
-          <h2 className="text-lg font-semibold text-accent">
+          <h2
+            className={`text-lg font-semibold text-accent ${
+              orderData.status === 'COMPLETED'
+                ? 'text-green-500 '
+                : orderData.status === 'CANCELED'
+                ? ' text-red-600 '
+                : ' text-blue-600 '
+            } `}
+          >
             {orderData.status}
           </h2>
-          {orderData.paid && (
-            <span
-              className={`${
-                orderData.status === 'COMPLETED'
-                  ? 'text-green-500 '
-                  : orderData.status === 'CANCELED'
-                  ? ' text-red-600 '
-                  : ' text-blue-600 '
-              } `}
-            >
+          {orderData.paid ? (
+            <span className="text-xs uppercase bg-green-500 text-base-100 px-2 py-1 rounded-md">
               Paid
+            </span>
+          ) : (
+            <span className="text-xs uppercase bg-red-500 text-base-100 px-2 py-1 rounded-md">
+              Not fully Paid
             </span>
           )}
         </div>
@@ -136,23 +140,35 @@ const SingleOrderCard = async ({ order }: { order: FullOrder }) => {
           </thead>
           <tbody>
             <tr className="border-b border-gray-300">
-              <td className="pr-4 py-2">Total Paid Amount:</td>
+              <td className="pr-4 py-2">Total Cost:</td>
               <td className="text-right pr-4 py-2">
-                {orderData.totalCost + 2000} RWF
+                {orderData.totalPaid} RWF
               </td>
+            </tr>
+            <tr className="border-b border-gray-300">
+              <td className="pr-4 py-2">Total Paid Amount:</td>
+              {orderData.paid ? (
+                <td className="text-right pr-4 py-2 text-green-500 ">
+                  {orderData.totalPaid} RWF
+                </td>
+              ) : (
+                <td className="text-right pr-4 py-2 text-red-500">
+                  {orderData.totalPaid} RWF
+                </td>
+              )}
             </tr>
             {role === 'ADMIN' || role === 'SELLER' ? (
               <>
                 <tr className="border-b border-gray-300">
                   <td className="pr-4 py-2">Platform Share:</td>
                   <td className="text-right pr-4 py-2">
-                    {(orderData.totalCost / 1.1) * 0.1} RWF
+                    {((orderData.totalCost / 1.1) * 0.1).toFixed(2)} RWF
                   </td>
                 </tr>
                 <tr>
                   <td className="pr-4 py-2">Seller Share:</td>
                   <td className="text-right pr-4 py-2">
-                    {orderData.totalCost / 1.1} RWF
+                    {(orderData.totalCost / 1.1).toFixed(2)} RWF
                   </td>
                 </tr>
               </>

@@ -14,7 +14,7 @@ const CustomerOrders = async () => {
       customer: { id: session?.user?.id ?? '12' },
     },
     include: {
-      payments: true,
+      payments: { where: { status: 'successful' } },
       shops: true,
       customer: true,
       _count: { select: { quantities: true } },

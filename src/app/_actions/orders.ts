@@ -45,33 +45,6 @@ export const checkout = async () => {
 
   const qties = cart.quantities;
 
-  // const result = await Promise.all(
-  //   qties.map(async ({ productQuantityId, quantity }) => {
-  //     const prodQty = await prisma.productQuantity.findFirst({
-  //       where: {
-  //         AND: {
-  //           id: productQuantityId,
-  //           quantity: { lt: quantity },
-  //         },
-  //       },
-  //       include: { product: true, size: true },
-  //     });
-  //     return prodQty;
-  //   })
-  // );
-
-  // const notAvailable = result.filter((q) => q !== null);
-  // if (notAvailable.length) {
-  //   const errorMsg = [
-  //     notAvailable
-  //       .map((q) => {
-  //         return `Product: ${q?.product.name}, size:(${q?.size}) has only ${q?.quantity} left.`;
-  //       })
-  //       .toString(),
-  //   ];
-  //   return errorMsg;
-  // }
-
   const order = await prisma.order.create({
     data: {
       shops: {
@@ -234,7 +207,7 @@ export async function startDelivery(formData: FormData) {
   });
 
   revalidatePath(await getPath());
-  return [null, order];
+  return [null];
 }
 
 export async function completeDelivery(formData: FormData) {
@@ -246,5 +219,5 @@ export async function completeDelivery(formData: FormData) {
   });
 
   revalidatePath(await getPath());
-  return [null, order];
+  return [null];
 }
