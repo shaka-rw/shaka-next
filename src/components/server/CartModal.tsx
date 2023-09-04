@@ -63,7 +63,7 @@ const CartModal = async ({ notHome = true }: { notHome?: boolean }) => {
           )}
           <button
             className={`btn btn-sm bg-transparent border-0 btn-square font-extrabold text-xl ${
-              notHome ? '  ' : ' text-base-content '
+              notHome ? ' text-base-content ' : ' text-base-100 '
             }`}
           >
             <MdShoppingCart />

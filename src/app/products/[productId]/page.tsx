@@ -1,13 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import Carousel from '@/components/client/Carousel';
-import AddToCartForm from '@/components/forms/AddToCartForm';
+import ProductInfo from '@/components/client/ProductInfo';
 import Navbar from '@/components/server/Navbar';
 import prisma from '@/prima';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import React from 'react';
-import { MdFavorite } from 'react-icons/md';
 
 export const metadata: Metadata = {
   title: 'Shaka',
@@ -22,7 +20,7 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
       mainImage: true,
       colors: { include: { mainImage: true, images: true } },
       shop: { include: { image: true } },
-      categories: true,
+      categories: { include: { image: true } },
 
       quantities: {
         include: { color: { include: { mainImage: true } }, size: true },
@@ -37,10 +35,8 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
   return (
     <main className="">
       <Navbar />
-
-      {/* <SingleProduct product={product} /> */}
-
-      <div className="container mx-auto ">
+      <ProductInfo product={product} />
+      {/* <div className="container mx-auto ">
         <div className="p-3 flex flex-col gap-2">
           <section className="w-full rounded pt-3">
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -116,7 +112,7 @@ const ProductPage = async ({ params }: { params: { productId: string } }) => {
             </div>
           </section>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 };

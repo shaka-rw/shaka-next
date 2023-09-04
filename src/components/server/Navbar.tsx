@@ -124,7 +124,7 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
             )}
           </ul>
           <Link href={'/'} className="hidden md:inline-block flex-none">
-            <span className="">
+            <span className=" z">
               <Image
                 alt={'Shaka'}
                 width={80}
