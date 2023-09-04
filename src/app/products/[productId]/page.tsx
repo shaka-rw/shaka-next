@@ -1,14 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import Carousel from '@/components/client/Carousel';
 import ProductInfo from '@/components/client/ProductInfo';
-import AddToCartForm from '@/components/forms/AddToCartForm';
 import Navbar from '@/components/server/Navbar';
 import prisma from '@/prima';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import React from 'react';
-import { MdFavorite } from 'react-icons/md';
 
 export const metadata: Metadata = {
   title: 'Shaka',
