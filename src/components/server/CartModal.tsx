@@ -50,11 +50,11 @@ const CartModal = async ({ notHome = true }: { notHome?: boolean }) => {
       modalId="cart_modal"
       lg
       btn={
-        <div className="indicator">
+        <div className="indicator indicator-top">
           {(cart?._count?.quantities ?? 0) > 0 && (
             <span
               className={twMerge(
-                'indicator-item font-bold -translate-x-[.15rem] translate-y-[.05rem]  badge badge-primary border rounded-full',
+                'indicator-item font-bold badge badge-primary border rounded-full',
                 'h-4 px-1'
               )}
             >
@@ -63,7 +63,7 @@ const CartModal = async ({ notHome = true }: { notHome?: boolean }) => {
           )}
           <button
             className={`btn btn-sm bg-transparent border-0 btn-square font-extrabold text-xl ${
-              notHome ? ' text-base-content ' : ' text-base-100 '
+              notHome ? '  ' : ' text-base-100 hover:text-base-content '
             }`}
           >
             <MdShoppingCart />

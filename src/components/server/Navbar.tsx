@@ -75,7 +75,7 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
       </div>
 
       <header
-        className={`navbar z-10 hidden md:flex items-center top-0 bottom-auto left-0 ring-0 h-[60px] justify-between ${
+        className={`navbar z-10 flex items-center top-0 bottom-auto left-0 ring-0 h-[60px] justify-between ${
           isNotHome
             ? ' border-b shadow-sm bg-base-100 [color:hsl(var(--bc)_/_var(--tw-text-opacity))!important] '
             : ' bg-transparent bg-gradient-to-b from-black to-transparent absolute '
@@ -95,7 +95,7 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
                     : ''
                 } btn rounded-3xl btn-outline tex btn-sm ${
                   isNotHome
-                    ? '  '
+                    ? ' border-transparent '
                     : ' border-base-100 text-base-100 hover:bg-base-100/20 '
                 }`}
               >
@@ -113,7 +113,7 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
                       : ''
                   } btn rounded-3xl btn-outline tex btn-sm ${
                     isNotHome
-                      ? '  '
+                      ? ' border-transparent '
                       : ' border-base-100 text-base-100 hover:bg-base-100/20 '
                   }`}
                 >
@@ -127,9 +127,9 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
             <span className=" z">
               <Image
                 alt={'Shaka'}
-                width={80}
-                height={60}
-                className="h-[60px] mt-1"
+                width={100}
+                height={50}
+                className=""
                 src={'/logo_.png'}
               />
             </span>
@@ -167,7 +167,7 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
             </ul>
             <ul className="flex items-center ml-1 gap-1">
               <li>
-                <CartModal notHome={false} />
+                <CartModal notHome={isNotHome} />
               </li>
               {session?.user && user ? (
                 <>

@@ -29,7 +29,7 @@ const CategoryDropDown = async ({ notHome = true }: { notHome?: boolean }) => {
         tabIndex={0}
         className={`btn rounded-3xl btn-outline tex btn-sm ${
           notHome
-            ? '  '
+            ? ' border-transparent '
             : ' border-base-100 text-base-100 hover:bg-base-100/20 '
         } `}
       >
