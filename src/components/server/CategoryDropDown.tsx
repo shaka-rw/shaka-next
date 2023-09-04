@@ -2,7 +2,7 @@ import React from 'react';
 import { MdOutlineWindow } from 'react-icons/md';
 import { FaCaretRight } from 'react-icons/fa6';
 import { getPath } from '@/app/_actions';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import Link from 'next/link';
 
 // interface Category {

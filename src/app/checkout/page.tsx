@@ -1,6 +1,6 @@
 import CheckoutClient from '@/components/client/CheckoutClient';
 import Navbar from '@/components/server/Navbar';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { Cart } from '@prisma/client';
 import { getCartId } from '../_actions/orders';
 

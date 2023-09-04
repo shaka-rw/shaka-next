@@ -15,7 +15,7 @@ import { getServerSession } from 'next-auth';
 import LogoutBtn from './LogoutBtn';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { AiOutlineUserAdd } from 'react-icons/ai';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import CartModal from './server/CartModal';
 import Themes from './client/Themes';
 

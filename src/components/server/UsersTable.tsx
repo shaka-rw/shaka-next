@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { getPath } from '@/app/_actions';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { User } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import React from 'react';

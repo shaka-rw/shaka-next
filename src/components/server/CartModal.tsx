@@ -7,7 +7,7 @@ import {
   MdShoppingCartCheckout,
 } from 'react-icons/md';
 import { UserRole } from '@prisma/client';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { removeItemFromCart } from '@/app/_actions';
 import { twMerge } from 'tailwind-merge';
 import Link from 'next/link';

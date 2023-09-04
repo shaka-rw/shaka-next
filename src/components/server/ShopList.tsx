@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { approveShop } from '@/app/_actions';
+import { approveShop, disApproveShop } from '@/app/_actions';
 import { Asset, Category, Shop, User } from '@prisma/client';
 import React from 'react';
-import { MdEmojiObjects, MdShop, MdCheck } from 'react-icons/md';
+import { MdEmojiObjects, MdShop, MdCheck, MdClose } from 'react-icons/md';
 import HorizontalScroll from './HorizontalScroll';
 
 export type ShopWithCategory = Shop & {
@@ -46,12 +46,20 @@ const ShopList = ({
               </figure>
               <div className="card-body p-2">
                 <h2 className="card-title">{shop.name}</h2>
-                {!shop.approved && user?.role === 'ADMIN' && (
+                {user?.role === 'ADMIN' && (
                   <div className="card-actions justify-end">
-                    <form action={approveShop}>
+                    <form
+                      action={!shop.approved ? approveShop : disApproveShop}
+                    >
                       <input type="hidden" name="shopId" value={shop.id} />
-                      <button type="submit" className="btn btn-sm btn-primary">
-                        <MdCheck /> Approve
+                      <button
+                        type="submit"
+                        className={`btn btn-sm ${
+                          !shop.approved ? ' btn-primary ' : ' btn-error '
+                        }`}
+                      >
+                        {!shop.approved ? <MdCheck /> : <MdClose />}
+                        {!shop.approved ? 'Approve' : 'Dis-Approve'}
                       </button>
                     </form>
                   </div>

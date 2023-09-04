@@ -1,7 +1,7 @@
 import React from 'react';
 import Flutterwave from 'flutterwave-node-v3';
 
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { Order, PayStatus } from '@prisma/client';
 import { checkout, getCartId } from '@/app/_actions/orders';
 import { getServerSession } from 'next-auth';

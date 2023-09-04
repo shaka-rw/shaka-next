@@ -2,7 +2,7 @@
 
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { FlutterWaveTypes } from 'flutterwave-react-v3';
 import { createFlutterWavePayment } from '../helpers/payment';
 import { cookies } from 'next/headers';
@@ -223,4 +223,28 @@ export async function getCartId() {
     cartId = user?.cart?.id;
   }
   return [, cartId];
+}
+
+export async function startDelivery(formData: FormData) {
+  const orderId = formData.get('orderId') as string;
+
+  const order = await prisma.order.update({
+    where: { id: orderId },
+    data: { status: 'DELIVERY' },
+  });
+
+  revalidatePath(await getPath());
+  return [null, order];
+}
+
+export async function completeDelivery(formData: FormData) {
+  const orderId = formData.get('orderId') as string;
+
+  const order = await prisma.order.update({
+    where: { id: orderId },
+    data: { status: 'COMPLETED' },
+  });
+
+  revalidatePath(await getPath());
+  return [null, order];
 }

@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import ProductInfo from '@/components/client/ProductInfo';
 import Navbar from '@/components/server/Navbar';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import React from 'react';
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const ProductPage = async ({ params }: { params: { productId: string } }) => {
   const product = await prisma.product.findUnique({
-    where: { id: params.productId },
+    where: { id: params.productId, shop: { approved: true } },
     include: {
       mainImage: true,
       colors: { include: { mainImage: true, images: true } },

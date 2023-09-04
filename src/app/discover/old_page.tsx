@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 import CategoryList from '@/components/CategoryList';
 import ShopList from '@/components/server/ShopList';
 import ProductList from '@/components/ProductList';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 

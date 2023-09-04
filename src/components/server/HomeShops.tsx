@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import Simplebar from '../client/SimpleBar';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 
 export type Shop = {
   id: number;
@@ -14,6 +14,7 @@ export type Shop = {
 const HomeShops = async () => {
   const shops = await prisma.shop.findMany({
     take: 100,
+    where: { approved: true },
     include: { image: true },
   });
 

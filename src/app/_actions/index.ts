@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { revalidatePath } from 'next/cache';
@@ -37,10 +37,13 @@ export async function addProductVariation(formData: FormData) {
           productColorId: color,
           productSizeId: size,
           quantity,
-          price,
+          price: Number((price + (price * 10) / 100).toFixed(2)),
           productId: data.productId,
         },
-        update: { quantity, price },
+        update: {
+          quantity,
+          price: Number((price + (price * 10) / 100).toFixed(2)),
+        },
       });
     });
     // await prisma.productQuantity.createMany({
@@ -211,6 +214,16 @@ export async function addProduct(formData: FormData) {
   //   initFiles: files,
   //   mainIndex: 0,
   // });
+  revalidatePath(await getPath());
+}
+
+export async function disApproveShop(data: FormData) {
+  const shopId = data.get('shopId') as string;
+  const shop = await prisma.shop.update({
+    where: { id: shopId },
+    data: { approved: false },
+  });
+
   revalidatePath(await getPath());
 }
 

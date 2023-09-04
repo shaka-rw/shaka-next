@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 // import Flutterwave from 'flutterwave-node-v3';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { Order, PayStatus } from '@prisma/client';
 import { checkout } from '@/app/_actions/orders';
 import { getServerSession } from 'next-auth';

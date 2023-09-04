@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import React from 'react';
 import { MdEmojiObjects } from 'react-icons/md';
 import CategoryList from './CategoryList';

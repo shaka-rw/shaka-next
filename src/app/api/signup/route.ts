@@ -1,4 +1,4 @@
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { NextResponse, type NextRequest } from 'next/server';
 import bcrypt from 'bcrypt';
 

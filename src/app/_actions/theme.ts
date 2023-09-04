@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { Theme } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';

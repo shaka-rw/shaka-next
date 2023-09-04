@@ -8,7 +8,7 @@ import AddVariationsForm, {
   VariationProduct,
 } from '../forms/AddVariationsForm';
 import EditProductForm from '../forms/EditProductForm';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { twMerge } from 'tailwind-merge';
 
 const NewProductList = ({ isDiscover = false }: { isDiscover?: boolean }) => {

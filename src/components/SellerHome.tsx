@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { Shop, User } from '@prisma/client';
 import React from 'react';
 import AddShopForm from './forms/AddShopForm';

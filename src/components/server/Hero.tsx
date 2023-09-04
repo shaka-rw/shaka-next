@@ -4,7 +4,7 @@ import React from 'react';
 import AddShopForm from '../forms/AddShopForm';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import Image from 'next/image';
 
 const Hero = async () => {

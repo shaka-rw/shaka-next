@@ -129,7 +129,7 @@ model Product {
   // main_image    ProductImage @relation(fields: [main_image_id], references: [id])
   mainImage   Asset             @relation(name: "ProductMainImage", fields: [assetId], references: [id])
   sizes       ProductSize[]
-  shop        Shop              @relation(fields: [shopId], references: [id])
+  shop        Shop              @relation(fields: [shopId], references: [id], onDelete: Cascade)
   shopId      String
   colors      ProductColor[]
   available   Boolean           @default(true)
@@ -160,10 +160,10 @@ model Cart {
 }
 
 model QuantitiesOnCart {
-  cart              Cart            @relation(fields: [cartId], references: [id])
+  cart              Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
   quantity          Int
   price             Float?
-  productQuantity   ProductQuantity @relation(fields: [productQuantityId], references: [id])
+  productQuantity   ProductQuantity @relation(fields: [productQuantityId], references: [id], onDelete: Cascade)
   cartId            String
   productQuantityId String
   createAt          DateTime        @default(now())
@@ -177,7 +177,7 @@ model OrderQuantities {
   order             Order           @relation(fields: [orderId], references: [id])
   quantity          Int
   price             Float
-  productQuantity   ProductQuantity @relation(fields: [productQuantityId], references: [id])
+  productQuantity   ProductQuantity @relation(fields: [productQuantityId], references: [id], onDelete: Restrict)
   productQuantityId String
   createAt          DateTime        @default(now())
   updatedAt         DateTime        @default(now()) @updatedAt
@@ -213,23 +213,22 @@ model ProductColor {
   images     Asset[]           @relation(name: "ColorAssets")
   assetId    String            @unique
   name       String?
-  product    Product           @relation(fields: [productId], references: [id])
+  product    Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId  String
   quantities ProductQuantity[]
 }
 
 model ProductQuantity {
-  id             String       @id @default(cuid())
-  price          Float
-  size           ProductSize  @relation(fields: [productSizeId], references: [id])
-  productSizeId  String
-  color          ProductColor @relation(fields: [productColorId], references: [id])
-  productColorId String
-  quantity       Int
-  product        Product      @relation(fields: [productId], references: [id])
-  productId      String
-  orders         Order[]
-
+  id               String             @id @default(cuid())
+  price            Float
+  size             ProductSize        @relation(fields: [productSizeId], references: [id], onDelete: Cascade)
+  productSizeId    String
+  color            ProductColor       @relation(fields: [productColorId], references: [id], onDelete: Cascade)
+  productColorId   String
+  quantity         Int
+  product          Product            @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId        String
+  orders           Order[]
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @default(now()) @updatedAt
   QuantitiesOnCart QuantitiesOnCart[]

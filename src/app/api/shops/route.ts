@@ -1,5 +1,5 @@
 // import { type  } from '@prisma/client';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { Shop } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';

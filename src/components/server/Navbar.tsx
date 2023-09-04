@@ -20,7 +20,7 @@ import Image from 'next/image';
 import { getServerSession } from 'next-auth';
 import CategoryDropDown from './CategoryDropDown';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { FaCaretDown } from 'react-icons/fa6';
 import LogoutBtn from '../LogoutBtn';
 import CartModal from './CartModal';

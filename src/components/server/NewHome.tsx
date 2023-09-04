@@ -3,7 +3,7 @@ import React from 'react';
 import Navbar from './Navbar';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import Hero from './Hero';
 import HomeCategories from './HomeCategories';
 import Products from './Products';
@@ -39,6 +39,7 @@ const NewHome = async () => {
   });
   const shops = await prisma.shop.findMany({
     take: 100,
+    where: { approved: true },
     include: { image: true },
   });
 

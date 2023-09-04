@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import React from 'react';
 import GuestHome from './GuestHome';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import CustomerHome from './CustomerHome';
 import AdminHome from './AdminHome';
 import SellerHome from './SellerHome';

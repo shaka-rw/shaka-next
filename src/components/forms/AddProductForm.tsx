@@ -216,12 +216,17 @@ const AddProductForm = ({
             className="input input-bordered w-full"
             type="number"
             placeholder="Previous Price (optional)"
-            {...register('prevPrice', { valueAsNumber: true })}
+            {...register('prevPrice', {
+              setValueAs(value) {
+                return Number.isNaN(value) ? undefined : Number(value);
+              },
+              required: false,
+            })}
           />
-          {errors.description && (
+          {errors.prevPrice && (
             <label className="label">
               <span className="label-text-alt text-red-500">
-                {errors.description.message}
+                {errors.prevPrice.message}
               </span>
             </label>
           )}

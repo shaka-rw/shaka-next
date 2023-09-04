@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Navbar from '@/components/server/Navbar';
 import { NewDynamicProductList } from '@/components/server/NewProductList';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';

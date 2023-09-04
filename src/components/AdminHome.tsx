@@ -1,4 +1,4 @@
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import React from 'react';
 import AddCategoryForm from './forms/AddCategoryForm';
 import CategoryList from './CategoryList';

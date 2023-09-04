@@ -2,7 +2,7 @@ import Navbar from '@/components/server/Navbar';
 import SideSection from '@/components/client/SideSection';
 import React, { Suspense } from 'react';
 import CategoryBar from '@/components/client/CategoryBar';
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import { notFound } from 'next/navigation';
 import { ProductGender } from '@prisma/client';
 import NewShopList from '@/components/server/NewShopList';
@@ -107,6 +107,7 @@ const Discover = async ({
       ? []
       : await prisma.shop.findMany({
           where: {
+            approved: true,
             ...(search
               ? {
                   OR: [

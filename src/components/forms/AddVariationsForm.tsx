@@ -301,18 +301,6 @@ const AddVariationsForm = ({ product }: { product: VariationProduct }) => {
           >
             <MdAdd /> Add Variation
           </button>
-          {/* <div className="form-control w-full max-w-xs">
-            <label className="label">
-              <span className="label-text">Quantity</span>
-            </label>
-            <input
-              type="number"
-              step={1}
-              className="input input-bordered w-full"
-              placeholder="Quantity"
-              name="quantity"
-            />
-          </div> */}
           <button
             disabled={isPending}
             type="submit"

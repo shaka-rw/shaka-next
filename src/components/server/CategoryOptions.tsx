@@ -1,4 +1,4 @@
-import prisma from '@/prima';
+import prisma from '@/prisma';
 import React from 'react';
 
 const CategoryOptions = async () => {

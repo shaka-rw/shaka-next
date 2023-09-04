@@ -19,7 +19,7 @@ export const editProductSchema = z.object({
   gender: z.enum(['FEMALE', 'MALE', 'UNISEX']),
   categories: z.array(z.string().trim().nonempty()),
   description: z.string().trim().min(10),
-  prevPrice: z.number().step(.01).min(0).optional(),
+  prevPrice: z.number().step(0.01).min(0).optional(),
 });
 
 const ProductEditForm = ({
@@ -232,13 +232,19 @@ const ProductEditForm = ({
           <input
             className="input input-bordered w-full"
             type="number"
+            required={false}
             placeholder="Previous Price (optional)"
-            {...register('prevPrice', { valueAsNumber: true })}
+            {...register('prevPrice', {
+              setValueAs(value) {
+                return Number.isNaN(value) ? undefined : Number(value);
+              },
+              required: false,
+            })}
           />
-          {errors.description && (
+          {errors.prevPrice && (
             <label className="label">
               <span className="label-text-alt text-red-500">
-                {errors.description.message}
+                {errors.prevPrice.message}
               </span>
             </label>
           )}
