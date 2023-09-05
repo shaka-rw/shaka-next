@@ -55,7 +55,7 @@ const Products = ({
                   </a>
                 </span>
               </Link>
-              <div className="flex flex-col justify-between gap-2 p-2">
+              <div className="flex flex-col flex-1 justify-between gap-2 p-2">
                 <span className="text-primary text-sm uppercase">
                   {product.categories?.[0]?.name ?? product.shop.category.name}
                 </span>
