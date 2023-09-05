@@ -35,7 +35,7 @@ const Products = ({
           return (
             <div
               key={product.id}
-              className="flex md:hover:scale-105 border border-primary/30 hover:border-secondary hover:z-[1] bg-base-100 transition-all duration-300 group/product border-b shadow-sm overflow-hidden w-full md:w-[250px] flex-col rounded-lg"
+              className="flex h-[444px] md:hover:scale-105 border border-primary/30 hover:border-secondary hover:z-[1] bg-base-100 transition-all duration-300 group/product border-b shadow-sm overflow-hidden w-full md:w-[250px] flex-col rounded-lg"
             >
               <Link
                 href={`/products/${product.id}`}
