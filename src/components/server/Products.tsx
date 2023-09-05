@@ -55,7 +55,7 @@ const Products = ({
                   </a>
                 </span>
               </Link>
-              <div className="flex flex-col gap-2 p-2">
+              <div className="flex flex-col justify-between gap-2 p-2">
                 <span className="text-primary text-sm uppercase">
                   {product.categories?.[0]?.name ?? product.shop.category.name}
                 </span>
@@ -68,7 +68,7 @@ const Products = ({
                 {
                   <div
                     className={`text-xs line-through md:text-sm font-light ${
-                      product.prevPrice ? '' : ' invisible opacity-0 '
+                      product.prevPrice ? '' : ' hidden '
                     }`}
                   >
                     {product.prevPrice ?? 0}RWF
