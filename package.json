@@ -47,6 +47,7 @@
     "react-select": "^5.7.4",
     "react-slick": "^0.29.0",
     "shard": "^1.1.0",
+    "sharp": "^0.32.5",
     "simplebar": "^6.2.5",
     "simplebar-react": "^3.2.4",
     "slick-carousel": "^1.8.1",
