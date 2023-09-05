@@ -65,11 +65,15 @@ const Products = ({
                 <div className="text-xs md:text-sm font-semibold">
                   {minPrice}RWF - {maxPrice}RWF
                 </div>
-                {product.prevPrice && (
-                  <div className="text-xs line-through md:text-sm font-light">
-                    {product.prevPrice}RWF
+                {
+                  <div
+                    className={`text-xs line-through md:text-sm font-light ${
+                      product.prevPrice ? '' : ' invisible opacity-0 '
+                    }`}
+                  >
+                    {product.prevPrice ?? 0}RWF
                   </div>
-                )}
+                }
                 <div className="text-xs h-4 w-full flex overflow-hidden">
                   {product.description}...
                 </div>

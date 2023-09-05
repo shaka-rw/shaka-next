@@ -347,10 +347,16 @@ export async function uploadAssetImage(file: File, assetFolder: AssetFolder) {
 export async function removeItemFromCart(formData: FormData) {
   'use server';
   const [cartId, prdQtyId] = (formData.get('cartQtyId') as string).split('_');
-  await prisma.quantitiesOnCart.delete({
-    where: {
-      cartId_productQuantityId: { cartId, productQuantityId: prdQtyId },
-    },
-  });
-  revalidatePath(await getPath());
+  try {
+    await prisma.quantitiesOnCart.delete({
+      where: {
+        cartId_productQuantityId: { cartId, productQuantityId: prdQtyId },
+      },
+    });
+    revalidatePath(await getPath());
+  } catch (error) {
+    revalidatePath(await getPath());
+    console.error({ error });
+    return ['Something went wrong!'];
+  }
 }
