@@ -123,7 +123,6 @@ export async function createPayment(formData: FormData) {
   if (amountToPay < 1) return [`Payment amount is less than 1!`];
 
   const paymethod: PayMethod | undefined = userData?.payOption ?? 'flutterwave';
-  console.log({ paymethod, userData });
   const payment = await prisma.payment
     .create({
       data: {

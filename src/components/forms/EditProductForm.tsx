@@ -76,7 +76,6 @@ const ProductEditForm = ({
         toast.success('Product edited successfully!');
       }
     });
-    // console.log({ data });
   };
 
   return (
@@ -112,7 +111,6 @@ const ProductEditForm = ({
                   name={field.name}
                   className="bg-base-100 text-base-content"
                   onChange={(value) => {
-                    console.log({ value, fValue: field.value });
                     field.value;
                     field.onChange(value.map((v) => (v as any).value));
                   }}

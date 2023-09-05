@@ -4,8 +4,13 @@ import React from 'react';
 import { AiOutlineWarning } from 'react-icons/ai';
 import { MdHome } from 'react-icons/md';
 
-const Error = ({ error }: { error: { message: string; digest: string } }) => {
-  console.log(error);
+const Error = ({
+  error,
+  reset,
+}: {
+  reset: () => void;
+  error: { message: string; reset: () => void; digest: string };
+}) => {
   return (
     <div
       style={{
@@ -29,6 +34,9 @@ const Error = ({ error }: { error: { message: string; digest: string } }) => {
           </div>
           <Link
             href="/"
+            onClick={() =>
+              reset ? reset() : error.reset ? error.reset() : null
+            }
             className="mt-4 inline-block px-4 py-2 btn-secondary rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
           >
             <MdHome className="inline-block mr-2" />

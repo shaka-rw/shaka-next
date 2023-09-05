@@ -41,7 +41,6 @@ const CheckoutForm = ({
 
   function onSubmit(data: z.infer<typeof checkoutSchema>) {
     const formData = new FormData();
-    console.log({ data });
     formData.append(
       'userData',
       JSON.stringify({ ...data, phoneNumber: `25${data.phoneNumber}` })

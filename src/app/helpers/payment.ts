@@ -34,8 +34,6 @@ export type UbudaPayment = {
 export const createUbudasaPayment = async (payInfo: UbudaPayment) => {
   const api_key = process.env.UBUDASA_KEY;
 
-  console.log({ ...payInfo, api_key });
-
   const body = new URLSearchParams();
   body.append('api_key', api_key as string);
   body.append('clientOrderId', payInfo.clientOrderId);
@@ -50,7 +48,6 @@ export const createUbudasaPayment = async (payInfo: UbudaPayment) => {
     });
     const data = await response.text();
 
-    console.log({ UbudasaRes: data });
     return data.trim();
   } catch (error) {
     console.log({ ubudasaError: error });

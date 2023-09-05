@@ -140,7 +140,6 @@ export async function addProduct(formData: FormData) {
       const colorAssets = formData.getAll(
         `color_images_${i}`
       ) as unknown as File[];
-      console.log({ color, colorAssets });
       const uploadColorAndAssets = [color, ...colorAssets].map((file) =>
         uploadAssetImage(file, AssetFolder.ProductImages)
       );
@@ -276,7 +275,6 @@ export async function addToCart(formData: FormData) {
     },
   });
 
-  console.log({ exists, id: session?.user?.id, cartId });
   if (exists && exists > 0) return ['Item already exists on the cart!'];
 
   await prisma.quantitiesOnCart.create({

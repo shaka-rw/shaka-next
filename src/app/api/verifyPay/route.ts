@@ -22,8 +22,6 @@ export const GET = async (req: NextRequest) => {
   const transId = searchParams.get('transaction_id');
   const status = searchParams.get('status');
 
-  console.log({ status });
-
   const payment = await prisma.payment.findUnique({
     where: { id: payId ?? '' },
   });

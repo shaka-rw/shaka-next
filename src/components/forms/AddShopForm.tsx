@@ -41,7 +41,6 @@ const AddShopForm = ({
     formData.append('category', data.category);
     formData.append('about', data.about);
     const imageList = data.image as FileList;
-    console.log({ img: imageList.item(0) });
     if ((imageList?.length ?? 0) !== 1) {
       return toast.error('No shop image was selected!');
     }
