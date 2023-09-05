@@ -100,13 +100,16 @@ const CartModal = async ({ notHome = true }: { notHome?: boolean }) => {
                 <tr key={qty.cartId + qty.productQuantityId}>
                   <th>{i + 1}</th>
                   <th>
-                    <div className="avatar rounded overflow-hidden w-12 h-12 justify-center items-center  ">
+                    <Link
+                      href={`/products/${qty.productQuantity.productId}`}
+                      className="avatar rounded overflow-hidden w-12 h-12 justify-center items-center  "
+                    >
                       <img
                         src={qty.productQuantity.color.mainImage.secureUrl}
                         className="w-full h-full object-contain"
                         alt={'Image'}
                       />
-                    </div>
+                    </Link>
                   </th>
                   <td>{qty.productQuantity.product.name}</td>
                   <td>{qty.price ?? qty.productQuantity.price}</td>

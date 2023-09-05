@@ -1,4 +1,8 @@
-import { getCartId, createCartCookie } from '@/app/_actions/orders';
+import {
+  getCartId,
+  createCartCookie,
+  deleteCartCookie,
+} from '@/app/_actions/orders';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 
@@ -7,7 +11,10 @@ const useAnonymousCartId = () => {
   const [cartSet, setCartSet] = useState(false);
 
   useEffect(() => {
-    if (session?.data?.user) return setCartSet(true);
+    if (session?.data?.user) {
+      deleteCartCookie();
+      return setCartSet(true);
+    }
     if (cartSet) return;
     getCartId().then(async ([error, cartId]) => {
       if (cartId) setCartSet(true);

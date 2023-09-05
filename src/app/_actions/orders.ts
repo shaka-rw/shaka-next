@@ -201,6 +201,12 @@ export async function createPayment(formData: FormData) {
   return [null, payLink];
 }
 
+export async function deleteCartCookie() {
+  cookies().delete('cartId');
+  revalidatePath(await getPath());
+  return [];
+}
+
 export async function createCartCookie() {
   let cartId: string | undefined = cookies().get('cartId')?.value;
   if (cartId) {
@@ -227,12 +233,14 @@ export async function getCartId() {
 
   if (!session?.user && !cartId) {
     return ['No cart found!'];
-  } else if (session?.user && !cartId) {
-    const user = await prisma.user.findUnique({
-      where: { id: session?.user?.id },
-      include: { cart: true },
+  } else if (session?.user) {
+    const userCart = await prisma.cart.upsert({
+      where: { userId: session?.user?.id },
+      create: { userId: session?.user?.id },
+      update: {},
     });
-    cartId = user?.cart?.id;
+
+    return [, userCart.id];
   }
   return [, cartId];
 }

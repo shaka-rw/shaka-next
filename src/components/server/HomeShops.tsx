@@ -20,7 +20,7 @@ const HomeShops = async () => {
 
   return (
     <div className="container my-10 p-2 mx-auto ">
-      <h3 className="text-2xl mb-5 font-bold">Shop by Shops</h3>
+      <h3 className="text-2xl mb-5 font-bold">Top Stores</h3>
       <Simplebar>
         <div className="grid max-w-full rounded-sm p-1 grid-rows-2 grid-flow-col gap-3">
           {shops.map((shop) => (

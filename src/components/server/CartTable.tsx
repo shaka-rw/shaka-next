@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { removeItemFromCart } from '@/app/_actions';
 import { Cart, QuantitiesOnCart } from '@prisma/client';
+import Link from 'next/link';
 import React from 'react';
 import { MdHourglassEmpty } from 'react-icons/md';
 
@@ -36,13 +37,16 @@ const CartTable = ({ cart }: { cart: Cart }) => {
                 <tr key={qty.cartId + qty.productQuantityId}>
                   <th>{i + 1}</th>
                   <th>
-                    <div className="avatar rounded overflow-hidden w-12 h-12 justify-center items-center  ">
+                    <Link
+                      href={`/products/${qty?.productQuantity?.productId}`}
+                      className="avatar rounded overflow-hidden w-12 h-12 justify-center items-center  "
+                    >
                       <img
                         src={qty.productQuantity.color.mainImage.secureUrl}
                         className="w-full h-full object-contain"
                         alt={'Image'}
                       />
-                    </div>
+                    </Link>
                   </th>
                   <td>{qty.productQuantity.product.name}</td>
                   <td>{qty.price ?? qty.productQuantity.price}</td>

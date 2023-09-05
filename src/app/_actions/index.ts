@@ -275,6 +275,8 @@ export async function addToCart(formData: FormData) {
       },
     },
   });
+
+  console.log({ exists, id: session?.user?.id, cartId });
   if (exists && exists > 0) return ['Item already exists on the cart!'];
 
   await prisma.quantitiesOnCart.create({
