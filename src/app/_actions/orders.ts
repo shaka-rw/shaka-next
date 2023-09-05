@@ -4,13 +4,18 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import prisma from '@/prisma';
 import { FlutterWaveTypes } from 'flutterwave-react-v3';
-import { createFlutterWavePayment } from '../helpers/payment';
+import {
+  PayMethod,
+  createFlutterWavePayment,
+  createUbudasaPayment,
+} from '../helpers/payment';
 import { cookies } from 'next/headers';
 import { SafeSession } from '@/components/server/CartModal';
 import { revalidatePath } from 'next/cache';
 import { getPath } from '.';
 import { checkoutSchema } from '@/components/forms/CheckoutForm';
 import { z } from 'zod';
+import { WaveLinkResponse } from '@/types';
 
 export const checkout = async () => {
   const session = await getServerSession(authOptions);
@@ -95,10 +100,13 @@ export async function createPayment(formData: FormData) {
     cartId = user?.cart?.id;
   } else {
     cartId = cookies().get('cartId')?.value;
-    userData = JSON.parse(
-      (formData?.get('userData') as string) ?? '{}'
-    ) as z.infer<typeof checkoutSchema>;
   }
+
+  userData = JSON.parse(
+    (formData?.get('userData') as string) ?? '{}'
+  ) as z.infer<typeof checkoutSchema>;
+
+  if (!userData) return ['No user data submitted!'];
 
   const cart = await prisma.cart.findUnique({
     where: { id: cartId },
@@ -106,18 +114,21 @@ export async function createPayment(formData: FormData) {
   });
 
   // Cart amount + delivery fee(2000)
-  const amountToPay =
-    (cart?.quantities.reduce(
-      (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
-      0
-    ) as number) + 2000;
+  const amountToPay = 20; //
+  // (cart?.quantities.reduce(
+  //   (a, c) => a + c.quantity * (c.price ?? c.productQuantity.price),
+  //   0
+  // ) as number) + 2000;
 
   if (amountToPay < 1) return [`Payment amount is less than 1!`];
 
+  const paymethod: PayMethod | undefined = userData?.payOption ?? 'flutterwave';
+  console.log({ paymethod, userData });
   const payment = await prisma.payment
     .create({
       data: {
         amount: amountToPay,
+        paymentOption: paymethod,
         email: (user?.email as string) ?? (userData?.email as string),
         phoneNumber: userData?.phoneNumber as string,
         name: user?.name ?? (userData?.name as string),
@@ -129,6 +140,34 @@ export async function createPayment(formData: FormData) {
     });
 
   if (!payment) return ['Initiating payment failed! Try again.'];
+
+  if (paymethod === 'ubudasa') {
+    try {
+      const result = await createUbudasaPayment({
+        amount: payment.amount,
+        callback: `${process.env.NEXTAUTH_URL}/api/payments/ubudasa`,
+        clientOrderId: payment.id,
+        success_url: `${process.env.NEXTAUTH_URL}/api/payments/ubudasa`,
+      });
+
+      if (!result) {
+        return ['Initiating UBUDASA payment failed! Try again.'];
+      }
+      return [
+        null,
+        {
+          status: '',
+          message: '',
+          data: { link: result },
+        } as WaveLinkResponse,
+      ];
+    } catch (error) {
+      console.log({ ubudasaError: error });
+      return [
+        'Unexpected error. Initiating UBUDASA payment failed! Try again.',
+      ];
+    }
+  }
 
   const waveConfig: FlutterWaveTypes.FlutterwaveConfig = {
     // public_key: process.env.FLW_PUBLIC_KEY as string,

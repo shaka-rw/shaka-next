@@ -32,6 +32,7 @@
     "iron-session": "^6.3.1",
     "next": "13.4.12",
     "next-auth": "^4.22.3",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.4",
     "numeral": "^2.0.6",
     "openid-client": "^5.4.3",

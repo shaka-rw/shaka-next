@@ -82,7 +82,9 @@ export async function editProduct(formData: FormData) {
             where: { size },
           })),
         },
-        prevPrice: data.prevPrice,
+        prevPrice: data.prevPrice
+          ? data.prevPrice + (data.prevPrice * 10) / 100
+          : undefined,
       },
     });
     return [];
@@ -172,6 +174,9 @@ export async function addProduct(formData: FormData) {
       shopId: undefined,
       gender: 'UNISEX',
       shop: { connect: { id: data.shopId } },
+      prevPrice: data.prevPrice
+        ? data.prevPrice + (data.prevPrice * 10) / 100
+        : undefined,
       categories: {
         connect: data.categories.map((id) => ({ id })),
       },

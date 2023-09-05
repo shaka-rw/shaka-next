@@ -82,25 +82,6 @@ const AddToCartForm = ({
       btnContent={<></>}
     >
       <div className="flex flex-col gap-2">
-        {/* {!session?.data?.user ? (
-          <>
-            <div className="flex flex-col gap-2">
-              <div className="alert flex gap-2 items-center alert-info my-2">
-                <MdInfo />
-                {session.status === 'loading' ? (
-                  <span className="loading loading-spinner " />
-                ) : (
-                  'You need to login first. '
-                )}
-              </div>
-              {session.status !== 'loading' && (
-                <Link href={'/api/auth/signin'} className="btn btn-primary">
-                  Login <AiOutlineLogin />
-                </Link>
-              )}
-            </div>
-          </>
-        ) : ( */}
         <>
           <h3 className="font-bold flex items-center gap-2 text-lg mb-2">
             <MdAdd /> Add &quot;{product.name}&quot; to cart

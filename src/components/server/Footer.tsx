@@ -25,7 +25,7 @@ const Footer = () => {
           Address: KN 48 Street, Kigali, Makuza plaza
         </a>
         <a className="link link-hover"> Floor: 3rd floor - Room: F3-13</a>
-        <a className="link link-hover">Call: (+250) 786 265 766</a>
+        <a className="link link-hover">Call: (+250) 793 216 462</a>
         <a className="link link-hover">Email: shaka.encore@gmail.com</a>
       </div>
       <div>

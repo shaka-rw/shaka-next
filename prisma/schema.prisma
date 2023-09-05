@@ -270,15 +270,21 @@ enum PayStatus {
   successful
 }
 
+enum PaymentOption {
+  flutterwave
+  ubudasa
+}
+
 model Payment {
-  id             String    @id @default(uuid())
-  status         PayStatus @default(pending)
+  id             String        @id @default(uuid())
+  status         PayStatus     @default(pending)
   transaction_id String?
   amount         Float
   name           String?
   email          String
   phoneNumber    String?
-  currency       String    @default("RWF")
+  currency       String        @default("RWF")
+  paymentOption  PaymentOption @default(flutterwave)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

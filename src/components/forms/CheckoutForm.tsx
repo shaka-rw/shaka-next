@@ -12,6 +12,7 @@ import { z } from 'zod';
 export const checkoutSchema = z.object({
   name: z.string().trim().nonempty(),
   email: z.string().email(),
+  payOption: z.enum(['flutterwave', 'ubudasa']),
   address: z.string().trim().nonempty(),
   phoneNumber: z
     .string()
@@ -40,6 +41,7 @@ const CheckoutForm = ({
 
   function onSubmit(data: z.infer<typeof checkoutSchema>) {
     const formData = new FormData();
+    console.log({ data });
     formData.append(
       'userData',
       JSON.stringify({ ...data, phoneNumber: `25${data.phoneNumber}` })
@@ -76,10 +78,10 @@ const CheckoutForm = ({
         </label>
         <input
           type="text"
-          defaultValue={session?.data?.user?.name ?? ''}
+          value={session?.data?.user?.name ?? ''}
           className="input input-bordered w-full"
           // disabled={!!session?.data?.user?.name}
-          placeholder="Shop name"
+          placeholder="Your names"
           {...register('name', { value: session?.data?.user?.name ?? '' })}
         />
         {errors.name && (
@@ -95,7 +97,7 @@ const CheckoutForm = ({
           <span className="label-text">Email</span>
         </label>
         <input
-          defaultValue={session?.data?.user?.email ?? ''}
+          value={session?.data?.user?.email ?? ''}
           type="text"
           // disabled={!!session?.data?.user?.email}
           className="input input-bordered w-full"
@@ -146,6 +148,23 @@ const CheckoutForm = ({
           </label>
         )}
       </div>
+
+      <div className="form-control w-full max-w-xs">
+        <label className="label">
+          <span className="label-text">Choose pay option</span>
+        </label>
+        <select className="select select-bordered" {...register('payOption')}>
+          <option value={'flutterwave'}>Flutter Wave</option>
+          <option value={'ubudasa'}>Ubudasa</option>
+        </select>
+      </div>
+      {errors.payOption && (
+        <label className="label">
+          <span className="label-text-alt text-red-500">
+            {errors.payOption.message}
+          </span>
+        </label>
+      )}
 
       <button
         type="submit"
