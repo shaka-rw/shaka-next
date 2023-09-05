@@ -136,7 +136,11 @@ const Discover = async ({
     include: { image: true, subCategories: { include: { image: true } } },
   });
 
-  const category = categories.find((c) => c.id === categoryId);
+  const category = categoryId
+    ? await prisma.category.findUnique({
+        where: { id: categoryId },
+      })
+    : null;
 
   if (categoryId && !category) {
     return notFound();
