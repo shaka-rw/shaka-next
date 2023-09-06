@@ -114,8 +114,8 @@ const AddToCartForm = ({
                           className="radio peer/size hidden radio-primary"
                           {...register('size')}
                         />
-                        <span className="rounded-md text-sm capitalize inline-block peer-checked/size:bg-base-300 peer-checked/size:border-2 border-secondary bg-base-200 p-1">
-                          {sz.size}
+                        <span className="inline-flex btn-circle shadow  justify-center items-center text-lg capitalize peer-checked/size:bg-base-300 peer-checked/size:border-[3px] hover:border-[3px] peer-hover/size:border-[3px] border-0 border-secondary bg-base-200 p-1">
+                          {sz.size.slice(0, 1)}
                         </span>
                       </label>
                       {errors.size && (
@@ -139,7 +139,7 @@ const AddToCartForm = ({
                   .map((color, i) => (
                     <>
                       <label
-                        className="text-lg flex shadow items-center "
+                        className="text-lg flex items-center "
                         htmlFor={color.id + i}
                         key={color.id}
                       >
@@ -150,12 +150,14 @@ const AddToCartForm = ({
                           className="radio hidden peer/color radio-primary"
                           {...register('color')}
                         />
-                        <div className="avatar  peer-checked/color:bg-secondary peer-checked/color:border-2 peer-checked/color:p-[.15rem] w-10 h-10 bg-base-200 rounded overflow-hidden">
-                          <img
-                            src={color.mainImage.secureUrl}
-                            alt="Color image"
-                            className="max-w-full max-h-full object-contain"
-                          />
+                        <div className="avatar inline-flex btn-circle shadow border-secondary justify-center items-center peer-checked/color:border-[3px] hover:border-[3px] peer-hover/color:border-[3px] border-0 bg-base-200 overflow-hidden">
+                          <div className="w-full">
+                            <img
+                              src={color.mainImage.secureUrl}
+                              alt="Color image"
+                              className=""
+                            />
+                          </div>
                         </div>
                       </label>
                       {errors.size && (

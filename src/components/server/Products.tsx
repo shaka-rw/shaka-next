@@ -35,11 +35,11 @@ const Products = ({
           return (
             <div
               key={product.id}
-              className="flex h-[444px] md:hover:scale-105 border border-primary/30 hover:border-secondary hover:z-[1] bg-base-100 transition-all duration-300 group/product border-b shadow-sm overflow-hidden w-full md:w-[250px] flex-col rounded-lg"
+              className="flex md:h-[444px] md:hover:scale-105 border border-primary/30 hover:border-secondary hover:z-[1] bg-base-100 transition-all duration-300 group/product border-b shadow-sm overflow-hidden w-full md:w-[250px] flex-col rounded-lg"
             >
               <Link
                 href={`/products/${product.id}`}
-                className="h-[250px] p-2 border-b border-base-200 flex items-center justify-center relative w-full"
+                className="h-[200px] md:h-[250px] p-2 border-b border-base-200 flex items-center justify-center relative w-full"
               >
                 <Image
                   width={250}
@@ -55,8 +55,8 @@ const Products = ({
                   </a>
                 </span>
               </Link>
-              <div className="flex flex-col flex-1 justify-between gap-2 p-2">
-                <span className="text-primary text-sm uppercase">
+              <div className="flex flex-col flex-1 bg-gradient-to-t from-base-200 to-transparent justify-between gap-2 p-2">
+                <span className="text-secondary text-sm uppercase">
                   {product.categories?.[0]?.name ?? product.shop.category.name}
                 </span>
                 <Link href={`/products/${product.id}`} className=" font-bold">
@@ -79,7 +79,7 @@ const Products = ({
                 </div>
                 <div className="flex items-center">
                   <AddToCartForm
-                    className="btn rounded-3xl mt-1 btn-primary btn-sm btn-outline"
+                    className="btn rounded-3xl mt-1 btn-secondary btn-sm"
                     btnText="Add to cart"
                     product={product}
                   />

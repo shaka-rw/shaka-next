@@ -53,7 +53,9 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
           href={'/discover'}
         >
           <MdExplore className="text-lg" />
-          <span className="btm-nav-label text-xs font-semibold">Discover</span>
+          <span className="btm-nav-label   text-xs font-semibold">
+            Discover
+          </span>
         </Link>
         {user && ['SELLER', 'ADMIN'].includes(user?.role ?? '') && (
           <Link
@@ -100,7 +102,7 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
                 }`}
               >
                 <MdExplore />
-                Discover
+                <span className="hidden lg:inline-block">Discover</span>
               </Link>
             </li>
             {session?.user && session?.user?.role !== 'CUSTOMER' && (
@@ -118,12 +120,12 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
                   }`}
                 >
                   <MdDashboard />
-                  Dashboard
+                  <span className="hidden lg:inline-block">Dashboard</span>
                 </Link>
               </li>
             )}
           </ul>
-          <Link href={'/'} className="hidden md:inline-block flex-none">
+          <Link href={'/'} className="hidden lg:inline-block flex-none">
             <span className=" z">
               <Image
                 alt={'Shaka'}
@@ -187,7 +189,7 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
                   <li className="dropdown dropdown-bottom dropdown-end">
                     <label
                       tabIndex={0}
-                      className={`btn btn-outline py-1 rounded-3xl text-sm ${
+                      className={`btn btn-outline flex-nowrap py-1 rounded-3xl text-sm ${
                         isNotHome
                           ? '  '
                           : ' items-center border-base-100 text-base-100 hover:bg-base-100/20 '

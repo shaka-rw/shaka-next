@@ -1,83 +1,80 @@
 /* eslint-disable @next/next/no-img-element */
 import Navbar from '@/components/server/Navbar';
 import { NewDynamicProductList } from '@/components/server/NewProductList';
+import Products from '@/components/server/Products';
 import prisma from '@/prisma';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
+import { BsArrowUpCircleFill } from 'react-icons/bs';
 import { FaFan } from 'react-icons/fa';
-import { MdCategory, MdPerson } from 'react-icons/md';
+import { MdCategory, MdPerson, MdStar } from 'react-icons/md';
 
-const ShopProfile = ({
-  name,
-  description,
-  followersCount,
-  owner,
-  category,
-  image,
-}: {
+type StoreProfileData = {
   name: string;
-  description: string;
-  followersCount: number;
   owner: string;
-  category: string;
   image: string;
-}) => {
+  followers: number;
+  products: number;
+  rating: number;
+};
+
+const ShopProfile = ({ storeInfo }: { storeInfo: StoreProfileData }) => {
+  // Store and owner information
+
   return (
-    <div className="bg-base-100">
-      {/* <div className="bg-base-200 shadow-md">
-        <img
-          src={image}
-          alt={`Shop ${name}`}
-          className="w-full h-64 blur-md object-cover"
-        />
-    </div> */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex gap-2 flex-wrap justify-center md:justify-normal mb-4">
-          <div className="avatar p-1 md:pr-2 ">
-            <div className="w-48 h-48">
-              <Image src={image} height={192} width={192} className="mask-squircle" alt={`Shop ${name}`} />
-            </div>
-          </div>
-          <div className="flex md:pl-3 items-center md:items-start md:border-l flex-col gap-1">
-            <h1 className="text-3xl font-semibold mb-2">{name}</h1>
-            <p className="text-gray-600 mb-4">{description}</p>
-            <ul className="menu min-w-max h-full">
-              <li className="">
-                <a>
-                  <MdPerson />{' '}
-                  <span className="font-bold underline text-primary">
-                    Owner:
-                  </span>{' '}
-                  {owner}
-                </a>
-              </li>
-              <li className="">
-                <a>
-                  <MdCategory />{' '}
-                  <span className="font-bold underline text-primary">
-                    Category:
-                  </span>{' '}
-                  {category}
-                </a>
-              </li>
-              <li className="">
-                <a>
-                  <FaFan />{' '}
-                  <span className="font-bold underline text-primary">
-                    Followers:
-                  </span>{' '}
-                  {followersCount}
-                </a>
-              </li>
-              <div className="divider" />{' '}
-              <button className="btn items-center justify-center w-fit btn-secondary">
-                Follow Shop <AiOutlineUsergroupAdd />{' '}
-              </button>
-            </ul>
+    <div className="grid p-3 mx-auto my-4 rounded-3xl bg-base-300 justify-items-stretch md:grid-cols-[auto,1fr] gap-4">
+      <div className="p-2 md:p-4 flex w-full justify-center items-center flex-col ">
+        <div className="avatar">
+          <div className="w-40 md:w-48 rounded-full">
+            <Image
+              height={150}
+              width={150}
+              src={storeInfo.image}
+              alt="Flower"
+            />
           </div>
         </div>
+      </div>
+      <div className="flex md:items-start md:justify-self-start w-full  justify-center  flex-col px-2 py-4 gap-4">
+        <div className="flex">
+          <h3 className="text-2xl text-center w-full md:text-start font-bold">
+            {storeInfo.name}
+          </h3>
+        </div>
+        <div className="stats w-full stats-vertical md:stats-horizontal">
+          <div className="stat">
+            <div className="stat-title">Followers</div>
+            <div className="stat-value">{storeInfo.products}</div>
+            <div className="stat-actions">
+              <button className="btn btn-sm btn-success">Follow</button>
+            </div>
+          </div>
+
+          <div className="stat justify-between gap-2 inline-flex flex-col">
+            <div className="stat-title">Pruducts</div>
+            <div className="stat-value gap-1 flex-1 inline-flex items-center">
+              <BsArrowUpCircleFill className="text-xl" /> {storeInfo.products}
+            </div>
+            {/* <div className="stat-actions">
+              <button className="btn btn-sm">Withdrawal</button>
+              <button className="btn btn-sm">deposit</button>
+            </div> */}
+          </div>
+          <div className="stat inline-flex gap-2 flex-col justify-between">
+            <div className="stat-title">Rating</div>
+
+            <div className="stat-value flex-1 inline-flex items-center">
+              <MdStar className="text-yellow-500 text-2xl" />
+              {storeInfo.rating.toFixed(1)}
+            </div>
+          </div>
+        </div>
+        <h3 className="text-2xl ml-2">
+          By:{' '}
+          <span className="font-bold link link-hover">{storeInfo.owner}</span>
+        </h3>
       </div>
     </div>
   );
@@ -91,7 +88,23 @@ const ShopProfilePage = async ({
   const shop = await prisma.shop.findUnique({
     where: { id: shopId },
     include: {
-      _count: { select: { followers: true } },
+      _count: {
+        select: {
+          followers: true,
+          products: {
+            where: {
+              AND: {
+                quantities: {
+                  some: {
+                    quantity: { gt: 0 },
+                  },
+                },
+                available: true,
+              },
+            },
+          },
+        },
+      },
       image: true,
       owner: true,
       category: true,
@@ -109,7 +122,7 @@ const ShopProfilePage = async ({
         include: {
           mainImage: true,
           colors: { include: { mainImage: true, images: true } },
-          shop: { include: { image: true } },
+          shop: { include: { image: true, owner: true, category: true } },
           categories: true,
           quantities: {
             include: { color: { include: { mainImage: true } }, size: true },
@@ -125,16 +138,20 @@ const ShopProfilePage = async ({
   return (
     <div>
       <Navbar />
-      <ShopProfile
-        name={shop.name}
-        followersCount={shop._count.followers}
-        description={shop.about}
-        category={shop.category.name}
-        image={shop.image.secureUrl}
-        owner={shop.owner.name ?? shop.name}
-      />
-      <div className="divider">PRODUCTS</div>
-      <NewDynamicProductList products={shop.products} />
+      <div className="container mx-auto p-2 md:p-1">
+        <ShopProfile
+          storeInfo={{
+            name: shop.name,
+            owner: shop.owner.name ?? 'Unknown',
+            image: shop.image.secureUrl,
+            followers: shop._count.followers,
+            products: shop._count.products,
+            rating: Number((Math.random() * 4.5).toFixed(1)),
+          }}
+        />
+        <div className="divider">PRODUCTS</div>
+        <Products products={shop.products} />
+      </div>
     </div>
   );
 };
