@@ -83,7 +83,14 @@ const Discover = async ({
                   }
                 : {}),
               ...(categoryId !== undefined && categoryId !== null
-                ? { categories: { some: { id: categoryId } } }
+                ? {
+                    OR: [
+                      {
+                        categories: { some: { id: categoryId } },
+                        shop: { categoryId },
+                      },
+                    ],
+                  }
                 : {}),
               // categories: { some: { id: catId || undefined } },
             },
