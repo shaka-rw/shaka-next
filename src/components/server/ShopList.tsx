@@ -30,16 +30,19 @@ const ShopList = ({
         <Simplebar>
           <div className="grid max-w-full rounded-sm p-1 grid-rows-2 grid-flow-col gap-3">
             {shops.map((shop) => (
-              <Link
-                href={`/shops/${shop.id}`}
+              <div
                 key={shop.id}
-                className="grid w-[300px] border border-transparent hover:border-primary cursor-pointer p-3 rounded-lg bg-base-200/50 items-center  gap-2 grid-cols-[auto,1fr,auto]"
+                className="grid w-fit border border-transparent hover:border-primary cursor-pointer p-3 rounded-lg bg-base-200/50 items-center  gap-2 grid-cols-[auto,1fr,auto]"
               >
-                <img
-                  src={shop.image.secureUrl}
-                  className="w-10 h-10 object-cover rounded-full"
-                  alt={shop.name}
-                />
+                <Link className="avatar" href={`/shops/${shop.id}`}>
+                  <div className="w-10 rounded-full">
+                    <img
+                      src={shop.image.secureUrl}
+                      className="w-10 h-10 object-cover rounded-full"
+                      alt={shop.name}
+                    />
+                  </div>
+                </Link>
                 <span className="flex gap-1 flex-col">
                   <span className="text-sm font-semibold">{shop.name}</span>
                   <span className="text-xs h-4 w-full flex overflow-hidden text-base-content">
@@ -64,7 +67,7 @@ const ShopList = ({
                     </form>
                   </div>
                 )}
-              </Link>
+              </div>
             ))}
           </div>
         </Simplebar>

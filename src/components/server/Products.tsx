@@ -39,14 +39,14 @@ const Products = ({
             >
               <Link
                 href={`/products/${product.id}`}
-                className="h-[250px] bg-base-200 flex items-center justify-center relative w-full"
+                className="h-[200px] p-2 border-b border-base-200 flex items-center justify-center relative w-full"
               >
                 <Image
                   width={250}
                   height={250}
                   src={product.mainImage.secureUrl}
                   alt={product.name}
-                  className="w-full min-w-full h-full object-center appearance-none object-contain"
+                  className="w-full min-w-full h-full object-center rounded appearance-none object-contain"
                 />
                 <span className="absolute text-base-100 transition-opacity duration-300 opacity-0 group-hover/product:opacity-100 flex justify-end  w-full inset-0 bottom-auto h-[50px] bg-gradient-to-b from-base-content/50 to-transparent">
                   <a className="group/a cursor-pointer btn-square justify-center items-center inline-flex font-extrabold text-xl">
