@@ -32,7 +32,7 @@ const ShopList = ({
             {shops.map((shop) => (
               <div
                 key={shop.id}
-                className="grid w-fit border border-transparent hover:border-primary cursor-pointer p-3 rounded-lg bg-base-200/50 items-center  gap-2 grid-cols-[auto,1fr,auto]"
+                className="grid min-w-[350px] w-fit border border-transparent hover:border-primary cursor-pointer p-3 rounded-lg bg-base-200/50 items-center  gap-2 grid-cols-[auto,1fr,auto]"
               >
                 <Link className="avatar" href={`/shops/${shop.id}`}>
                   <div className="w-10 rounded-full">
@@ -57,7 +57,7 @@ const ShopList = ({
                       <input type="hidden" name="shopId" value={shop.id} />
                       <button
                         type="submit"
-                        className={`btn btn-sm ${
+                        className={`btn flex-nowrap btn-sm ${
                           !shop.approved ? ' btn-primary ' : ' btn-error '
                         }`}
                       >
@@ -72,48 +72,6 @@ const ShopList = ({
           </div>
         </Simplebar>
       </div>
-
-      {/* <HorizontalScroll className="bg-transparent md:p-2 rounded">
-        <div className="flex justify-center items-center gap-2 p-2">
-          {shops.map((shop) => (
-            <div
-              key={shop.id}
-              className="card flex items-center px-3 border card-side bg-base-100"
-            >
-              <figure className="w-10 flex justify-center items-center h-10">
-                <div className="avatar overflow-hidden rounded-full h-10 w-10 border">
-                  <img
-                    src={shop.image.secureUrl}
-                    alt={shop.name}
-                    className="w-full object-contain h-full"
-                  />
-                </div>
-              </figure>
-              <div className="card-body p-2">
-                <h2 className="card-title">{shop.name}</h2>
-                {user?.role === 'ADMIN' && (
-                  <div className="card-actions justify-end">
-                    <form
-                      action={!shop.approved ? approveShop : disApproveShop}
-                    >
-                      <input type="hidden" name="shopId" value={shop.id} />
-                      <button
-                        type="submit"
-                        className={`btn btn-sm ${
-                          !shop.approved ? ' btn-primary ' : ' btn-error '
-                        }`}
-                      >
-                        {!shop.approved ? <MdCheck /> : <MdClose />}
-                        {!shop.approved ? 'Approve' : 'Dis-Approve'}
-                      </button>
-                    </form>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </HorizontalScroll> */}
     </>
   );
 };

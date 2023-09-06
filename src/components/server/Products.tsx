@@ -39,7 +39,7 @@ const Products = ({
             >
               <Link
                 href={`/products/${product.id}`}
-                className="h-[200px] p-2 border-b border-base-200 flex items-center justify-center relative w-full"
+                className="h-[250px] p-2 border-b border-base-200 flex items-center justify-center relative w-full"
               >
                 <Image
                   width={250}
