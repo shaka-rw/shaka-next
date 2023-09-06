@@ -114,8 +114,8 @@ const AddToCartForm = ({
                           className="radio peer/size hidden radio-primary"
                           {...register('size')}
                         />
-                        <span className="inline-flex btn-circle shadow  justify-center items-center text-lg capitalize peer-checked/size:bg-base-300 peer-checked/size:border-[3px] hover:border-[3px] peer-hover/size:border-[3px] border-0 border-secondary bg-base-200 p-1">
-                          {sz.size.slice(0, 1)}
+                        <span className="inline-flex uppercase btn-circle rounded-3xl shadow  justify-center items-center text-lg peer-checked/size:bg-base-300 peer-checked/size:border-[3px] hover:border-[3px] peer-hover/size:border-[3px] border-0 border-secondary bg-base-200 p-1">
+                          {sz.size}
                         </span>
                       </label>
                       {errors.size && (
