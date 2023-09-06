@@ -34,6 +34,10 @@ const CheckoutForm = ({
     handleSubmit,
     formState: { errors },
   } = useForm<z.infer<typeof checkoutSchema>>({
+    defaultValues: {
+      name: session?.data?.user?.name ?? '',
+      email: session?.data?.user?.email ?? '',
+    },
     resolver: zodResolver(checkoutSchema),
   });
 
@@ -77,7 +81,7 @@ const CheckoutForm = ({
         </label>
         <input
           type="text"
-          value={session?.data?.user?.name ?? ''}
+          defaultValue={session?.data?.user?.name ?? ''}
           className="input input-bordered w-full"
           // disabled={!!session?.data?.user?.name}
           placeholder="Your names"
@@ -96,7 +100,7 @@ const CheckoutForm = ({
           <span className="label-text">Email</span>
         </label>
         <input
-          value={session?.data?.user?.email ?? ''}
+          defaultValue={session?.data?.user?.email ?? ''}
           type="text"
           // disabled={!!session?.data?.user?.email}
           className="input input-bordered w-full"
@@ -165,15 +169,17 @@ const CheckoutForm = ({
         </label>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="btn btn-primary w-fit"
-      >
-        <MdShoppingCartCheckout /> Checkout{' '}
-        <span className="font-mono font-bold ">({cartTotal + 2000}RWF)</span>
-        {isPending && <span className="loading loading-spinner loading-sm" />}
-      </button>
+      <div className="col-span-2 w-full">
+        <button
+          type="submit"
+          disabled={isPending}
+          className="btn btn-primary w-fit"
+        >
+          <MdShoppingCartCheckout /> Checkout{' '}
+          <span className="font-mono font-bold ">({cartTotal + 2000}RWF)</span>
+          {isPending && <span className="loading loading-spinner loading-sm" />}
+        </button>
+      </div>
     </form>
   );
 };
