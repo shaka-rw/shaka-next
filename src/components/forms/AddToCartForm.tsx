@@ -176,11 +176,15 @@ const AddToCartForm = ({
                 </label>
                 <input
                   type="number"
-                  max={values.quantity ?? Infinity}
                   placeholder="Quantity"
                   className="input input-bordered w-full max-w-xs"
                   {...register(`quantity`, {
                     valueAsNumber: true,
+                    min: { message: 'Quantity must be positive', value: 1 },
+                    max: {
+                      message: 'Not enough stock',
+                      value: qty?.quantity ?? 0,
+                    },
                   })}
                 />
                 {errors.quantity && (
