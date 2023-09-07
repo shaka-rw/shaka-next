@@ -188,7 +188,7 @@ export async function createPayment(formData: FormData) {
     customizations: {
       title: 'Shaka E-commerce',
       description: 'Purchase on Shaka E-commerce',
-      logo: 'https://www.shaka.rw/logo_.png',
+      logo: 'https://shaka.rw/logo_.png',
     },
   } as any;
 
