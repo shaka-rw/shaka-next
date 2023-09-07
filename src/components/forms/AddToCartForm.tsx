@@ -114,7 +114,7 @@ const AddToCartForm = ({
                           className="radio peer/size hidden radio-primary"
                           {...register('size')}
                         />
-                        <span className="inline-flex uppercase h-12 w-fit px-2 rounded-3xl shadow  justify-center items-center text-lg peer-checked/size:bg-base-300 peer-checked/size:border-[3px] hover:border-[3px] peer-hover/size:border-[3px] border-0 border-secondary bg-base-200 p-1">
+                        <span className="inline-flex cursor-pointer uppercase h-10 w-fit px-2 rounded-3xl shadow  justify-center items-center text-sm peer-checked/size:bg-base-300 peer-checked/size:border-[3px] hover:border-[3px] peer-hover/size:border-[3px] border-0 border-secondary bg-base-200 p-1">
                           {sz.size}
                         </span>
                       </label>
@@ -150,7 +150,7 @@ const AddToCartForm = ({
                           className="radio hidden peer/color radio-primary"
                           {...register('color')}
                         />
-                        <div className="avatar inline-flex btn-circle shadow border-secondary justify-center items-center peer-checked/color:border-[3px] hover:border-[3px] peer-hover/color:border-[3px] border-0 bg-base-200 overflow-hidden">
+                        <div className="avatar cursor-pointer inline-flex btn-circle shadow border-secondary justify-center items-center peer-checked/color:border-[3px] hover:border-[3px] peer-hover/color:border-[3px] border-0 bg-base-200 overflow-hidden">
                           <div className="w-full">
                             <img
                               src={color.mainImage.secureUrl}
@@ -176,11 +176,15 @@ const AddToCartForm = ({
                 </label>
                 <input
                   type="number"
-                  max={values.quantity ?? Infinity}
                   placeholder="Quantity"
                   className="input input-bordered w-full max-w-xs"
                   {...register(`quantity`, {
                     valueAsNumber: true,
+                    min: { message: 'Quantity must be positive', value: 1 },
+                    max: {
+                      message: 'Not enough stock',
+                      value: qty?.quantity ?? 0,
+                    },
                   })}
                 />
                 {errors.quantity && (
