@@ -36,10 +36,12 @@ const SingleOrderCard = async ({ order }: { order: FullOrder }) => {
     | 'SELLER'
     | 'CUSTOMER'
     | undefined;
+  const userId = session?.user?.id as string | undefined;
 
   const orderData = {
     customer: {
       name: order.customer?.name ?? 'Anonymous',
+      id: order.customer?.id,
     },
     items: order.quantities.map((quantity) => ({
       id: quantity.id,
@@ -197,7 +199,7 @@ const SingleOrderCard = async ({ order }: { order: FullOrder }) => {
         ) : (
           <></>
         )}
-        {role === 'CUSTOMER' && orderData.status === 'DELIVERY' ? (
+        {userId === orderData.customer.id && orderData.status === 'DELIVERY' ? (
           <form action={completeDelivery}>
             <input type="hidden" name="orderId" value={order.id} />
             <button
