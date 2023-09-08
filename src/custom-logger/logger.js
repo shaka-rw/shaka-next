@@ -1,5 +1,5 @@
 const axios = require('axios');
-const pkg = require('../package.json');
+const pkgJson = require('../package.json');
 const { createLogger, format, transports } = require('winston');
 const { combine, timestamp, colorize, errors, printf, json } = format;
 
@@ -9,10 +9,10 @@ function logger(name, _rave) {
     {
       publicKey: _rave.getPublicKey(),
       language: 'NodeJs v3',
-      version: pkg.version,
+      version: pkgJson.version,
       title: 'Incoming call',
       message: name,
-    },
+    }
   );
 }
 
@@ -24,7 +24,7 @@ const errorLogger = createLogger({
           stack: true,
         }),
         timestamp(),
-        json(),
+        json()
       ),
     }),
   ],
