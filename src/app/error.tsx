@@ -11,6 +11,8 @@ const Error = ({
   reset: () => void;
   error: { message: string; reset: () => void; digest: string };
 }) => {
+  console.error({ error });
+
   return (
     <div
       style={{
