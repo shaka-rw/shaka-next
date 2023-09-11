@@ -1,20 +1,51 @@
 /* eslint-disable @next/next/no-img-element */
-import { Asset, Category, Shop } from '@prisma/client';
-import { User } from 'next-auth';
+import { DiscoverSearchParams } from '@/app/discover/page';
+import prisma from '@/prisma';
 import Link from 'next/link';
 import React from 'react';
 import { FaFan } from 'react-icons/fa';
 import { FaArrowRight } from 'react-icons/fa6';
 import { MdEmojiObjects } from 'react-icons/md';
 
-export type ShopWithData = Shop & {
-  image: Asset;
-  owner: User;
-  _count: { followers: number };
-  category: Category;
-};
+const NewShopList = async ({
+  searchParams,
+}: {
+  searchParams: DiscoverSearchParams;
+}) => {
+  const {
+    q: search,
+    st: searchType = 'products',
+    cat: categoryId,
+  } = searchParams;
 
-const NewShopList = ({ shops }: { shops: ShopWithData[] }) => {
+  const shops =
+    searchType !== 'shops'
+      ? []
+      : await prisma.shop.findMany({
+          where: {
+            approved: true,
+            ...(search
+              ? {
+                  OR: [
+                    { name: { contains: search, mode: 'insensitive' } },
+                    {
+                      about: { contains: search, mode: 'insensitive' },
+                    },
+                  ],
+                }
+              : {}),
+            ...(categoryId !== undefined && categoryId !== null
+              ? { categoryId }
+              : {}),
+          },
+          include: {
+            _count: { select: { followers: true } },
+            image: true,
+            owner: true,
+            category: true,
+          },
+        });
+
   return (
     <div className="flex flex-wrap w-full ">
       {shops.length === 0 && (

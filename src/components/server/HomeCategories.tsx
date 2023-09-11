@@ -1,18 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import Simplebar from '../client/SimpleBar';
-import { Asset, Category } from '@prisma/client';
 import Image from 'next/image';
+import prisma from '@/prisma';
 
-const HomeCategories = ({
-  categories,
-}: {
-  categories: Array<Category & { image: Asset }>;
-}) => {
+const HomeCategories = async () => {
+  const categories = await prisma.category.findMany({
+    take: 10,
+    where: { parent: null },
+    include: { image: true },
+  });
+
   return (
     <>
       <div className="flex flex-col  my-8 container mx-auto px-2 md:px-0 gap-3">
-        <div className="text-2xl md:text-3xl font-bold">Our Top Categories</div>
+        <div className="text-2xl font-bold">Our Top Categories</div>
         <Simplebar className="max-w-full">
           <div className="w-full">
             <div className="flex w-full flex-col">
@@ -20,7 +22,7 @@ const HomeCategories = ({
                 {categories.map((cat) => (
                   <Link
                     href={`/discover?cat=${cat.id}`}
-                    className={`relative group/cat overflow-hidden rounded-md flex-none h-[200px] w-[160px!important]`}
+                    className={`relative group/cat overflow-hidden rounded-md flex-none h-[200px!important] w-[160px!important]`}
                     key={cat.id}
                   >
                     <Image

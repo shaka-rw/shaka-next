@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Simplebar from '../client/SimpleBar';
 
-const DashboardCategories = ({
+const CategoryBar = ({
   categories,
   catId,
 }: {
@@ -50,4 +50,4 @@ const DashboardCategories = ({
   );
 };
 
-export default DashboardCategories;
+export default CategoryBar;
