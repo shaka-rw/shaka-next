@@ -10,6 +10,7 @@ import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { addProduct } from '@/app/_actions';
 import { toast } from 'react-hot-toast';
+import { closeModal } from '../client/ClientModal';
 
 const colorImageSchema = z.object({
   color: z.any(),
@@ -65,6 +66,7 @@ const AddProductForm = ({
     defaultValues: { shopId },
   });
 
+  const modalId = 'add-product-modal';
   const [isPending, startTransition] = useTransition();
   const { fields, append, remove } = useFieldArray({ control, name: 'colors' });
 
@@ -122,7 +124,18 @@ const AddProductForm = ({
 
     formData.append('product_data', JSON.stringify(data));
 
-    return startTransition(() => addProduct(formData));
+    return startTransition(async () => {
+      const result = await addProduct(formData);
+      if (Array.isArray(result)) {
+        const error = result[0];
+        if (error) {
+          toast.error(error);
+        } else {
+          toast.success('Product added successfully!');
+          closeModal(modalId);
+        }
+      }
+    });
   };
 
   const [sizesOptions, setSizeOptions] = useState([
@@ -138,6 +151,7 @@ const AddProductForm = ({
 
   return (
     <Modal
+      modalId={modalId}
       btn={
         <button className="btn btn-primary">
           <MdAdd /> Add new product

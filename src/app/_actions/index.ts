@@ -90,7 +90,7 @@ export async function editProduct(formData: FormData) {
     return [];
   } catch (error) {
     console.log({ error });
-    return ['Something went wrong!'];
+    return ['Editing product failed! Please try again.'];
   }
 
   revalidatePath(await getPath());
@@ -156,68 +156,79 @@ export async function addProduct(formData: FormData) {
     });
   };
 
-  const mainImage = await uploadAssetImage(
-    mainImageFile,
-    AssetFolder.ProductImages
-  );
+  let mainImage: Awaited<ReturnType<typeof uploadAssetImage>>;
 
-  const uploaded = await uploadAllColorAssets();
+  try {
+    mainImage = await uploadAssetImage(
+      mainImageFile,
+      AssetFolder.ProductImages
+    );
+  } catch (error) {
+    console.error('UPLOAD ERROR:', error);
+    return ['Uploading main image failed!'];
+  }
+  let uploaded: Awaited<ReturnType<typeof uploadAllColorAssets>>;
 
+  try {
+    uploaded = await uploadAllColorAssets();
+  } catch (error) {
+    console.error('UPLOAD ERROR:', error);
+    return ['Uploading color images failed!'];
+  }
   // const files = formData.getAll('images') as unknown as File[];
 
   const data = JSON.parse(jsonData) as z.infer<typeof productSchema>;
 
-  const product = await prisma.product.create({
-    data: {
-      ...data,
-      shopId: undefined,
-      gender: 'UNISEX',
-      shop: { connect: { id: data.shopId } },
-      prevPrice: data.prevPrice
-        ? data.prevPrice + (data.prevPrice * 10) / 100
-        : undefined,
-      categories: {
-        connect: data.categories.map((id) => ({ id })),
-      },
-      sizes: {
-        connectOrCreate: data.sizes.map((size) => ({
-          create: { size },
-          where: { size },
-        })),
-      },
-      mainImage: {
-        create: {
-          secureUrl: mainImage.secure_url,
-          url: mainImage.url,
-          assetId: mainImage.public_id,
+  try {
+    const product = await prisma.product.create({
+      data: {
+        ...data,
+        shopId: undefined,
+        gender: 'UNISEX',
+        shop: { connect: { id: data.shopId } },
+        prevPrice: data.prevPrice
+          ? data.prevPrice + (data.prevPrice * 10) / 100
+          : undefined,
+        categories: {
+          connect: data.categories.map((id) => ({ id })),
+        },
+        sizes: {
+          connectOrCreate: data.sizes.map((size) => ({
+            create: { size },
+            where: { size },
+          })),
+        },
+        mainImage: {
+          create: {
+            secureUrl: mainImage.secure_url,
+            url: mainImage.url,
+            assetId: mainImage.public_id,
+          },
+        },
+        colors: {
+          create: uploaded.map(({ color, images }) => ({
+            mainImage: {
+              create: {
+                secureUrl: color.secure_url,
+                url: color.url,
+                assetId: color.public_id,
+              },
+            },
+            images: {
+              create: images.map((img) => ({
+                secureUrl: img.secure_url,
+                url: img.url,
+                assetId: img.public_id,
+              })),
+            },
+          })),
         },
       },
-      colors: {
-        create: uploaded.map(({ color, images }) => ({
-          mainImage: {
-            create: {
-              secureUrl: color.secure_url,
-              url: color.url,
-              assetId: color.public_id,
-            },
-          },
-          images: {
-            create: images.map((img) => ({
-              secureUrl: img.secure_url,
-              url: img.url,
-              assetId: img.public_id,
-            })),
-          },
-        })),
-      },
-    },
-  });
-
-  // await uploadProductImages({
-  //   productId: product.id,
-  //   initFiles: files,
-  //   mainIndex: 0,
-  // });
+    });
+  } catch (error) {
+    console.error('Product Create ERROR:', error);
+    return ['Creating product failed! Please try again.'];
+  }
   revalidatePath(await getPath());
 }
 
@@ -338,10 +349,13 @@ export async function uploadAssetImage(file: File, assetFolder: AssetFolder) {
     await cleanUpLocalPaths(localPaths);
     return response;
   } catch (error) {
+    console.error('UPLOAD ERROR:', error);
     await cleanUpLocalPaths(localPaths);
   }
 
-  throw new Error();
+  throw new Error(
+    `UPLOAD ERROR: Couldn't upload image! ${assetFolder}/${file.name}, size:${file.size}`
+  );
 }
 
 export async function removeItemFromCart(formData: FormData) {
