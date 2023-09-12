@@ -11,6 +11,7 @@ import {
   cleanUpLocalPaths,
   configCloudinary,
   uploadLocal,
+  uploadStreamToCloudinary,
   uploadToCloudinary,
 } from '../helpers/upload';
 import { multiVariationSchema } from '@/components/forms/AddVariationsForm';
@@ -343,14 +344,16 @@ export async function uploadAssetAndSave(file: File, assetFolder: AssetFolder) {
 
 export async function uploadAssetImage(file: File, assetFolder: AssetFolder) {
   configCloudinary();
-  const localPaths = await uploadLocal([file]);
+  // const localPaths = await uploadLocal([file]);
   try {
-    const response = await uploadToCloudinary(localPaths[0], assetFolder);
-    await cleanUpLocalPaths(localPaths);
-    return response;
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const result = await uploadStreamToCloudinary(buffer, assetFolder);
+    // const response = await uploadToCloudinary(localPaths[0], assetFolder);
+    // await cleanUpLocalPaths(localPaths);
+    return result;
   } catch (error) {
     console.error('UPLOAD ERROR:', error);
-    await cleanUpLocalPaths(localPaths);
+    // await cleanUpLocalPaths(localPaths);
   }
 
   throw new Error(

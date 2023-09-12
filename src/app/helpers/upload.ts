@@ -2,6 +2,7 @@ import { existsSync } from 'fs';
 import { mkdir, unlink, writeFile } from 'fs/promises';
 import path from 'path';
 import cloudinary from 'cloudinary';
+import streamifier from 'streamifier';
 
 export const uploadLocal = async (lFiles: File[]) => {
   const result = lFiles.map(async (f) => {
@@ -22,6 +23,22 @@ export const uploadLocal = async (lFiles: File[]) => {
 export const uploadToCloudinary = (localPath: string, remoteFolder: string) => {
   return cloudinary.v2.uploader.upload(localPath, {
     folder: remoteFolder,
+  });
+};
+
+export const uploadStreamToCloudinary = (
+  buffer: Buffer,
+  remoteFolder: string
+): Promise<cloudinary.UploadApiResponse> => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.v2.uploader.upload_stream(
+      { folder: remoteFolder },
+      (err, res) => {
+        if (err) reject(err);
+        else resolve(res as cloudinary.UploadApiResponse);
+      }
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
   });
 };
 
