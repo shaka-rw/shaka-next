@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import React from 'react';
 import AddShopForm from '../forms/AddShopForm';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';

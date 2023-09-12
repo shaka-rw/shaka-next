@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { removeItemFromCart } from '@/app/_actions';
 import { Cart, QuantitiesOnCart } from '@prisma/client';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import React from 'react';
 import { MdHourglassEmpty } from 'react-icons/md';
 

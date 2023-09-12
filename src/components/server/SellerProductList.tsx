@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Product, Asset } from '@prisma/client';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import React, { ReactNode } from 'react';
 import { MdFavorite, MdAddShoppingCart, MdAddBox } from 'react-icons/md';
 import AddVariationsForm, { VariationProduct } from '../forms/AddVariationsForm';

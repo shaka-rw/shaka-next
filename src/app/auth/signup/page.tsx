@@ -11,7 +11,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import Image from 'next/image';
 
 const signupSchema = z

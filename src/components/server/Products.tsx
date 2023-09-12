@@ -3,7 +3,7 @@ import { MdFavoriteBorder, MdFavorite, MdEmojiObjects } from 'react-icons/md';
 import { VariationProduct } from '../forms/AddVariationsForm';
 import { Category, Shop } from '@prisma/client';
 import AddToCartForm from '../forms/AddToCartForm';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import Image from 'next/image';
 
 const Products = ({

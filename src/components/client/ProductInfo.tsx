@@ -8,7 +8,7 @@ import { MdFavorite } from 'react-icons/md';
 import { VariationProduct } from '../forms/AddVariationsForm';
 import { Asset, Category, ProductColor, Shop } from '@prisma/client';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import AddToCartForm from '../forms/AddToCartForm';
 
 const ProductInfo = ({

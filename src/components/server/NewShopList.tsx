@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { DiscoverSearchParams } from '@/app/discover/page';
 import prisma from '@/prisma';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import React from 'react';
 import { FaFan } from 'react-icons/fa';
 import { FaArrowRight } from 'react-icons/fa6';

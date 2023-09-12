@@ -7,7 +7,7 @@ import { checkout, getCartId } from '@/app/_actions/orders';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Navbar from '@/components/server/Navbar';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import { MdCheckCircleOutline, MdError, MdHome } from 'react-icons/md';
 import { cookies } from 'next/headers';
 

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import Simplebar from '../client/SimpleBar';
 import Image from 'next/image';
 import prisma from '@/prisma';

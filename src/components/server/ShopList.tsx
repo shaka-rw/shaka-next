@@ -2,7 +2,7 @@
 import { Asset, Category, Shop, User } from '@prisma/client';
 import React from 'react';
 import { MdCheck, MdClose, MdEmojiObjects } from 'react-icons/md';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import Simplebar from '../client/SimpleBar';
 import { approveShop, disApproveShop } from '@/app/_actions';
 

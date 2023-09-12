@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import React from 'react';
 
 export type SideBarItem = {

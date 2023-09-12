@@ -10,7 +10,7 @@ import { UserRole } from '@prisma/client';
 import prisma from '@/prisma';
 import { removeItemFromCart } from '@/app/_actions';
 import { twMerge } from 'tailwind-merge';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import { getCartId } from '@/app/_actions/orders';
 import PlantAnonymousCookie from '../client/PlantAnonymousCookie';
 

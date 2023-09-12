@@ -9,7 +9,7 @@ import {
 } from 'react-icons/ai';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';

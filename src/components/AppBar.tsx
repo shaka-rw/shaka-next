@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import Image from 'next/image';
 import React from 'react';
 import {

@@ -2,7 +2,7 @@
 'use client';
 import React from 'react';
 import { CategoryWithSubs } from '../CategoryList';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import { useSearchParams } from 'next/navigation';
 import Simplebar from '../client/SimpleBar';
 

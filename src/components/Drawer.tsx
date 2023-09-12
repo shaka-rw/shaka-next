@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
-import Link from 'next/link';
+import Link from '@/components/server/Link';
 import React from 'react';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import {
