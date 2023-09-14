@@ -68,20 +68,17 @@ export async function editProduct(formData: FormData) {
     typeof editProductSchema
   >;
   try {
-    const updatedProduct = await prisma.product.update({
+    await prisma.product.update({
       where: { id: data.productId },
       data: {
-        gender: 'UNISEX',
+        gender: data.gender,
         available: data.available,
         description: data.description,
         categories: {
-          connect: data.categories.map((id) => ({ id })),
+          set: data.categories.map((id) => ({ id })),
         },
         sizes: {
-          connectOrCreate: data.sizes.map((size) => ({
-            create: { size },
-            where: { size },
-          })),
+          set: data.sizes.map((size) => ({ size })),
         },
         prevPrice: data.prevPrice
           ? data.prevPrice + (data.prevPrice * 10) / 100

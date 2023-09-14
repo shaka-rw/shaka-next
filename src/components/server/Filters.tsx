@@ -68,15 +68,21 @@ const Filters = ({ catId = '' }: { catId?: string }) => {
               </span>
               <input
                 placeholder="Search"
+                type="text"
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter' && e.currentTarget?.value?.trim()) {
+                    handleSubmit(onSubmit)();
+                  }
+                }}
                 className="pl-10 input input-sm input-bordered focus:ring-0 hover:ring-0 hover:outline-none outline-none rounded-3xl "
                 {...register('search')}
               />
             </div>
           </div>
           <div className="flex items-center p-1 rounded-3xl px-2 border gap-3">
-            <button className="btn btn-sm text-xs capitalize btn-outline border-0 rounded-3xl">
+            {/* <button className="btn btn-sm text-xs capitalize btn-outline border-0 rounded-3xl">
               <MdOutlineSort className="text-xl" /> Sort
-            </button>
+            </button> */}
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}
@@ -162,20 +168,23 @@ const Filters = ({ catId = '' }: { catId?: string }) => {
                     </select>
                   </div>
                 </div>
-                <button
-                  className="bnt-sm btn mt-2 btn-secondary btn-block"
-                  onClick={() => reset()}
-                >
-                  <MdRecycling /> Reset
-                </button>
+                <div className="flex items-center justify-stretch px-1 gap-1">
+                  <button
+                    type="button"
+                    className="bnt-sm btn mt-2 btn-secondary btn-outline rounded-3xl"
+                    onClick={() => reset()}
+                  >
+                    <MdRecycling /> Reset
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn rounded-3xl ml-3 ring-3 btn-secondary btn-sm"
+                  >
+                    APPLY <MdArrowCircleRight />
+                  </button>
+                </div>
               </div>
             </div>
-            <button
-              type="submit"
-              className="btn rounded-3xl ml-3 ring-3 btn-secondary btn-sm"
-            >
-              APPLY <MdArrowCircleRight />
-            </button>
           </div>
         </div>
       </div>

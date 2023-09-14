@@ -70,13 +70,11 @@ const DiscoverProducts = async ({
                     },
                   }
                 : {}),
-              ...(categoryId !== undefined && categoryId !== null
+              ...(categoryId
                 ? {
                     OR: [
-                      {
-                        categories: { some: { id: categoryId } },
-                        shop: { categoryId },
-                      },
+                      { categories: { some: { id: categoryId } } },
+                      { shop: { category: { id: categoryId } } },
                     ],
                   }
                 : {}),

@@ -63,7 +63,9 @@ const Products = ({
                   {product.name}
                 </Link>
                 <div className="text-xs md:text-sm font-semibold">
-                  {minPrice}RWF - {maxPrice}RWF
+                  {minPrice !== maxPrice
+                    ? `${minPrice}RWF - ${maxPrice}RWF`
+                    : `${minPrice}RWF`}
                 </div>
                 {
                   <div

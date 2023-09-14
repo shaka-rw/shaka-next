@@ -34,9 +34,7 @@ const NewShopList = async ({
                   ],
                 }
               : {}),
-            ...(categoryId !== undefined && categoryId !== null
-              ? { categoryId }
-              : {}),
+            ...(categoryId ? { categoryId } : {}),
           },
           include: {
             _count: { select: { followers: true } },
