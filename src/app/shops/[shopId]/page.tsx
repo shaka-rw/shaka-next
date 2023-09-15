@@ -46,7 +46,7 @@ const ShopProfile = ({ storeInfo }: { storeInfo: StoreProfileData }) => {
         <div className="stats w-full stats-vertical md:stats-horizontal">
           <div className="stat">
             <div className="stat-title">Followers</div>
-            <div className="stat-value">{storeInfo.products}</div>
+            <div className="stat-value">{storeInfo.followers}</div>
             <div className="stat-actions">
               <button className="btn btn-sm btn-success">Follow</button>
             </div>
@@ -146,10 +146,10 @@ const ShopProfilePage = async ({
             image: shop.image.secureUrl,
             followers: shop._count.followers,
             products: shop._count.products,
-            rating: Number((Math.random() * 4.5).toFixed(1)),
+            rating: Number((Math.random() * 0).toFixed(1)),
           }}
         />
-        <div className="divider">PRODUCTS</div>
+        <div className="divider w-1/2 mx-auto space-x-2">PRODUCTS</div>
         <Products products={shop.products} />
       </div>
     </div>
