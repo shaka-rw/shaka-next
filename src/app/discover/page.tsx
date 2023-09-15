@@ -15,6 +15,7 @@ export type DiscoverSearchParams = {
   st?: 'products' | 'shops';
   q?: string;
   sz?: string;
+  page?: string;
   p?: string;
 };
 

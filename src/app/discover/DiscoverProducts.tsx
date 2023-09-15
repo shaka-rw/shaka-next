@@ -20,6 +20,7 @@ const DiscoverProducts = async ({
   const {
     q: search,
     sz: size,
+    page: _page,
     st: searchType = 'products',
     g: gender,
     cat: categoryId,
@@ -32,6 +33,8 @@ const DiscoverProducts = async ({
     searchType !== 'products'
       ? []
       : await prisma.product.findMany({
+          take: 30,
+          skip: parseInt(_page ?? '0') * 30,
           where: {
             AND: {
               quantities: {

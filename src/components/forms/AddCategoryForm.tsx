@@ -1,41 +1,13 @@
-import prisma from '@/prisma';
 import React from 'react';
-import ModalBtn from '../ModalBtn';
-import { revalidatePath } from 'next/cache';
 import { MdAdd } from 'react-icons/md';
-import { getPath, uploadAssetImage } from '@/app/_actions';
 import { Category } from '@prisma/client';
 import { Modal } from '../Modal';
+import { addCategory } from '@/app/_actions/category';
 
 export enum AssetFolder {
   Categories = 'categories',
   Shops = 'shops',
   ProductImages = 'product_images',
-}
-
-async function addCategory(data: FormData) {
-  'use server';
-  const name = data.get('name') as string;
-  const image = data.get('image') as File;
-  const parentId = data.get('parentId') as string | null;
-
-  if (!name.trim() || !image?.size) return;
-  const asset = await uploadAssetImage(image, AssetFolder.Categories);
-
-  const category = await prisma.category.create({
-    data: {
-      name,
-      image: {
-        create: {
-          secureUrl: asset.secure_url,
-          url: asset.url,
-          assetId: asset.public_id,
-        },
-      },
-      ...(parentId ? { parent: { connect: { id: parentId as string } } } : {}),
-    },
-  });
-  revalidatePath(await getPath());
 }
 
 const AddCategoryForm = ({ parent }: { parent?: Category }) => {

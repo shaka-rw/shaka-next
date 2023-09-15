@@ -10,6 +10,11 @@ export function closeModal(modalId: string) {
   if (modal) modal.close();
 }
 
+export function openModal(modalId: string) {
+  const modal = document.getElementById(modalId) as HTMLDialogElement;
+  if (modal) modal.showModal();
+}
+
 export const ClientModal = ({
   btnContent,
   btnPrimary,

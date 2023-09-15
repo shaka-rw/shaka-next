@@ -4,7 +4,10 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
+  productionBrowserSourceMaps: false, // Disable source maps in development
+  optimizeFonts: false, // Disable font optimization
+  swcMinify: false, // Disable minification
   images: {
     domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
   },

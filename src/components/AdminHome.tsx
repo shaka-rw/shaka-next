@@ -39,15 +39,15 @@ const AdminHome = async () => {
     },
     {
       icon: <FaProductHunt />,
-      link: '#',
+      link: '/dashboard/products',
       name: 'Products',
-      tooltip: 'My products',
+      tooltip: 'Products',
     },
     {
       icon: <FaPeopleGroup />,
       link: '#',
       name: 'Users',
-      tooltip: 'My products',
+      tooltip: 'Users',
     },
     {
       name: 'Orders',

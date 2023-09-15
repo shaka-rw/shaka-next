@@ -45,7 +45,7 @@ const NewShopList = async ({
         });
 
   return (
-    <div className="flex flex-wrap w-full ">
+    <div className="flex container mx-auto px-2 md:px-0 flex-wrap w-full ">
       {shops.length === 0 && (
         <div className="flex justify-center items-center min-h-max w-full p-4">
           <div className="alert alert-info flex gap-2">

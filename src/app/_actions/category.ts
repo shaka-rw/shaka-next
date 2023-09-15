@@ -5,6 +5,31 @@ import prisma from '@/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadAssetImage, getPath } from '.';
 
+export async function addCategory(data: FormData) {
+  'use server';
+  const name = data.get('name') as string;
+  const image = data.get('image') as File;
+  const parentId = data.get('parentId') as string | null;
+
+  if (!name.trim() || !image?.size) return;
+  const asset = await uploadAssetImage(image, AssetFolder.Categories);
+
+  const category = await prisma.category.create({
+    data: {
+      name,
+      image: {
+        create: {
+          secureUrl: asset.secure_url,
+          url: asset.url,
+          assetId: asset.public_id,
+        },
+      },
+      ...(parentId ? { parent: { connect: { id: parentId as string } } } : {}),
+    },
+  });
+  revalidatePath(await getPath());
+}
+
 export async function editCategory(formData: FormData) {
   const categoryId = formData.get('categoryId') as string;
   const name = formData.get('name') as string;
