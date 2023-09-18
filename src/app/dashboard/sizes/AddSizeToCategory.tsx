@@ -41,9 +41,11 @@ const AddSizeToCategory: React.FC<Props> = ({ categories, existingSizes }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = React.useTransition();
 
-  const { handleSubmit, control } = useForm<z.infer<typeof sizesSchema>>({
-    resolver: zodResolver(sizesSchema),
-  });
+  const { handleSubmit, reset, control } = useForm<z.infer<typeof sizesSchema>>(
+    {
+      resolver: zodResolver(sizesSchema),
+    }
+  );
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId);
@@ -52,9 +54,7 @@ const AddSizeToCategory: React.FC<Props> = ({ categories, existingSizes }) => {
 
   const onSubmit: SubmitHandler<z.infer<typeof sizesSchema>> = (data) => {
     // Handle form submission here
-    const category = categories.find((c) => c.id === selectedCategory);
     const sizes = data.sizes.map((sz) => ({ size: sz }));
-    console.log({ data, selectedCategory, category, sizes });
 
     startTransition(async () => {
       const formData = new FormData();
@@ -67,6 +67,7 @@ const AddSizeToCategory: React.FC<Props> = ({ categories, existingSizes }) => {
       }
       toast.success('Sizes connected to category successfully');
       setIsModalOpen(false);
+      reset();
     });
     // setIsModalOpen(false); // Close the modal after submission
   };
@@ -85,6 +86,7 @@ const AddSizeToCategory: React.FC<Props> = ({ categories, existingSizes }) => {
       }
       toast.success('Size disconnected from category successfully');
       setIsModalOpen(false);
+      reset();
     });
   };
 
@@ -243,7 +245,10 @@ const AddSizeToCategory: React.FC<Props> = ({ categories, existingSizes }) => {
                   Connect
                 </button>
                 <button
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    reset();
+                  }}
                   className="btn btn-error"
                 >
                   <MdClose />
