@@ -101,7 +101,9 @@ const ProductInfo = ({
             <div className="mt-4">
               <p className="text-gray-600">Price Range:</p>
               <p className="text-lg font-semibold">
-                {minPrice}RWF - {maxPrice}RWF
+                {minPrice !== maxPrice
+                  ? `${minPrice}RWF - ${maxPrice}RWF`
+                  : `${minPrice}RWF`}
               </p>
               {product.prevPrice && (
                 <p className="text-gray-400 line-through">

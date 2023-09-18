@@ -53,7 +53,7 @@ const ShopProfile = ({ storeInfo }: { storeInfo: StoreProfileData }) => {
           </div>
 
           <div className="stat justify-between gap-2 inline-flex flex-col">
-            <div className="stat-title">Pruducts</div>
+            <div className="stat-title">Products</div>
             <div className="stat-value gap-1 flex-1 inline-flex items-center">
               <BsArrowUpCircleFill className="text-xl" /> {storeInfo.products}
             </div>
