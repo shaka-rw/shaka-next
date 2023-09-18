@@ -43,7 +43,7 @@ const SellerHome = async () => {
     where: { userId: user?.id as string },
     include: {
       _count: { select: { followers: true, products: true } },
-      category: true,
+      category: { include: { productSizes: true } },
       image: true,
       owner: true,
     },
@@ -170,7 +170,11 @@ const SellerHome = async () => {
             </div>
             <div className="divider" />
             {shop.approved ? (
-              <AddProductForm shopId={shop.id} categories={subCategories} />
+              <AddProductForm
+                sizes={shop.category.productSizes}
+                shopId={shop.id}
+                categories={subCategories}
+              />
             ) : (
               <div className="text-xl font-bold text-accent my-1 ">
                 You can add products once your shop is approved
@@ -193,7 +197,7 @@ const SellerHome = async () => {
           </div>
         )}
 
-        <NewDynamicProductList products={products} isSeller />
+        <NewDynamicProductList products={products} shop={shop} isSeller />
       </div>
 
       <div className="drawer-side">

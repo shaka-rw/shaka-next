@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Asset } from '@prisma/client';
+import { Asset, Category, ProductSize, Shop } from '@prisma/client';
 import Link from '@/components/server/Link';
 import React, { ReactNode } from 'react';
 import { MdAddShoppingCart, MdEmojiObjects, MdFavorite } from 'react-icons/md';
@@ -110,6 +110,7 @@ export const NewDynamicProductList = async ({
   link,
   isSeller = false,
   products,
+  shop,
   className,
 }: {
   products: VariationProduct[];
@@ -117,9 +118,10 @@ export const NewDynamicProductList = async ({
   link?: ReactNode;
   className?: string;
   isSeller?: boolean;
+  shop?: Shop & { category: Category & { productSizes: ProductSize[] } };
   isDiscover?: boolean;
 }) => {
-  const sizes = isSeller ? await prisma.productSize.findMany({ take: 50 }) : [];
+  const sizes = isSeller && shop ? shop.category.productSizes : [];
   return (
     <section className={`my-2`}>
       <div className="container flex-col flex gap-3 mx-auto px-2">

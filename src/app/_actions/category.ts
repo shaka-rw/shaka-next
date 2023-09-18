@@ -76,3 +76,50 @@ export async function deleteCategory(formData: FormData) {
   revalidatePath(await getPath());
   return [];
 }
+
+export async function connectSizesToCategory(formData: FormData) {
+  const categoryId = formData.get('categoryId') as string;
+  const sizes = formData.getAll('sizes') as string[];
+
+  try {
+    const category = await prisma.category.update({
+      where: { id: categoryId },
+      data: {
+        productSizes: {
+          connectOrCreate: sizes.map((size) => ({
+            create: { size },
+            where: { size },
+          })),
+        },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return [`Can't connect sizes to category`];
+  }
+  revalidatePath(await getPath());
+  return [];
+}
+
+export async function disconnectSizeFromCategory(formData: FormData) {
+  const categoryId = formData.get('categoryId') as string;
+  const size = formData.get('size') as string;
+
+  try {
+    const category = await prisma.category.update({
+      where: { id: categoryId },
+      data: {
+        productSizes: {
+          disconnect: {
+            size,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return [`Can't disconnect size from category`];
+  }
+  revalidatePath(await getPath());
+  return [];
+}

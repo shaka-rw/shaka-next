@@ -144,22 +144,24 @@ const ProductEditForm = ({
             render={({ field }) => (
               <>
                 <CreatableSelect
-                  createOptionPosition="first"
-                  className="bg-base-100 text-base-content"
                   onCreateOption={(value) => {
-                    setSizeOptions([{ value, label: value }, ...sizesOptions]);
+                    field.onChange([...field.value, value]);
+                    setSizeOptions((prev) => [
+                      { value, label: value },
+                      ...prev,
+                    ]);
                   }}
                   ref={field.ref}
                   name={field.name}
+                  value={field.value.map((v) => ({
+                    value: v,
+                    label: v,
+                  }))}
                   onChange={(value) => {
-                    field.value;
-                    field.onChange(value.map((v) => (v as any).value));
+                    field.onChange(value.map((v) => v.value));
                   }}
-                  options={sizesOptions as any}
+                  options={sizesOptions}
                   isMulti
-                  defaultValue={sizeOptions.filter((op) =>
-                    field.value.some((v) => op.value === v)
-                  )}
                 />
               </>
             )}

@@ -57,9 +57,9 @@ const AdminHome = async () => {
     },
     {
       icon: <MdCategory />,
-      link: '#',
-      name: 'Categories',
-      tooltip: 'Categories',
+      link: '/dashboard/sizes',
+      name: 'Sizes',
+      tooltip: 'Sizes',
     },
     {
       name: 'Customers',

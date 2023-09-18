@@ -89,10 +89,11 @@ model Category {
   shops         Shop[]
   products      Product[]
   assetId       String
-  image         Asset      @relation(fields: [assetId], references: [id])
-  parent        Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  image         Asset         @relation(fields: [assetId], references: [id])
+  parent        Category?     @relation("SubCategories", fields: [parentId], references: [id])
   parentId      String?
-  subCategories Category[] @relation("SubCategories")
+  subCategories Category[]    @relation("SubCategories")
+  productSizes  ProductSize[]
 }
 
 model Shop {
@@ -144,6 +145,7 @@ model Product {
 model ProductSize {
   id         String            @id @default(cuid())
   size       String            @unique
+  categories Category[]
   products   Product[]
   quantities ProductQuantity[]
 }

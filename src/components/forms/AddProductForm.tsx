@@ -1,6 +1,6 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Category } from '@prisma/client';
+import { Category, ProductSize } from '@prisma/client';
 import React, { useState, useTransition } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { MdAdd, MdClose } from 'react-icons/md';
@@ -51,10 +51,12 @@ function getVideoDurationInMinutes(file: File): Promise<number> {
 
 const AddProductForm = ({
   categories,
+  sizes,
   shopId,
 }: {
   categories: Category[];
   shopId: string;
+  sizes: ProductSize[];
 }) => {
   const {
     register,
@@ -138,11 +140,20 @@ const AddProductForm = ({
     });
   };
 
-  const [sizesOptions, setSizeOptions] = useState([
-    { value: 'small', label: 'Small' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'large', label: 'Large' },
-  ]);
+  const initialSizeOptions = !sizes
+    ? null
+    : sizes?.map(({ size }) => ({
+        value: size,
+        label: size,
+      }));
+
+  const [sizesOptions, setSizeOptions] = useState(
+    initialSizeOptions ?? [
+      { value: 'small', label: 'Small' },
+      { value: 'medium', label: 'Medium' },
+      { value: 'large', label: 'Large' },
+    ]
+  );
 
   const categoriesOptions = categories.map((cat) => ({
     value: cat.id,
@@ -245,25 +256,6 @@ const AddProductForm = ({
             </label>
           )}
         </div>
-        {/* <div className="form-control w-full max-w-xs">
-          <label className="label">
-            <span className="label-text">Price</span>
-          </label>
-          <input
-            type="number"
-            step={0.01}
-            className="input input-bordered w-full"
-            placeholder="Price"
-            {...register('price', { valueAsNumber: true })}
-          />
-          {errors.price && (
-            <label className="label">
-              <span className="label-text-alt text-red-500">
-                {errors.price.message}
-              </span>
-            </label>
-          )}
-        </div> */}
         <div className="form-control w-full max-w-xs">
           <label className="label">
             <span className="label-text">Categories</span>
@@ -305,16 +297,23 @@ const AddProductForm = ({
             render={({ field }) => (
               <>
                 <CreatableSelect
-                  createOptionPosition="first"
                   onCreateOption={(value) => {
-                    setSizeOptions([{ value, label: value }, ...sizesOptions]);
+                    field.onChange([...field.value, value]);
+                    setSizeOptions((prev) => [
+                      { value, label: value },
+                      ...prev,
+                    ]);
                   }}
                   ref={field.ref}
                   name={field.name}
+                  value={field.value.map((v) => ({
+                    value: v,
+                    label: v,
+                  }))}
                   onChange={(value) => {
-                    field.onChange(value.map((v) => (v as any).value));
+                    field.onChange(value.map((v) => v.value));
                   }}
-                  options={sizesOptions as any}
+                  options={sizesOptions}
                   isMulti
                 />
               </>
