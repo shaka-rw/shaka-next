@@ -105,7 +105,7 @@ const AddToCartForm = ({
                       <label
                         className="flex items-center "
                         htmlFor={sz.id + i}
-                        key={sz.id}
+                        key={sz.id + i}
                       >
                         <input
                           type="radio"
@@ -141,7 +141,7 @@ const AddToCartForm = ({
                       <label
                         className="text-lg flex items-center "
                         htmlFor={color.id + i}
-                        key={color.id}
+                        key={color.id + i}
                       >
                         <input
                           type="radio"

@@ -5,6 +5,7 @@ import { Category, Shop } from '@prisma/client';
 import AddToCartForm from '../forms/AddToCartForm';
 import Link from '@/components/server/Link';
 import Image from 'next/image';
+import { sliceText } from '@/lib/helpers';
 
 const Products = ({
   products,
@@ -45,7 +46,7 @@ const Products = ({
                   width={250}
                   height={250}
                   src={product.mainImage.secureUrl}
-                  alt={product.name}
+                  alt={product.name.slice(0, 20)}
                   className="w-full min-w-full h-full object-center rounded appearance-none object-contain"
                 />
                 <span className="absolute text-base-100 transition-opacity duration-300 opacity-0 group-hover/product:opacity-100 flex justify-end  w-full inset-0 bottom-auto h-[50px] bg-gradient-to-b from-base-content/50 to-transparent">
@@ -60,7 +61,7 @@ const Products = ({
                   {product.categories?.[0]?.name ?? product.shop.category.name}
                 </span>
                 <Link href={`/products/${product.id}`} className=" font-bold">
-                  {product.name}
+                  {sliceText(product.name, 40)}
                 </Link>
                 <div className="text-xs md:text-sm font-semibold">
                   {minPrice !== maxPrice

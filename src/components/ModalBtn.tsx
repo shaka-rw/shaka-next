@@ -18,23 +18,36 @@ export const ModalBtn2 = ({
   primary = false,
   btn,
   children,
+  nonDialog = false,
 }: PropsWithChildren<{
   btn?: ReactNode;
   primary?: boolean;
   modalId: string;
+  nonDialog?: boolean;
 }>) => {
+  const handleShowModal = () => {
+    if (nonDialog) {
+      const modal = document.getElementById(modalId);
+      modal?.classList.add('modal-open');
+      modal?.classList.add('hidden');
+      modal?.setAttribute('open', 'true');
+    } else {
+      (window[modalId as any] as any).showModal();
+    }
+  };
   return btn ? (
     <div
       className="inline-flex items-center justify-center"
       tabIndex={0}
-      onClick={() => (window[modalId as any] as any).showModal()}
+      onClick={handleShowModal}
     >
+      <template className="modal-open" />
       {btn}
     </div>
   ) : (
     <button
       className={`btn ${primary ? 'btn-primary' : ''}`}
-      onClick={() => (window[modalId as any] as any).showModal()}
+      onClick={handleShowModal}
     >
       {children}
     </button>

@@ -72,6 +72,7 @@ export async function editProduct(formData: FormData) {
       where: { id: data.productId },
       data: {
         gender: data.gender,
+        name: data.name,
         available: data.available,
         description: data.description,
         categories: {

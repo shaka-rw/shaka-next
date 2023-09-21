@@ -168,17 +168,21 @@ const Filters = ({ catId = '' }: { catId?: string }) => {
                     </select>
                   </div>
                 </div>
-                <div className="flex items-center justify-stretch px-1 gap-1">
+                <div className="flex items-center mt-2 justify-stretch px-1 gap-1">
                   <button
                     type="button"
-                    className="bnt-sm btn mt-2 btn-secondary btn-outline rounded-3xl"
+                    className="btn-sm btn btn-secondary btn-outline rounded-3xl"
                     onClick={() => reset()}
                   >
                     <MdRecycling /> Reset
                   </button>
                   <button
                     type="submit"
-                    className="btn rounded-3xl ml-3 ring-3 btn-secondary btn-sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSubmit(onSubmit)();
+                    }}
+                    className="btn rounded-3xl btn-secondary btn-sm"
                   >
                     APPLY <MdArrowCircleRight />
                   </button>

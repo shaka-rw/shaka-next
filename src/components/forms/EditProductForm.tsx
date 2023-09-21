@@ -11,8 +11,30 @@ import CreatableSelect from 'react-select/creatable';
 import { Category, ProductSize } from '@prisma/client';
 import { editProduct } from '@/app/_actions';
 import { toast } from 'react-hot-toast';
+import { type IAllProps } from '@tinymce/tinymce-react';
+// import dynamic from 'next/dynamic';
+// import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
+import dynamic, { LoaderComponent } from 'next/dynamic';
+import NonDialogModal from '../client/NonDialogModal';
+
+const Editor = dynamic(
+  () =>
+    import('@tinymce/tinymce-react').then(
+      ({ Editor }) => Editor
+    ) as LoaderComponent<IAllProps>,
+  {
+    ssr: false, // Ensure it's not loaded during server-side rendering
+  }
+);
+// const DynamicEditor = dynamic(
+//   () => import('@tinymce/tinymce-react').then((mod) => mod.Editor),
+//   {
+//     ssr: false, // Ensure it's not loaded during server-side rendering
+//   }
+// );
 
 export const editProductSchema = z.object({
+  name: z.string().trim().min(1),
   sizes: z.array(z.string().trim().nonempty()),
   productId: z.string().trim().nonempty(),
   available: z.boolean().default(true),
@@ -49,6 +71,7 @@ const ProductEditForm = ({
       categories: productCategories.map((cat) => cat.id),
       description: product.description,
       gender: product.gender,
+      name: product.name,
       productId: product.id,
     },
     resolver: zodResolver(editProductSchema),
@@ -79,7 +102,7 @@ const ProductEditForm = ({
   };
 
   return (
-    <Modal
+    <NonDialogModal
       btn={
         <button className="btn text-xl btn-primary btn-circle btn-sm md:btn-md">
           <MdEdit />
@@ -96,6 +119,24 @@ const ProductEditForm = ({
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col mx-auto md:w-[400px] gap-2"
       >
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Name</span>
+          </label>
+          <input
+            className="input input-bordered w-full"
+            type="text"
+            placeholder="Name"
+            {...register('name')}
+          />
+          {errors.name && (
+            <label className="label">
+              <span className="label-text-alt text-red-500">
+                {errors.name.message}
+              </span>
+            </label>
+          )}
+        </div>
         <div className="form-control w-full max-w-xs">
           <label className="label">
             <span className="label-text">Categories</span>
@@ -208,14 +249,32 @@ const ProductEditForm = ({
             </label>
           )}
         </div>
+
         <div className="form-control w-full max-w-xs">
           <label className="label">
             <span className="label-text">Description</span>
           </label>
-          <textarea
+          <div className="w-full">
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <Editor
+                  init={{
+                    directionality: 'ltr',
+                  }}
+                  id={`edit-description-${product.id}`}
+                  apiKey="o5qpo7a5wt1lg4lwv0s9ckuggdb6m6cec2nlu20e4v34kqiv"
+                  onChange={(content) => field.onChange(content)}
+                  value={field.value}
+                />
+              )}
+            />
+          </div>
+          {/* <textarea
             className="textarea textarea-bordered w-full"
             {...register('description', { value: product.description })}
-          ></textarea>
+          ></textarea> */}
           {errors.description && (
             <label className="label">
               <span className="label-text-alt text-red-500">
@@ -275,7 +334,7 @@ const ProductEditForm = ({
           {isPending && <span className="loading loading-spinner loading-sm" />}
         </button>
       </form>
-    </Modal>
+    </NonDialogModal>
   );
 };
 

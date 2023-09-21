@@ -11,6 +11,7 @@ import CreatableSelect from 'react-select/creatable';
 import { addProduct } from '@/app/_actions';
 import { toast } from 'react-hot-toast';
 import { closeModal } from '../client/ClientModal';
+import { Editor } from '@tinymce/tinymce-react';
 
 const colorImageSchema = z.object({
   color: z.any(),
@@ -18,7 +19,7 @@ const colorImageSchema = z.object({
 });
 
 export const productSchema = z.object({
-  name: z.string().trim().min(3),
+  name: z.string().trim().min(1),
   description: z.string().trim().min(10),
   prevPrice: z.number().step(0.01).min(0).optional(),
   shopId: z.string().trim(),
@@ -221,10 +222,20 @@ const AddProductForm = ({
           <label className="label">
             <span className="label-text">Description</span>
           </label>
-          <textarea
-            className="textarea textarea-bordered w-full"
-            {...register('description')}
-          ></textarea>
+          <div className="w-full">
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <Editor
+                  apiKey="o5qpo7a5wt1lg4lwv0s9ckuggdb6m6cec2nlu20e4v34kqiv"
+                  onEditorChange={(content) => field.onChange(content)}
+                  initialValue={field.value}
+                  id="add-description"
+                />
+              )}
+            />
+          </div>
           {errors.description && (
             <label className="label">
               <span className="label-text-alt text-red-500">
