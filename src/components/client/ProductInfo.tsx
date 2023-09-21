@@ -156,35 +156,35 @@ const ProductInfo = ({
               <p className="text-gray-600 font-semibold mb-1">Share:</p>
               <div className="flex p-1 items-center gap-2">
                 <FacebookShareButton
-                  url={`https://shaka.com/products/${product.id}`}
+                  url={`https://shaka.rw/products/${product.id}`}
                   quote={`Check out this product on Shaka: ${product.name}`}
                   hashtag="#shaka"
                 >
                   <FacebookIcon size={32} round />
                 </FacebookShareButton>
                 <TwitterShareButton
-                  url={`https://shaka.com/products/${product.id}`}
+                  url={`https://shaka.rw/products/${product.id}`}
                   title={`Check out this product on Shaka: ${product.name}`}
                   hashtags={['shaka', 'shakaproduct']}
                 >
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
                 <LinkedinShareButton
-                  url={`https://shaka.com/products/${product.id}`}
+                  url={`https://shaka.rw/products/${product.id}`}
                   title={`SHAKA: ${product.name}`}
                   summary={`Check out this product on Shaka: ${product.name}`}
-                  source={`https://shaka.com/products/${product.id}`}
+                  source={`https://shaka.rw/products/${product.id}`}
                 >
                   <LinkedinIcon size={32} round />
                 </LinkedinShareButton>
                 <WhatsappShareButton
-                  url={`https://shaka.com/products/${product.id}`}
+                  url={`https://shaka.rw/products/${product.id}`}
                   title={`Check out this product on Shaka: ${product.name}`}
                 >
                   <WhatsappIcon size={32} round />
                 </WhatsappShareButton>
                 <FacebookMessengerShareButton
-                  url={`https://shaka.com/products/${product.id}`}
+                  url={`https://shaka.rw/products/${product.id}`}
                   appId="1088597931155576"
                 >
                   <FacebookMessengerIcon size={32} round />
