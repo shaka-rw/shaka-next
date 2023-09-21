@@ -5,13 +5,26 @@ import React, { useState, useTransition } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { MdAdd, MdClose } from 'react-icons/md';
 import { z } from 'zod';
-import { Modal } from '../Modal';
+import Modal from '../client/NonDialogModal';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { addProduct } from '@/app/_actions';
 import { toast } from 'react-hot-toast';
 import { closeModal } from '../client/ClientModal';
-import { Editor } from '@tinymce/tinymce-react';
+import { type IAllProps } from '@tinymce/tinymce-react';
+
+import dynamic from 'next/dynamic';
+
+const Editor = dynamic(
+  async () => {
+    const mod = await import('@tinymce/tinymce-react');
+    return mod.Editor as React.ComponentType<IAllProps>;
+  },
+  {
+    ssr: false,
+    loading: () => <p className="loading mx-auto loading-dots"></p>,
+  }
+);
 
 const colorImageSchema = z.object({
   color: z.any(),
@@ -230,7 +243,7 @@ const AddProductForm = ({
                 <Editor
                   apiKey="o5qpo7a5wt1lg4lwv0s9ckuggdb6m6cec2nlu20e4v34kqiv"
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue={field.value}
+                  value={field.value}
                   id="add-description"
                 />
               )}
@@ -421,32 +434,6 @@ const AddProductForm = ({
           />
           <label className="label"></label>
         </div>
-
-        {/* <div className="form-control w-full max-w-xs">
-          <label className="label">
-            <span className="label-text">Category (Industry)</span>
-          </label>
-          <select
-            className="select select-bordered w-full max-w-xs"
-            {...register('category')}
-          >
-            <option disabled selected>
-              Choose category
-            </option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <label className="label">
-              <span className="label-text-alt text-red-500">
-                {errors.category.message}
-              </span>
-            </label>
-          )}
-        </div> */}
         <button
           type="submit"
           disabled={isPending}

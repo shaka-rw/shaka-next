@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useTransition } from 'react';
-import { Modal } from '../Modal';
+import React, { ComponentType, useState, useTransition } from 'react';
+import Modal from '../client/NonDialogModal';
 import { MdEdit } from 'react-icons/md';
 import { VariationProduct } from './AddVariationsForm';
 import { z } from 'zod';
@@ -12,26 +12,19 @@ import { Category, ProductSize } from '@prisma/client';
 import { editProduct } from '@/app/_actions';
 import { toast } from 'react-hot-toast';
 import { type IAllProps } from '@tinymce/tinymce-react';
-// import dynamic from 'next/dynamic';
-// import { Editor as TinyMCEEditor } from '@tinymce/tinymce-react';
-import dynamic, { LoaderComponent } from 'next/dynamic';
-import NonDialogModal from '../client/NonDialogModal';
+
+import dynamic from 'next/dynamic';
 
 const Editor = dynamic(
-  () =>
-    import('@tinymce/tinymce-react').then(
-      ({ Editor }) => Editor
-    ) as LoaderComponent<IAllProps>,
+  async () => {
+    const mod = await import('@tinymce/tinymce-react');
+    return mod.Editor as ComponentType<IAllProps>;
+  },
   {
-    ssr: false, // Ensure it's not loaded during server-side rendering
+    ssr: false,
+    loading: () => <p className="loading mx-auto loading-dots"></p>,
   }
 );
-// const DynamicEditor = dynamic(
-//   () => import('@tinymce/tinymce-react').then((mod) => mod.Editor),
-//   {
-//     ssr: false, // Ensure it's not loaded during server-side rendering
-//   }
-// );
 
 export const editProductSchema = z.object({
   name: z.string().trim().min(1),
@@ -102,7 +95,7 @@ const ProductEditForm = ({
   };
 
   return (
-    <NonDialogModal
+    <Modal
       btn={
         <button className="btn text-xl btn-primary btn-circle btn-sm md:btn-md">
           <MdEdit />
@@ -260,12 +253,8 @@ const ProductEditForm = ({
               control={control}
               render={({ field }) => (
                 <Editor
-                  init={{
-                    directionality: 'ltr',
-                  }}
-                  id={`edit-description-${product.id}`}
                   apiKey="o5qpo7a5wt1lg4lwv0s9ckuggdb6m6cec2nlu20e4v34kqiv"
-                  onChange={(content) => field.onChange(content)}
+                  onEditorChange={(content) => field.onChange(content)}
                   value={field.value}
                 />
               )}
@@ -334,7 +323,7 @@ const ProductEditForm = ({
           {isPending && <span className="loading loading-spinner loading-sm" />}
         </button>
       </form>
-    </NonDialogModal>
+    </Modal>
   );
 };
 

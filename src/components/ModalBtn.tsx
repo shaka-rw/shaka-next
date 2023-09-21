@@ -18,7 +18,7 @@ export const ModalBtn2 = ({
   primary = false,
   btn,
   children,
-  nonDialog = false,
+  nonDialog,
 }: PropsWithChildren<{
   btn?: ReactNode;
   primary?: boolean;
@@ -28,8 +28,7 @@ export const ModalBtn2 = ({
   const handleShowModal = () => {
     if (nonDialog) {
       const modal = document.getElementById(modalId);
-      modal?.classList.add('modal-open');
-      modal?.classList.add('hidden');
+      modal?.classList.add('open');
       modal?.setAttribute('open', 'true');
     } else {
       (window[modalId as any] as any).showModal();
@@ -41,7 +40,6 @@ export const ModalBtn2 = ({
       tabIndex={0}
       onClick={handleShowModal}
     >
-      <template className="modal-open" />
       {btn}
     </div>
   ) : (

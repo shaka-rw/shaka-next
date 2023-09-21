@@ -193,7 +193,10 @@ const ProductInfo = ({
             </div>
             <div className="mt-4">
               <p className="text-gray-600 font-semibold mb-1">Description:</p>
-              <p className="text-gray-700">{product.description}</p>
+              <p
+                dangerouslySetInnerHTML={{ __html: product.description }}
+                className="text-gray-700"
+              />
             </div>
           </div>
         </div>

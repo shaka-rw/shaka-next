@@ -77,9 +77,9 @@ const Products = ({
                     {product.prevPrice ?? 0}RWF
                   </div>
                 }
-                <div className="text-xs h-4 w-full flex overflow-hidden">
+                {/* <div className="text-xs h-4 w-full flex overflow-hidden">
                   {product.description}...
-                </div>
+                </div> */}
                 <div className="flex items-center">
                   <AddToCartForm
                     className="btn rounded-3xl mt-1 btn-secondary btn-sm"
