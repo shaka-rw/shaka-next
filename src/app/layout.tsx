@@ -12,6 +12,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Shaka',
+  
   icons: { icon: '/logo.png' },
   description: 'Shaka e-commerce - Rwanda',
   keywords: [
