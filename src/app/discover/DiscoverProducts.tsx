@@ -37,7 +37,7 @@ const DiscoverProducts = async ({
           // skip: parseInt(_page ?? '0') * 30,
           include: {
             products: {
-              take: 10,
+              take: 8,
               where: {
                 AND: {
                   quantities: {
@@ -109,7 +109,7 @@ const DiscoverProducts = async ({
           },
           orderBy: {
             products: {
-              _count: 'asc',
+              _count: 'desc',
             },
           },
         });
