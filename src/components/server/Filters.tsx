@@ -83,7 +83,7 @@ const Filters = ({ catId = '' }: { catId?: string }) => {
             {/* <button className="btn btn-sm text-xs capitalize btn-outline border-0 rounded-3xl">
               <MdOutlineSort className="text-xl" /> Sort
             </button> */}
-            <div className="dropdown dropdown-end">
+            <div className="dropdown md:dropdown-end">
               <label
                 tabIndex={0}
                 className="btn btn-sm btn-outline border-0 rounded-3xl"
