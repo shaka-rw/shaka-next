@@ -1,6 +1,6 @@
 'use server';
 
-import { AssetFolder } from '@/components/forms/AddCategoryForm';
+import { AssetFolder } from '@/types';
 import prisma from '@/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadAssetImage, getPath } from '.';

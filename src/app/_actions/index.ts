@@ -16,7 +16,7 @@ import {
 } from '../helpers/upload';
 import { multiVariationSchema } from '@/components/forms/AddVariationsForm';
 import { cartSchema } from '@/components/forms/AddToCartForm';
-import { AssetFolder } from '@/components/forms/AddCategoryForm';
+import { AssetFolder } from '@/types';
 import { editProductSchema } from '@/components/forms/EditProductForm';
 import { getCartId } from './orders';
 

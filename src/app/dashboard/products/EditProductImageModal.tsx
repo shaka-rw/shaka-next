@@ -6,7 +6,7 @@ import React, { useState, useTransition } from 'react';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';
 import { deleteAsset, updateAsset } from '@/app/_actions/assets';
 import toast from 'react-hot-toast';
-import { AssetFolder } from '@/components/forms/AddCategoryForm';
+import { AssetFolder } from '@/types';
 
 export type EditImagesProduct = Product & {
   colors: (ProductColor & { mainImage: Asset; images: Asset[] })[];

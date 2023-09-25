@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { closeModal } from '../client/ClientModal';
 
-export enum AssetFolder {
+enum AssetFolder {
   Categories = 'categories',
   Shops = 'shops',
   ProductImages = 'product_images',

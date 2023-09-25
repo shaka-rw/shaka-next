@@ -14,3 +14,9 @@ export type WaveLinkResponse = {
     link: string;
   };
 };
+
+export enum AssetFolder {
+  Categories = 'categories',
+  Shops = 'shops',
+  ProductImages = 'product_images',
+}
