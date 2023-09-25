@@ -17,7 +17,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ products }) => {
   return (
     <div className="flex flex-col">
       {products.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-col mt-4 items-center justify-center gap-2">
           <div className="text-2xl flex gap-2 items-center font-bold">
             <MdEmojiObjects /> No results found
           </div>

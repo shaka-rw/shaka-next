@@ -116,7 +116,7 @@ const DiscoverProducts = async ({
 
   return (
     <div className="mx-auto container p-1">
-      {categories[0]?.products?.length === 0 && (
+      {categories.reduce((a, c) => a + c.products.length, 0) === 0 && (
         <div className="flex flex-col items-center gap-3 justify-center h-96">
           <h1 className="text-3xl font-bold">No products found</h1>
           <p className="text-lg text-gray-500">
