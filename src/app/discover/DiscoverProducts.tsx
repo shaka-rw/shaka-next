@@ -116,6 +116,15 @@ const DiscoverProducts = async ({
 
   return (
     <div className="mx-auto container p-1">
+      {categories[0]?.products?.length === 0 && (
+        <div className="flex flex-col items-center gap-3 justify-center h-96">
+          <h1 className="text-3xl font-bold">No products found</h1>
+          <p className="text-lg text-gray-500">
+            Try adjusting your search or filter to find what you&apos;re looking
+            for.
+          </p>
+        </div>
+      )}
       {categories.map((category) =>
         category.products.length > 0 ? (
           <div key={category.id} className="flex flex-col w-full gap-2">
