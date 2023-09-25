@@ -28,6 +28,7 @@ import { getPath } from '@/app/_actions';
 import Themes, { ThemeButton } from '../client/Themes';
 import Logo from '../client/Logo';
 import { twMerge } from 'tailwind-merge';
+import SearchModal from '../client/Search';
 
 const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
   const session = await getServerSession(authOptions);
@@ -157,14 +158,15 @@ const Navbar = async ({ notHome: isNotHome = true }: { notHome?: boolean }) => {
                 </li>
               )}
               <li>
-                <Link
+                <SearchModal isNotHome={isNotHome} />
+                {/* <Link
                   href="#"
                   className={`btn btn-sm bg-transparent border-0 btn-square font-extrabold text-xl ${
                     isNotHome ? '  ' : ' text-base-100 hover:text-base-content '
                   }`}
                 >
                   <MdSearch />
-                </Link>
+                </Link> */}
               </li>
             </ul>
             <ul className="flex items-center ml-1 gap-1">

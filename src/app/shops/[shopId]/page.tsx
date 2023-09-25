@@ -1,8 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
+import { followShop, unfollowShop } from '@/app/_actions/shop';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import Link from '@/components/server/Link';
 import Navbar from '@/components/server/Navbar';
 import { NewDynamicProductList } from '@/components/server/NewProductList';
 import Products from '@/components/server/Products';
 import prisma from '@/prisma';
+import { getServerSession } from 'next-auth';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
@@ -18,6 +22,8 @@ type StoreProfileData = {
   followers: number;
   products: number;
   rating: number;
+  followsShop: boolean;
+  userId?: string;
 };
 
 const ShopProfile = ({ storeInfo }: { storeInfo: StoreProfileData }) => {
@@ -48,7 +54,30 @@ const ShopProfile = ({ storeInfo }: { storeInfo: StoreProfileData }) => {
             <div className="stat-title">Followers</div>
             <div className="stat-value">{storeInfo.followers}</div>
             <div className="stat-actions">
-              <button className="btn btn-sm btn-success">Follow</button>
+              {storeInfo.userId ? (
+                <form
+                  action={storeInfo.followsShop ? unfollowShop : followShop}
+                >
+                  <input type="hidden" name="shopId" value={storeInfo.name} />
+                  <input type="hidden" name="userId" value={storeInfo.name} />
+                  {storeInfo.followsShop ? (
+                    <button type="submit" className="btn btn-sm btn-error">
+                      Unfollow ({storeInfo.followers})
+                    </button>
+                  ) : (
+                    <button type="submit" className="btn btn-sm btn-success">
+                      Follow ({storeInfo.followers})
+                    </button>
+                  )}
+                </form>
+              ) : (
+                <Link
+                  href={`/api/auth/signin`}
+                  className="btn btn-sm btn-success"
+                >
+                  Login to Follow
+                </Link>
+              )}
             </div>
           </div>
 
@@ -57,10 +86,6 @@ const ShopProfile = ({ storeInfo }: { storeInfo: StoreProfileData }) => {
             <div className="stat-value gap-1 flex-1 inline-flex items-center">
               <BsArrowUpCircleFill className="text-xl" /> {storeInfo.products}
             </div>
-            {/* <div className="stat-actions">
-              <button className="btn btn-sm">Withdrawal</button>
-              <button className="btn btn-sm">deposit</button>
-            </div> */}
           </div>
           <div className="stat inline-flex gap-2 flex-col justify-between">
             <div className="stat-title">Rating</div>
@@ -135,12 +160,22 @@ const ShopProfilePage = async ({
 
   if (!shop) return notFound();
 
+  const session = await getServerSession(authOptions);
+  const followsShop = session?.user
+    ? await prisma.shop.findFirst({
+        where: { followers: { some: { id: session?.user?.id ?? '1' } } },
+        select: { _count: { select: { followers: true } } },
+      })
+    : null;
+
   return (
     <div>
       <Navbar />
       <div className="container mx-auto p-2 md:p-1">
         <ShopProfile
           storeInfo={{
+            userId: session?.user?.id,
+            followsShop: (followsShop?._count?.followers ?? 0) > 0,
             name: shop.name,
             owner: shop.owner.name ?? 'Unknown',
             image: shop.image.secureUrl,

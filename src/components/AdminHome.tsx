@@ -8,7 +8,6 @@ import ShopList from './server/ShopList';
 import { FaHome, FaShoppingCart, FaMoneyBillAlt } from 'react-icons/fa';
 import {
   FaProductHunt,
-  FaFan,
   FaUser,
   FaChartBar,
   FaPeopleGroup,

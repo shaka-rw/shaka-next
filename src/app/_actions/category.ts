@@ -14,19 +14,26 @@ export async function addCategory(data: FormData) {
   if (!name.trim() || !image?.size) return;
   const asset = await uploadAssetImage(image, AssetFolder.Categories);
 
-  const category = await prisma.category.create({
-    data: {
-      name,
-      image: {
-        create: {
-          secureUrl: asset.secure_url,
-          url: asset.url,
-          assetId: asset.public_id,
+  try {
+    const category = await prisma.category.create({
+      data: {
+        name,
+        image: {
+          create: {
+            secureUrl: asset.secure_url,
+            url: asset.url,
+            assetId: asset.public_id,
+          },
         },
+        ...(parentId
+          ? { parent: { connect: { id: parentId as string } } }
+          : {}),
       },
-      ...(parentId ? { parent: { connect: { id: parentId as string } } } : {}),
-    },
-  });
+    });
+  } catch (error) {
+    console.error(error);
+    return ["Error occured, can't create category"];
+  }
   revalidatePath(await getPath());
 }
 
