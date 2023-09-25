@@ -33,11 +33,11 @@ const DiscoverProducts = async ({
     searchType !== 'products'
       ? []
       : await prisma.category.findMany({
-          take: 30,
+          take: 6,
           // skip: parseInt(_page ?? '0') * 30,
           include: {
             products: {
-              take: 8,
+              take: 5,
               where: {
                 AND: {
                   quantities: {
@@ -119,7 +119,7 @@ const DiscoverProducts = async ({
       {categories.map((category) =>
         category.products.length > 0 ? (
           <div key={category.id} className="flex flex-col w-full gap-2">
-            <h3 className="text-2xl capitalize mt-4 mb-2 font-bold">
+            <h3 className="text-2xl capitalize mt-8 mb-4 font-bold">
               {category.name}
             </h3>
             <Products products={category.products} />
