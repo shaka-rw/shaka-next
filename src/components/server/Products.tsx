@@ -28,7 +28,7 @@ const Products = ({
           </div>
         </div>
       )}
-      <div className="grid grid-cols-2 p-2 md:p-0 md:gap-y-10 gap-2 md:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-center">
+      <div className="grid grid-cols-2 p-2 md:p-0 md:gap-y-10 gap-2 md:gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center">
         {products.map((product) => {
           const minPrice = Math.min(...product.quantities.map((q) => q.price));
           const maxPrice = Math.max(...product.quantities.map((q) => q.price));
@@ -70,9 +70,8 @@ const Products = ({
                 </div>
                 {
                   <div
-                    className={`text-xs line-through md:text-sm font-light ${
-                      product.prevPrice ? '' : ' hidden '
-                    }`}
+                    className={`text-xs line-through md:text-sm font-light ${product.prevPrice ? '' : ' hidden '
+                      }`}
                   >
                     {product.prevPrice ?? 0}RWF
                   </div>
