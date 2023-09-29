@@ -3,17 +3,14 @@ import { followShop, unfollowShop } from '@/app/_actions/shop';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Link from '@/components/server/Link';
 import Navbar from '@/components/server/Navbar';
-import { NewDynamicProductList } from '@/components/server/NewProductList';
 import Products from '@/components/server/Products';
 import prisma from '@/prisma';
 import { getServerSession } from 'next-auth';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
-import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { BsArrowUpCircleFill } from 'react-icons/bs';
-import { FaFan } from 'react-icons/fa';
-import { MdCategory, MdPerson, MdStar } from 'react-icons/md';
+import { MdStar } from 'react-icons/md';
 
 type StoreProfileData = {
   name: string;
@@ -24,6 +21,7 @@ type StoreProfileData = {
   rating: number;
   followsShop: boolean;
   userId?: string;
+  shopId: string;
 };
 
 const ShopProfile = ({ storeInfo }: { storeInfo: StoreProfileData }) => {
@@ -58,8 +56,8 @@ const ShopProfile = ({ storeInfo }: { storeInfo: StoreProfileData }) => {
                 <form
                   action={storeInfo.followsShop ? unfollowShop : followShop}
                 >
-                  <input type="hidden" name="shopId" value={storeInfo.name} />
-                  <input type="hidden" name="userId" value={storeInfo.name} />
+                  <input type="hidden" name="shopId" value={storeInfo.shopId} />
+                  <input type="hidden" name="userId" value={storeInfo.userId} />
                   {storeInfo.followsShop ? (
                     <button type="submit" className="btn btn-sm btn-error">
                       Unfollow ({storeInfo.followers})
@@ -163,9 +161,9 @@ const ShopProfilePage = async ({
   const session = await getServerSession(authOptions);
   const followsShop = session?.user
     ? await prisma.shop.findFirst({
-        where: { followers: { some: { id: session?.user?.id ?? '1' } } },
-        select: { _count: { select: { followers: true } } },
-      })
+      where: { followers: { some: { id: session?.user?.id ?? '1' } } },
+      select: { _count: { select: { followers: true } } },
+    })
     : null;
 
   return (
@@ -174,6 +172,7 @@ const ShopProfilePage = async ({
       <div className="container mx-auto p-2 md:p-1">
         <ShopProfile
           storeInfo={{
+            shopId: shop.id,
             userId: session?.user?.id,
             followsShop: (followsShop?._count?.followers ?? 0) > 0,
             name: shop.name,
