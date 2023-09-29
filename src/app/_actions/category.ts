@@ -6,7 +6,6 @@ import { revalidatePath } from 'next/cache';
 import { uploadAssetImage, getPath } from '.';
 
 export async function addCategory(data: FormData) {
-  'use server';
   const name = data.get('name') as string;
   const image = data.get('image') as File;
   const parentId = data.get('parentId') as string | null;
@@ -55,14 +54,14 @@ export async function editCategory(formData: FormData) {
       name,
       ...(asset
         ? {
-            image: {
-              create: {
-                secureUrl: asset.secure_url,
-                url: asset.url,
-                assetId: asset.public_id,
-              },
+          image: {
+            create: {
+              secureUrl: asset.secure_url,
+              url: asset.url,
+              assetId: asset.public_id,
             },
-          }
+          },
+        }
         : {}),
     },
   });
