@@ -22,9 +22,9 @@ const CategoryBar = ({
 
   return (
     <>
-      <div className="flex container my-4 mx-auto flex-col gap-3">
+      <div className="flex my-4 mx-auto flex-col gap-3">
         <div className="flex items-center gap-4">
-          <Simplebar className="rounded-3xl">
+          <Simplebar className="container rounded-3xl">
             <div className="flex rounded-3xl flex-row flex-nowrap  gap-2 items-center py-2 px-2 mx-auto">
               {categories
                 .sort((a, b) =>
