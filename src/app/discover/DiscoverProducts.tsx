@@ -27,6 +27,7 @@ const DiscoverProducts = async ({
     p: price,
   } = searchParams;
 
+
   const [minPrice, maxPrice] = price ? price.split('-').map(parseInfinity) : [];
 
   const categories =
@@ -36,7 +37,7 @@ const DiscoverProducts = async ({
         where: {
           parentId: categoryId ?? { not: null }
         },
-        take: 50,
+        take: 5,
         include: {
           products: {
             take: 5,
@@ -81,14 +82,14 @@ const DiscoverProducts = async ({
                   },
                 }
                 : {}),
-              ...(categoryId
-                ? {
-                  OR: [
-                    { categories: { some: { OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }] } } },
-                    { shop: { category: { OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }] } } },
-                  ],
-                }
-                : {}),
+              // ...(categoryId
+              //   ? {
+              //     OR: [
+              //       { categories: { some: { OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }] } } },
+              //       { shop: { category: { OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }] } } },
+              //     ],
+              //   }
+              //   : {}),
             },
             include: {
               mainImage: true,
@@ -109,11 +110,12 @@ const DiscoverProducts = async ({
         },
         orderBy: {
           products: {
-            _count: 'asc',
+            _count: 'desc',
           },
         },
       });
 
+  console.log({ categories })
   const allProductsCount = categories.reduce((a, c) => a + c.products.length, 0);
 
   return (

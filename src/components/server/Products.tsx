@@ -28,7 +28,7 @@ const Products = ({
           </div>
         </div>
       )}
-      <div className="grid grid-cols-2 p-2 md:p-0 md:gap-y-10 gap-2 md:gap-x-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center">
+      <div className="grid grid-cols-2 p-2 md:p-0 md:gap-y-10 gap-2 md:gap-x-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 items-center">
         {products.map((product) => {
           const minPrice = Math.min(...product.quantities.map((q) => q.price));
           const maxPrice = Math.max(...product.quantities.map((q) => q.price));
@@ -36,15 +36,15 @@ const Products = ({
           return (
             <div
               key={product.id}
-              className="flex md:h-[444px] md:hover:scale-105 border border-primary/30 hover:border-secondary hover:z-[1] bg-base-100 transition-all duration-300 group/product border-b shadow-sm overflow-hidden w-full md:w-[250px] flex-col rounded-lg"
+              className="flex md:h-[370px] md:hover:scale-105 border border-primary/30 hover:border-secondary hover:z-[1] bg-base-100 transition-all duration-300 group/product border-b shadow-sm overflow-hidden gap-1 w-full md:w-[220px] flex-col rounded-lg"
             >
               <Link
                 href={`/products/${product.id}`}
-                className="h-[200px] md:h-[250px] p-2 border-b border-base-200 flex items-center justify-center relative w-full"
+                className="h-[150px] md:h-[200px] p-2 border-b border-base-200 flex items-center justify-center relative w-full"
               >
                 <Image
-                  width={250}
-                  height={250}
+                  width={150}
+                  height={150}
                   src={product.mainImage.secureUrl}
                   alt={product.name.slice(0, 20)}
                   className="w-full min-w-full h-full object-center rounded appearance-none object-contain"
@@ -56,12 +56,12 @@ const Products = ({
                   </a>
                 </span>
               </Link>
-              <div className="flex flex-col flex-1 bg-gradient-to-t from-base-200 to-transparent justify-between gap-2 p-2">
+              <div className="flex flex-col flex-1 bg-gradient-to-t from-base-200 to-transparent justify-between gap-1 p-2">
                 <span className="text-secondary text-sm uppercase">
                   {product.categories?.[0]?.name ?? product.shop.category.name}
                 </span>
-                <Link href={`/products/${product.id}`} className=" font-bold">
-                  {sliceText(product.name, 40)}
+                <Link href={`/products/${product.id}`} className=" text-sm font-bold">
+                  {sliceText(product.name, 30)}
                 </Link>
                 <div className="text-xs md:text-sm font-semibold">
                   {minPrice !== maxPrice
