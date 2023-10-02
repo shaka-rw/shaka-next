@@ -39,7 +39,7 @@ const DiscoverProducts = async ({
           } : null
           )
         },
-        take: 6,
+        take: 50,
         include: {
           products: {
             take: 5,
