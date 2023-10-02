@@ -34,10 +34,7 @@ const DiscoverProducts = async ({
       ? []
       : await prisma.category.findMany({
         where: {
-          parent: (categoryId ? {
-            id: categoryId,
-          } : null
-          )
+          parentId: categoryId ?? { not: null }
         },
         take: 50,
         include: {
