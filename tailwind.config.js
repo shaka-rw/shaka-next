@@ -13,6 +13,16 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',
+        sm: '1rem',
+        lg: '2rem',
+        xl: '3rem',
+        '2xl': '3rem',
+      }
+    },
   },
   daisyui: {
     themes: [

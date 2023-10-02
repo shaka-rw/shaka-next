@@ -13,8 +13,8 @@ const DiscoverProducts = async ({
     return value === '-Infinity'
       ? -Infinity
       : value === 'Infinity'
-      ? Infinity
-      : parseFloat(value);
+        ? Infinity
+        : parseFloat(value);
   }
 
   const {
@@ -33,86 +33,86 @@ const DiscoverProducts = async ({
     searchType !== 'products'
       ? []
       : await prisma.category.findMany({
-          take: 30,
-          // skip: parseInt(_page ?? '0') * 30,
-          include: {
-            products: {
-              take: 10,
-              where: {
-                AND: {
-                  quantities: {
-                    some: {
-                      AND: {
-                        quantity: { gt: 0 },
-                        ...(price
-                          ? {
-                              price: {
-                                gte: isNaN(minPrice) ? undefined : minPrice,
-                                lte: isNaN(maxPrice) ? undefined : maxPrice,
-                              },
-                            }
-                          : {}),
-                      },
+        take: 10,
+        // skip: parseInt(_page ?? '0') * 30,
+        include: {
+          products: {
+            take: 10,
+            where: {
+              AND: {
+                quantities: {
+                  some: {
+                    AND: {
+                      quantity: { gt: 0 },
+                      ...(price
+                        ? {
+                          price: {
+                            gte: isNaN(minPrice) ? undefined : minPrice,
+                            lte: isNaN(maxPrice) ? undefined : maxPrice,
+                          },
+                        }
+                        : {}),
                     },
                   },
-                  ...(search
-                    ? {
-                        OR: [
-                          { name: { contains: search, mode: 'insensitive' } },
-                          {
-                            description: {
-                              contains: search,
-                              mode: 'insensitive',
-                            },
-                          },
-                        ],
-                      }
-                    : {}),
-                  available: true,
-                  ...(gender
-                    ? { gender: { equals: gender as ProductGender } }
-                    : {}),
-                  ...(size
-                    ? {
-                        sizes: {
-                          some: { size: { equals: size, mode: 'insensitive' } },
+                },
+                ...(search
+                  ? {
+                    OR: [
+                      { name: { contains: search, mode: 'insensitive' } },
+                      {
+                        description: {
+                          contains: search,
+                          mode: 'insensitive',
                         },
-                      }
-                    : {}),
-                  ...(categoryId
-                    ? {
-                        OR: [
-                          { categories: { some: { id: categoryId } } },
-                          { shop: { category: { id: categoryId } } },
-                        ],
-                      }
-                    : {}),
-                  // categories: { some: { id: catId || undefined } },
-                },
-              },
-              include: {
-                mainImage: true,
-                shop: { include: { image: true, category: true } },
-                categories: { include: { image: true } },
-                quantities: {
-                  where: { quantity: { gt: 0 } },
-                  distinct: ['productColorId', 'productSizeId'],
-                  include: {
-                    color: { include: { mainImage: true } },
-                    size: true,
-                  },
-                },
-                sizes: true,
-                colors: { include: { mainImage: true, images: true } },
+                      },
+                    ],
+                  }
+                  : {}),
+                available: true,
+                ...(gender
+                  ? { gender: { equals: gender as ProductGender } }
+                  : {}),
+                ...(size
+                  ? {
+                    sizes: {
+                      some: { size: { equals: size, mode: 'insensitive' } },
+                    },
+                  }
+                  : {}),
+                ...(categoryId
+                  ? {
+                    OR: [
+                      { categories: { some: { id: categoryId } } },
+                      { shop: { category: { id: categoryId } } },
+                    ],
+                  }
+                  : {}),
+                // categories: { some: { id: catId || undefined } },
               },
             },
-          },
-          orderBy: {
-            products: {
-              _count: 'asc',
+            include: {
+              mainImage: true,
+              shop: { include: { image: true, category: true } },
+              categories: { include: { image: true } },
+              quantities: {
+                where: { quantity: { gt: 0 } },
+                distinct: ['productColorId', 'productSizeId'],
+                include: {
+                  color: { include: { mainImage: true } },
+                  size: true,
+                },
+              },
+              sizes: true,
+              colors: { include: { mainImage: true, images: true } },
             },
           },
-        });
+        },
+        orderBy: {
+          products: {
+            _count: 'asc',
+          },
+        },
+      });
 
   return (
     <div className="mx-auto container p-1">
