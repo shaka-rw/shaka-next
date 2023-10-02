@@ -41,9 +41,11 @@ const DiscoverProducts = async ({
         take: 6,
         include: {
           subCategories: {
+            take: 3,
+            orderBy: { products: { _count: 'desc' } },
             include: {
               products: {
-                take: 5,
+                take: 3,
                 where: {
                   shop: { approved: true },
                   quantities: {
