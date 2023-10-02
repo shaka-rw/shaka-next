@@ -34,85 +34,80 @@ const DiscoverProducts = async ({
       ? []
       : await prisma.category.findMany({
         where: {
-          ...(categoryId ? {
-            OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }]
-          } : { parent: null })
+          parent: (categoryId ? {
+            id: categoryId,
+          } : null
+          )
         },
         take: 6,
         include: {
-          subCategories: {
-            take: 3,
-            orderBy: { products: { _count: 'desc' } },
-            include: {
-              products: {
-                take: 3,
-                where: {
-                  shop: { approved: true },
-                  quantities: {
-                    some: {
-                      AND: {
-                        quantity: { gt: 0 },
-                        ...(price
-                          ? {
-                            price: {
-                              gte: isNaN(minPrice) ? undefined : minPrice,
-                              lte: isNaN(maxPrice) ? undefined : maxPrice,
-                            },
-                          }
-                          : {}),
-                      },
-                    },
-                  },
-                  ...(search
-                    ? {
-                      OR: [
-                        { name: { contains: search, mode: 'insensitive' } },
-                        {
-                          description: {
-                            contains: search,
-                            mode: 'insensitive',
-                          },
+          products: {
+            take: 5,
+            where: {
+              shop: { approved: true },
+              quantities: {
+                some: {
+                  AND: {
+                    quantity: { gt: 0 },
+                    ...(price
+                      ? {
+                        price: {
+                          gte: isNaN(minPrice) ? undefined : minPrice,
+                          lte: isNaN(maxPrice) ? undefined : maxPrice,
                         },
-                      ],
-                    }
-                    : {}),
-                  available: true,
-                  ...(gender
-                    ? { gender: { equals: gender as ProductGender } }
-                    : {}),
-                  ...(size
-                    ? {
-                      sizes: {
-                        some: { size: { equals: size, mode: 'insensitive' } },
-                      },
-                    }
-                    : {}),
-                  ...(categoryId
-                    ? {
-                      OR: [
-                        { categories: { some: { OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }] } } },
-                        { shop: { category: { OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }] } } },
-                      ],
-                    }
-                    : {}),
-                },
-                include: {
-                  mainImage: true,
-                  shop: { include: { image: true, category: true } },
-                  categories: { include: { image: true } },
-                  quantities: {
-                    where: { quantity: { gt: 0 } },
-                    distinct: ['productColorId', 'productSizeId'],
-                    include: {
-                      color: { include: { mainImage: true } },
-                      size: true,
-                    },
+                      }
+                      : {}),
                   },
-                  sizes: true,
-                  colors: { include: { mainImage: true, images: true } },
                 },
               },
-            }
+              ...(search
+                ? {
+                  OR: [
+                    { name: { contains: search, mode: 'insensitive' } },
+                    {
+                      description: {
+                        contains: search,
+                        mode: 'insensitive',
+                      },
+                    },
+                  ],
+                }
+                : {}),
+              available: true,
+              ...(gender
+                ? { gender: { equals: gender as ProductGender } }
+                : {}),
+              ...(size
+                ? {
+                  sizes: {
+                    some: { size: { equals: size, mode: 'insensitive' } },
+                  },
+                }
+                : {}),
+              ...(categoryId
+                ? {
+                  OR: [
+                    { categories: { some: { OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }] } } },
+                    { shop: { category: { OR: [{ id: categoryId }, { subCategories: { some: { id: categoryId } } }] } } },
+                  ],
+                }
+                : {}),
+            },
+            include: {
+              mainImage: true,
+              shop: { include: { image: true, category: true } },
+              categories: { include: { image: true } },
+              quantities: {
+                where: { quantity: { gt: 0 } },
+                distinct: ['productColorId', 'productSizeId'],
+                include: {
+                  color: { include: { mainImage: true } },
+                  size: true,
+                },
+              },
+              sizes: true,
+              colors: { include: { mainImage: true, images: true } },
+            },
           },
         },
         orderBy: {
@@ -122,7 +117,7 @@ const DiscoverProducts = async ({
         },
       });
 
-  const allProductsCount = categories.reduce((a, c) => a + c.subCategories.reduce((a, c) => a + c.products.length, 0), 0);
+  const allProductsCount = categories.reduce((a, c) => a + c.products.length, 0);
 
   return (
 
@@ -137,13 +132,12 @@ const DiscoverProducts = async ({
         </div>
       )}
       {categories.map((category) => {
-        const products = [...category.subCategories.map(sb => sb.products)].flat()
-        return [...category.subCategories.map(sb => sb.products)].flat().length > 0 ? (
+        return category.products.length > 0 ? (
           <div key={category.id} className="flex flex-col w-full gap-2">
             <h3 className="text-2xl capitalize mt-8 mb-4 font-bold">
               {category.name}
             </h3>
-            <Products products={products} />
+            <Products products={category.products} />
           </div>
         ) : (
           <></>
