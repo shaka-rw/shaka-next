@@ -112,7 +112,7 @@ const DiscoverProducts = async ({
         },
         orderBy: {
           products: {
-            _count: 'desc',
+            _count: 'asc',
           },
         },
       });
