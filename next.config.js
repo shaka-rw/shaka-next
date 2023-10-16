@@ -9,7 +9,8 @@ const nextConfig = {
   optimizeFonts: false, // Disable font optimization
   swcMinify: false, // Disable minification
   images: {
-    domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
+    unoptimized: true,
+    domains: ["lh3.googleusercontent.com", "res.cloudinary.com"],
   },
 };
 
